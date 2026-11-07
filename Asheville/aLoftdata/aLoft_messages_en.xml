@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano>
+
+<!-- ************************ -->
+<!--         Messages         -->
+<!-- ************************ -->
+
+  <data name="en_project_title"><![CDATA[Asheville NC]]></data>
+  <data name="en_project_author_name"><![CDATA[Mike Storey]]></data>
+  <data name="en_project_author_url"><![CDATA[http://www.ssgpp.com]]></data>
+
+
+
+  <data name="en_pano31_title"><![CDATA[aLoft Hotel by Mike Storey]]></data>
+
+
+
+
+
+
+  <data name="en_contextmenuopenFsLabel"><![CDATA[Enter Fullscreen]]></data>
+  <data name="en_contextmenucloseFsLabel"><![CDATA[Exit Fullscreen]]></data>
+  <data name="en_contextmenunormallabel"><![CDATA[Normal View]]></data>
+  <data name="en_contextmenufisheyelabel"><![CDATA[Fisheye View]]></data>
+  <data name="en_contextmenuarchitecturallabel"><![CDATA[Architectural View]]></data>
+  <data name="en_contextmenulittleplanetlabel"><![CDATA[Little Planet View]]></data>
+  <data name="en_controlBar_dockedThumbnailszoomInTip"><![CDATA[Zoom in]]></data>
+  <data name="en_controlBar_dockedThumbnailszoomOutTip"><![CDATA[Zoom out]]></data>
+  <data name="en_controlBar_dockedThumbnailsopenFsTip"><![CDATA[Enter fullscreen]]></data>
+  <data name="en_controlBar_dockedThumbnailscloseFsTip"><![CDATA[Exit fullscreen]]></data>
+  <data name="en_controlBar_dockedThumbnailsautorotateOnTip"><![CDATA[Start autorotation]]></data>
+  <data name="en_controlBar_dockedThumbnailsautorotateOffTip"><![CDATA[Stop autorotation]]></data>
+  <data name="en_controlBar_dockedThumbnailsgyroOnTip"><![CDATA[Enable gyroscope]]></data>
+  <data name="en_controlBar_dockedThumbnailsgyroOffTip"><![CDATA[Disable gyroscope]]></data>
+  <data name="en_controlBar_dockedThumbnailsdisplayHelpTip"><![CDATA[Show help screen]]></data>
+  <data name="en_controlBar_dockedThumbnailshideHelpTip"><![CDATA[Hide help screen]]></data>
+  <data name="en_controlBar_dockedThumbnailsdisplayControlsTip"><![CDATA[Show controls]]></data>
+  <data name="en_controlBar_dockedThumbnailshideControlsTip"><![CDATA[Hide controls]]></data>
+  <data name="en_controlBar_dockedThumbnailsctrlmodeDragTip"><![CDATA[Change control mode]]></data>
+  <data name="en_controlBar_dockedThumbnailsctrlmodeMoveTip"><![CDATA[Change control mode]]></data>
+
+  <data name="en_project_description"><![CDATA[Asheville NC as seen by Mike Storey - All images copyright Surround Sight Gigapixel Panoramic Photography<div><br></div>]]></data>
+
+
+</krpano>
