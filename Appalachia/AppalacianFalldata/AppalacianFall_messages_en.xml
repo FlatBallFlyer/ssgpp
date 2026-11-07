@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano>
+
+<!-- ************************ -->
+<!--         Messages         -->
+<!-- ************************ -->
+
+  <data name="en_project_title"><![CDATA[Appalachian Fall]]></data>
+  <data name="en_project_author_name"><![CDATA[Mike Storey]]></data>
+  <data name="en_project_author_url"><![CDATA[http://www.ssgpp.com]]></data>
+
+
+
+  <data name="en_pano62_title"><![CDATA[Big East Overlook]]></data>
+
+
+  <data name="en_pano24_title"><![CDATA[Lake Logan]]></data>
+
+
+  <data name="en_pano27_title"><![CDATA[Near Graveyard Fields]]></data>
+
+
+  <data name="en_pano32_title"><![CDATA[Sam's Branch Falls]]></data>
+
+
+  <data name="en_pano30_title"><![CDATA[Hewat Overlook]]></data>
+
+
+  <data name="en_pano41_title"><![CDATA[Big East Fork]]></data>
+
+
+  <data name="en_pano35_title"><![CDATA[Deep Creek Valley]]></data>
+
+
+  <data name="en_pano65_title"><![CDATA[Oconaluftee River]]></data>
+
+
+  <data name="en_pano38_title"><![CDATA[New Found Gap]]></data>
+
+
+  <data name="en_pano44_title"><![CDATA[Mt. Mitchell]]></data>
+
+
+	<data name="en_spotmap64_tooltip"><![CDATA[Big East Overlook]]></data>
+	<data name="en_spotmap26_tooltip"><![CDATA[Lake Logan]]></data>
+	<data name="en_spotmap29_tooltip"><![CDATA[Near Graveyard Fields]]></data>
+	<data name="en_spotmap34_tooltip"><![CDATA[Sam's Branch Falls]]></data>
+	<data name="en_spotmap104_tooltip"><![CDATA[Hewat Overlook]]></data>
+	<data name="en_spotmap43_tooltip"><![CDATA[Big East Fork]]></data>
+	<data name="en_spotmap37_tooltip"><![CDATA[Deep Creek Valley]]></data>
+	<data name="en_spotmap67_tooltip"><![CDATA[Oconaluftee River]]></data>
+	<data name="en_spotmap40_tooltip"><![CDATA[New Found Gap]]></data>
+	<data name="en_spotmap46_tooltip"><![CDATA[Mt. Mitchell]]></data>
+
+
+
+
+  <data name="en_prevnexttheme2prevSceneTip"><![CDATA[Previous Scene]]></data>
+  <data name="en_prevnexttheme2nextSceneTip"><![CDATA[Next Scene]]></data>
+  <data name="en_controlBar_dockedThumbnailszoomInTip"><![CDATA[Zoom in]]></data>
+  <data name="en_controlBar_dockedThumbnailszoomOutTip"><![CDATA[Zoom out]]></data>
+  <data name="en_controlBar_dockedThumbnailsmoveLeftTip"><![CDATA[Move left]]></data>
+  <data name="en_controlBar_dockedThumbnailsmoveRightTip"><![CDATA[Move right]]></data>
+  <data name="en_controlBar_dockedThumbnailsmoveUpTip"><![CDATA[Move up]]></data>
+  <data name="en_controlBar_dockedThumbnailsmoveDownTip"><![CDATA[Move down]]></data>
+  <data name="en_controlBar_dockedThumbnailsopenFsTip"><![CDATA[Enter fullscreen]]></data>
+  <data name="en_controlBar_dockedThumbnailscloseFsTip"><![CDATA[Exit fullscreen]]></data>
+  <data name="en_controlBar_dockedThumbnailsautotourOnTip"><![CDATA[Start automatic tour]]></data>
+  <data name="en_controlBar_dockedThumbnailsautotourOffTip"><![CDATA[Stop automatic tour]]></data>
+  <data name="en_controlBar_dockedThumbnailsgyroOnTip"><![CDATA[Enable gyroscope]]></data>
+  <data name="en_controlBar_dockedThumbnailsgyroOffTip"><![CDATA[Disable gyroscope]]></data>
+  <data name="en_controlBar_dockedThumbnailsdisplayHelpTip"><![CDATA[Show help screen]]></data>
+  <data name="en_controlBar_dockedThumbnailshideHelpTip"><![CDATA[Hide help screen]]></data>
+  <data name="en_controlBar_dockedThumbnailsdisplayControlsTip"><![CDATA[Show controls]]></data>
+  <data name="en_controlBar_dockedThumbnailshideControlsTip"><![CDATA[Hide controls]]></data>
+  <data name="en_controlBar_dockedThumbnailsctrlmodeDragTip"><![CDATA[Change control mode]]></data>
+  <data name="en_controlBar_dockedThumbnailsctrlmodeMoveTip"><![CDATA[Change control mode]]></data>
+  <data name="en_contextmenuopenwebsitelabel1"><![CDATA[Non-Comercial Use]]></data>
+  <data name="en_contextmenuwebsiteurl1"><![CDATA[https://s3.amazonaws.com/immersive.ssgpp.com/Appalachia/AppalacianFall.html]]></data>
+  <data name="en_contextmenuopenFsLabel"><![CDATA[Enter Fullscreen]]></data>
+  <data name="en_contextmenucloseFsLabel"><![CDATA[Exit Fullscreen]]></data>
+  <data name="en_contextmenunormallabel"><![CDATA[Normal View]]></data>
+  <data name="en_contextmenufisheyelabel"><![CDATA[Fisheye View]]></data>
+  <data name="en_contextmenuarchitecturallabel"><![CDATA[Architectural View]]></data>
+  <data name="en_contextmenulittleplanetlabel"><![CDATA[Little Planet View]]></data>
+  <data name="en_panotourmapskey"><![CDATA[]]></data>
+
+  <data name="en_project_description"><![CDATA[Beautiful Appalacia, Western North Carolina<div>Currently 10 vista's, totaling 10 Gigapixels</div>]]></data>
+
+
+  <data name="en_pano62_description"><![CDATA[<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div><a href="http://www.ssgpp.com/contact/" target="_blank">Click Here to contact me about fine art prints</a></div><div>Composite of 760 individual 30 megapixel photos</div><div>19 columns by 8 rows by 5 brackets (~180 degree view)</div><div>Final Resolution: 108,562 X 30,095 (3.27 GIGA-PIXELS)</div><div>Blue Ridge Parkway, NC – October 9, 2014</div><div>Shot with: Nikon D800, Nikor-AFS 28-120</div><div>Using the Gigan Epic Pro robot</div><div>Stitched with Kolor - AutopanoGiga,&nbsp;</div><div>Rendered for the web with Kolor - Panotour Pro.</div>]]></data>
+
+
+
+  <data name="en_pano24_description"><![CDATA[<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div><a href="http://www.ssgpp.com/contact/" target="_blank">Click Here to contact me about fine art prints</a></div><div>Composite of 200 individual 30 megapixel photos</div><div>8 columns by 5 rows by 5 brackets (360 degrees)</div><div>Final Resolution 34,887 X 14,598 (0.5 Gigapixels)</div><div>Lake Logan, NC – October 9, 2014</div><div>Shot with: Nikon D800, Nikor-AFS 28-120</div><div>Using the Gigan Epic Pro robot</div><div>Stitched with Kolor - AutopanoGiga,&nbsp;</div><div>Rendered for the web with Kolor - Panotour Pro.</div>]]></data>
+
+
+
+  <data name="en_pano27_description"><![CDATA[<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div><a href="http://www.ssgpp.com/contact/" target="_blank">Click Here to contact me about fine art prints</a></div><div>Composite of 275 individual 30 megapixel photos</div><div>11 columns by 5 rows by 5 brackets (360 degrees)</div><div>Final Resolution 61,321 X 15,823 (0.97 Gigapixels)</div><div>Blue Ridge Parkway, Canton NC – October 8, 2014</div><div>Shot with: Nikon D800, Nikor-AFS 28-120</div><div>Using the Gigan Epic Pro robot</div><div>Stitched with Kolor - AutopanoGiga,&nbsp;</div><div>Rendered for the web with Kolor - Panotour Pro.</div>]]></data>
+
+
+
+  <data name="en_pano32_description"><![CDATA[<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div>Composite of 240 individual 30 megapixel photos</div><div>8 columns by 6 rows by 5 brackets (360 degrees)</div><div>Final Resolution 35,544 X 17,777 (632 Megapixels)</div><div>Sams Branch Falls, Canton NC – October 8, 2014</div><div>Shot with: Nikon D800, Nikor-AFS 28-120</div><div>Using the Gigan Epic Pro robot</div><div>Stitched with Kolor - AutopanoGiga,&nbsp;</div><div>Rendered for the web with Kolor - Panotour Pro.</div>]]></data>
+
+
+
+  <data name="en_pano30_description"><![CDATA[<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div>Composite of 70 individual 30 megapixel photos</div><div>7 columns by 2 rows by 5 brackets (160 degrees)</div><div>Final Resolution 19,016 X 7,263 (138 Megapixels)</div><div>Blue Ridge Parkway, Asheville NC – October 6, 2014</div><div>Shot with: Nikon D800, Nikor-AFS 28-120</div><div>Stitched with Kolor - AutopanoGiga,&nbsp;</div><div>Rendered for the web with Kolor - Panotour Pro.</div>]]></data>
+
+
+
+  <data name="en_pano41_description"><![CDATA[<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div><a href="http://www.ssgpp.com/big-east-fork-prints/" target="_blank">Click Here to purchase fine art prints</a></div><div>Composite of 560 individual 30 megapixel photos</div><div>10 columns by 8 rows by 7 brackets (190 degrees)</div><div>Final Resolution 43,094 X 24,195 (1.04 Gigapixels)</div><div>Big East Fork, Canton NC – October 4, 2013</div><div>Shot with: Nikon D800, Nikor-AFS 28-120</div><div>Using the Gigan Epic Pro robot</div><div>Stitched with Kolor - AutopanoGiga,&nbsp;</div><div>Rendered for the web with Kolor - Panotour Pro.</div>]]></data>
+
+
+
+  <data name="en_pano35_description"><![CDATA[<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div><a href="http://www.ssgpp.com/deep-creek-valley-prints/" target="_blank">Click Here to purchase fine art prints</a></div><div>Composite of 588 individual 30 megapixel photos</div><div>14 columns by 6 rows by 7 brackets (160 degrees)</div><div>Final Resolution 66,689 X 21,691 (1.45 Gigapixels)</div><div>Deep Creek Valley, Cherokee NC – October 11, 2013</div><div>Shot with: Nikon D800, Nikor-AFS 28-120</div><div>Using the Gigan Epic Pro robot</div><div>Stitched with Kolor - AutopanoGiga,&nbsp;</div><div>Rendered for the web with Kolor - Panotour Pro.</div>]]></data>
+
+
+
+  <data name="en_pano65_description"><![CDATA[<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div><a href="http://www.ssgpp.com/contact/" target="_blank">Click Here to contact me about fine art prints</a></div><div>Composite of 714 individual 30 megapixel photos</div><div>17 columns by 6 rows by 7 brackets (360 degrees)</div><div>Final Resolution 33,094 X 16,547 (0.54 Gigapixels)</div><div>Oconaluftee River, Cherokee NC – October 11, 2013</div><div>Shot with: Nikon D800, Nikor-AFS 28-120</div><div>Using the Gigan Epic Pro robot</div><div>Stitched with Kolor - AutopanoGiga,&nbsp;</div><div>Rendered for the web with Kolor - Panotour Pro.</div>]]></data>
+
+
+
+  <data name="en_pano38_description"><![CDATA[<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div><a href="http://www.ssgpp.com/new-found-gap-prints/" target="_blank">Click Here to purchase fine art prints</a></div><div>Composite of 250 individual 30 megapixel photos</div><div>10 columns by 5 rows by 5 brackets (160 degrees)</div><div>Final Resolution 50,966 X 16,989 (0.87 Gigapixels)</div><div>New Found Gap, Cherokee NC – October 11, 2013</div><div>Shot with: Nikon D800, Nikor-AFS 28-120</div><div>Using the Gigan Epic Pro robot</div><div>Stitched with Kolor - AutopanoGiga,&nbsp;</div><div>Rendered for the web with Kolor - Panotour Pro.</div>]]></data>
+
+
+
+  <data name="en_pano44_description"><![CDATA[<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div><a href="http://www.ssgpp.com/contact/" target="_blank">Click Here to contact me about fine art prints</a></div><div>Composite of 185 individual 15 megapixel photos</div><div>Final Resolution 62,754 X 5,151 (323 Megapixels)</div><div>Mt. Mitchell NC – January, 2011</div><div>Shot with: Cannon T1i</div><div>Using the Gigan Epic Pro robot</div><div>Stitched with Kolor - AutopanoGiga,&nbsp;</div><div>Rendered for the web with Kolor - Panotour Pro.</div>]]></data>
+</krpano>

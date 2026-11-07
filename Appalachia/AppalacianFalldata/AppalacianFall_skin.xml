@@ -1,0 +1,2407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano version="1.17">
+
+          <!-- unsupported kind of display : PointMap -->
+
+  <!-- ********************** -->
+  <!-- Previous / Next Strips -->
+  <!-- ********************** -->
+
+  <style name="prevnexttheme2btn_alpha_style" 
+    alpha="0.0" onover="set(alpha, 1);" onout="set(alpha, 0.0);"
+    devices="desktop"
+  />
+  <style name="prevnexttheme2btn_alpha_style" 
+    alpha="0.5"
+    devices="tablet|mobile"
+  />
+  <layer name="prevnexttheme2btn_prev_pano" keep="true" align="left"
+         height="102%"
+         width="5%"
+         type="container"
+         bgcapture="true"
+         bgalpha="0.2"
+         bgcolor="0xeeeeee"
+         zorder="0"
+         onclick="loadPreviousScene();"
+         style="prevnexttheme2btn_alpha_style"
+         visible="false">
+    <layer name="prevnexttheme2prevPanoramaArrow" keep="true" align="center"
+         url="%FIRSTXML%/graphics/prevnextstrips/btn_scroll_left.png"
+         alpha="1"
+         zorder="0"
+         tooltip="prevnexttheme2prevSceneTip"
+         onhover="showTooltip(left,prevnexttheme2TooltipStyle,left);"
+         onout="hideTooltip();"
+         onclick="loadPreviousScene();"
+    />
+  </layer>
+
+  <layer name="prevnexttheme2btn_next_pano" keep="true" align="right"
+         height="102%"
+         width="5%"
+         type="container"
+         bgcapture="true"
+         bgalpha="0.2"
+         bgcolor="0xeeeeee"
+         zorder="0"
+         onclick="loadNextScene();"
+         style="prevnexttheme2btn_alpha_style"
+         visible="false">
+    <layer name="prevnexttheme2nextPanoramaArrow" keep="true" align="center"
+         url="%FIRSTXML%/graphics/prevnextstrips/btn_scroll_right.png"
+         alpha="1"
+         zorder="0"
+         tooltip="prevnexttheme2nextSceneTip"
+         onhover="showTooltip(right,prevnexttheme2TooltipStyle,right);"
+         onout="hideTooltip();"
+         onclick="loadNextScene();"
+    />
+  </layer>
+
+  <events name="prevnexttheme2hideshowcontrolsevent" 
+    onTourStart="prevnexttheme2showPrevNextControls();"
+    keep="true"/>
+  <action name="prevnexttheme2hidePrevNextControls">
+    set(layer[prevnexttheme2btn_prev_pano].visible, false);
+    set(layer[prevnexttheme2btn_next_pano].visible, false);
+  </action>
+  <action name="prevnexttheme2showPrevNextControls">
+    set(layer[prevnexttheme2btn_prev_pano].visible, true);
+    set(layer[prevnexttheme2btn_next_pano].visible, true);
+  </action>
+
+<layer name="prevnexttheme2TooltipStyle"
+	keep="true"
+	enabled="false"
+	capture="false"
+	url="%FIRSTXML%/graphics/textfield.swf"
+	align="center"
+	background="false"
+	border="false"
+	textshadow="1" textshadowrange="4.0" textshadowangle="45" textshadowcolor="0x000000" textshadowalpha="1"
+	css="color:#e6e6e6;font-family:Helvetica;font-weight:bold;font-size:14px;text-align:left;"
+	height="20" 
+	autoheight="true"
+	autowidth="auto"
+	selectable="false"
+	zorder="0"
+	xoffset="0"
+	yoffset="0"
+	visible="false"
+	html=""
+/>
+
+<!-- ************ -->
+<!-- Double click -->
+<!-- ************ -->
+  <plugin name="doubleclick" url="%FIRSTXML%/graphics/doubleclick/fieldofview_dc.swf" alturl="%FIRSTXML%/graphics/doubleclick/fieldofview_dc.js" keep="true" ondblclick="ondoubleclick();"/>
+  <action name="ondoubleclick">switchFullscreen();
+
+  </action>
+<!-- ********* -->
+<!-- Gyroscope -->
+<!-- ********* -->
+<plugin name="gyroscope"
+        url="graphics/gyro.js"
+        keep="true"
+        devices="tablet|mobile"
+        onavailable="delayedcall(1, checkGyroAvailability(););"
+        enabled="false"
+        />
+
+<action name="changeGyroscopeState">
+  ifnot (plugin[gyroscope].available === undefined,
+    if (plugin[gyroscope].available,
+      if (%1 !=  plugin[gyroscope].enabled,
+	    switch(plugin[gyroscope].enabled);
+	    if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
+      );
+    );
+  );
+</action>
+
+<action name="checkGyroAvailability">
+	ifnot (plugin[gyroscope].available === undefined, 
+		if (plugin[gyroscope].available,
+			set(tour_gyroscopedevices, true);
+			events.dispatch(ongyroscopeavailable);
+			if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
+		,
+			set(tour_gyroscopedevices, false);
+			set(plugin[gyroscope].enabled, false);
+		);
+	,
+		set(tour_gyroscopedevices, false);
+		set(plugin[gyroscope].enabled, false);
+	);
+</action>
+	<!-- ***************************** -->
+	<!-- Docked Thumbnails Control Bar -->
+	<!-- ***************************** -->
+
+
+
+<krpano themeunanimebarbuilt="false" themeunanimeIsOpened="false" />
+
+<events name="themeunanimebarevents" 
+	onxmlcomplete="themeunanimebuildMenuBar();"
+	
+	keep="true"/>
+
+<action name="themeunanimebuildMenuBar">
+	ifnot (themeunanimebarbuilt, themeunanimebuildMenu(); set(themeunanimebarbuilt, true););
+</action>
+
+
+
+<action name="themeunanimebuildMenu">
+	
+    set(themeunanimebutton_pos, 0);
+    set(layer[themeunanimebtn_hidecontrols].x, get(themeunanimebutton_pos));
+    inc(themeunanimebutton_pos, 36);
+
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_display_help].x, get(themeunanimebutton_pos));
+        
+        set(layer[themeunanimebtn_close_help].x  , get(themeunanimebutton_pos));
+        
+        inc(themeunanimebutton_pos, 36);
+      );
+
+      if (device.fullscreensupport,
+        set(layer[themeunanimebtn_openfs].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_closefs].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+
+
+
+      set(layer[themeunanimebtn_autotour_on].x , get(themeunanimebutton_pos));
+      
+      set(layer[themeunanimebtn_autotour_off].x, get(themeunanimebutton_pos));
+      
+      inc(themeunanimebutton_pos, 36);
+
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_ctrlmode_drag_to].x, get(themeunanimebutton_pos));
+        
+        set(layer[themeunanimebtn_ctrlmode_move_to].x, get(themeunanimebutton_pos));
+        
+        inc(themeunanimebutton_pos, 36);
+      );
+
+
+      set(themeunanimeDisplayGryoscopeButton, false);
+      if (device.tablet, set(themeunanimeDisplayGryoscopeButton, true););
+      if (device.mobile, set(themeunanimeDisplayGryoscopeButton, true););
+      if(themeunanimeDisplayGryoscopeButton,
+        set(layer[themeunanimebtn_gyroscope_on].x, get(themeunanimebutton_pos));
+        
+        set(layer[themeunanimebtn_gyroscope_off].x, get(themeunanimebutton_pos));
+        
+        inc(themeunanimebutton_pos, 36);
+      );
+
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_right].x, get(themeunanimebutton_pos));
+        
+        inc(themeunanimebutton_pos, 36);
+
+        set(layer[themeunanimebtn_left].x, get(themeunanimebutton_pos));
+        
+        inc(themeunanimebutton_pos, 36);
+      );
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_down].x, get(themeunanimebutton_pos));
+        
+        inc(themeunanimebutton_pos, 36);
+
+        set(layer[themeunanimebtn_up].x, get(themeunanimebutton_pos));
+        
+        inc(themeunanimebutton_pos, 36);
+      );
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_out].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+        set(layer[themeunanimebtn_in].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+
+	
+	
+	
+</action>
+
+<events name="themeunanimeStartTourEvents" onTourStart="themeunanimeCallOnStartTour();" keep="true" />
+
+<action name="themeunanimeCallOnStartTour">
+	
+	themeunanimeshowMenuControls();
+</action>
+
+
+    <layer name="themeunanime_bg"
+           keep="true"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/footer.png"
+           zorder="3"
+           width="100%"
+           align="bottomleft"
+           x="0"
+           visible="false" />
+
+
+    <style name="themeunanime_btn_style_on_bg"
+           keep="true"
+           parent="themeunanime_bg"
+           crop="0|48|48|48"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_bg.png"
+           align="bottomright"
+           height="36"
+           width="36"
+           alpha="0.3"
+           y="12"
+           zorder="0"
+           />
+
+    <style name="themeunanime_btn_down_style"
+           keep="true"
+           parent="themeunanime_bg"
+                 crop="0| 0|48|48"
+           onovercrop="0|48|48|48"
+           ondowncrop="0|96|48|48"
+           align="bottomright"
+           height="36"
+           width="36"
+           x="0" y="12"
+           zorder="1"
+           onhover="showTooltip(bottomright, themeunanimemenuTooltipStyle);"
+           onout="hideTooltip();"
+           />
+
+    <style name="themeunanime_btn_style"
+           keep="true"
+           parent="themeunanime_bg"
+                 crop="0| 0|48|48"
+           onovercrop="0|48|48|48"
+           ondowncrop="0|96|48|48"
+           align="bottomright"
+           height="36"
+           width="36"
+           x="0" y="12"
+           zorder="1"
+           onhover="showTooltip(bottomright, themeunanimemenuTooltipStyle);"
+           onout="hideTooltip();"
+           />
+
+
+    <style name="themeunanime_btn_style_on"
+            keep="true"
+            parent="themeunanime_bg"
+                  crop="0|48|48|48"
+            onovercrop="0|48|48|48"
+            ondowncrop="0|96|48|48"
+            align="bottomright"
+            height="36"
+            width="36"
+            y="12"
+            zorder="1"
+            onhover="showTooltip(bottomright, themeunanimemenuTooltipStyle);" 
+            onout="hideTooltip();"
+            />
+
+
+  <events name="themeunanimegyroscopeavailableevent"
+          ongyroscopeavailable="themeunanimeupdateGyroscopeButtonsAvailability();"
+          ongyroscopeon="themeunanimeenableGyroscopeButtons(true);"
+          ongyroscopeoff="themeunanimeenableGyroscopeButtons(false);"
+          keep="true"/>
+  <krpano themeunanimemenugyroscopeavailable="false" themeunanimemenugyroscopeenabled="false"/>
+  <action name="themeunanimeupdateGyroscopeButtonsAvailability">
+    if (tour_gyroscopedevices,
+      set(themeunanimemenugyroscopeavailable, true);
+      themeunanimeupdateGyroscopeButtons();
+    );
+  </action>
+  <action name="themeunanimeenableGyroscopeButtons">
+    if (tour_gyroscopedevices,
+      set(themeunanimemenugyroscopeenabled, %1);
+      themeunanimeupdateGyroscopeButtons();
+    );
+  </action>
+	<action name="themeunanimeHideGyroscopeButtons">
+		set(layer[themeunanimebtn_gyroscope_off].visible, false);
+		set(layer[themeunanimebtn_gyroscope_on].visible, false);
+		
+	</action>
+	<action name="themeunanimeShowGyroscopeButtons">
+		if (themeunanimemenugyroscopeavailable,
+			if (themeunanimemenugyroscopeenabled,
+				set(layer[themeunanimebtn_gyroscope_off].visible, true);
+				set(layer[themeunanimebtn_gyroscope_on].visible, false);
+				
+			,
+				set(layer[themeunanimebtn_gyroscope_off].visible, false);
+				set(layer[themeunanimebtn_gyroscope_on].visible, true);
+				
+			);
+		,
+			themeunanimeHideGyroscopeButtons();
+		);
+	</action>
+	<action name="themeunanimeupdateGyroscopeButtons">
+	if (tour_gyroscopedevices,
+		set(themeunanimeDisplayMenuGyroscopeButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayMenuGyroscopeButtons, true););
+		if (themeunanimeDisplayMenuGyroscopeButtons,
+			themeunanimeShowGyroscopeButtons();
+		,
+			themeunanimeHideGyroscopeButtons();
+		);
+	,
+		themeunanimeHideGyroscopeButtons();
+	);
+	</action>
+	
+    <layer name="themeunanimebtn_gyroscope_off"
+            url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_gyroscope.png"
+            style="themeunanime_btn_style"
+            onclick="disableGyroscope();"
+            devices="tablet|mobile"
+            tooltip="controlBar_dockedThumbnailsgyroOffTip"
+            visible="false"
+            />
+    <layer name="themeunanimebtn_gyroscope_on"
+            url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_gyroscope.png"
+            style="themeunanime_btn_style_on"
+            onclick="enableGyroscope();"
+            devices="tablet|mobile"
+            tooltip="controlBar_dockedThumbnailsgyroOnTip"
+            visible="false"
+            />
+
+
+	<events name="themeunanimecontrolmodechangedevent" oncontrolmodechanged="themeunanimeupdateControlModeButtons();" keep="true"/>
+	<action name="themeunanimeHideControlModeButtons">
+		set(layer[themeunanimebtn_ctrlmode_move_to].visible, false);
+		set(layer[themeunanimebtn_ctrlmode_drag_to].visible, false);
+		
+	</action>
+	<action name="themeunanimeShowControlModeButtons">
+		if (tour_controlmodemousetype == "moveto",
+			set(layer[themeunanimebtn_ctrlmode_drag_to].visible, true);
+			set(layer[themeunanimebtn_ctrlmode_move_to].visible, false);
+			
+		,
+			set(layer[themeunanimebtn_ctrlmode_move_to].visible, true);
+			set(layer[themeunanimebtn_ctrlmode_drag_to].visible, false);
+			
+		);
+	</action>
+	<action name="themeunanimeupdateControlModeButtons">
+	if (device.desktop,
+		set(themeunanimeDisplayControlModeButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayControlModeButtons, true););
+		if (themeunanimeDisplayControlModeButtons,
+			themeunanimeShowControlModeButtons();
+		,
+			themeunanimeHideControlModeButtons();
+		);
+	,
+		themeunanimeHideControlModeButtons();
+	);
+	</action>
+	
+    <layer name="themeunanimebtn_ctrlmode_move_to"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_move_to.png"
+           style="themeunanime_btn_style"
+           tooltip="controlBar_dockedThumbnailsctrlmodeMoveTip"
+           onclick="setControlModeMoveTo();"
+           visible="false"
+           devices="desktop"
+           />
+    <layer name="themeunanimebtn_ctrlmode_drag_to"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_drag_to.png"
+           style="themeunanime_btn_style"
+           tooltip="controlBar_dockedThumbnailsctrlmodeDragTip"
+           onclick="setControlModeDragTo();"
+           visible="false"
+           devices="desktop"
+           />
+
+    <layer name="themeunanimebtn_in"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_zoom_in.png"
+           style="themeunanime_btn_down_style"
+           ondown="set(fov_moveforce, -1);"
+           onup="set(fov_moveforce, 0);"
+           tooltip="controlBar_dockedThumbnailszoomInTip"
+           devices="desktop"
+           visible="false"
+           />
+    <layer name="themeunanimebtn_out"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_zoom_out.png"
+           style="themeunanime_btn_down_style"
+           ondown="set(fov_moveforce, +1);"
+           onup="set(fov_moveforce, 0);"
+           tooltip="controlBar_dockedThumbnailszoomOutTip"
+           devices="desktop"
+           visible="false"
+           />
+
+    <layer name="themeunanimebtn_left"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_move_left.png"
+           style="themeunanime_btn_down_style"
+           ondown="set(hlookat_moveforce, -1);"
+           onup="set(hlookat_moveforce, 0);"
+            tooltip="controlBar_dockedThumbnailsmoveLeftTip"
+           devices="desktop"
+           visible="false"
+           />
+    <layer name="themeunanimebtn_right"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_move_right.png"
+           style="themeunanime_btn_down_style"
+           ondown="set(hlookat_moveforce, +1);"
+           onup="set(hlookat_moveforce, 0);"
+            tooltip="controlBar_dockedThumbnailsmoveRightTip"
+           devices="desktop"
+           visible="false"
+           />
+
+    <layer name="themeunanimebtn_up"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_move_up.png"
+           style="themeunanime_btn_down_style"
+           ondown="set(vlookat_moveforce, -1);"
+           onup="set(vlookat_moveforce, 0);"
+            tooltip="controlBar_dockedThumbnailsmoveUpTip"
+           devices="desktop"
+           visible="false"
+           />
+    <layer name="themeunanimebtn_down"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_move_down.png"
+           style="themeunanime_btn_down_style"
+           ondown="set(vlookat_moveforce, +1);"
+           onup="set(vlookat_moveforce, 0);"
+            tooltip="controlBar_dockedThumbnailsmoveDownTip"
+           devices="desktop"
+           visible="false"
+           />
+
+
+
+
+
+    <layer name="themeunanimebtn_openfs"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_enter_fs.png"
+           onclick="enterFullscreen();"
+           style="themeunanime_btn_style"
+           visible="false"
+           tooltip="controlBar_dockedThumbnailsopenFsTip"
+           devices="fullscreensupport"
+           />
+    <layer name="themeunanimebtn_closefs"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_close_fs.png"
+           onclick="exitFullscreen();"
+           style="themeunanime_btn_style_on"
+           visible="false"
+           tooltip="controlBar_dockedThumbnailscloseFsTip"
+           devices="fullscreensupport"
+           />
+
+
+    <layer name="themeunanimebtn_autotour_on"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_start_automatic_tour.png"
+           onclick="startautotour();"
+           style="themeunanime_btn_style"
+           visible="false"
+            tooltip="controlBar_dockedThumbnailsautotourOnTip"
+           />
+    <layer name="themeunanimebtn_autotour_off"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_stop_automatic_tour.png"
+           onclick="stopautotour();"
+           style="themeunanime_btn_style_on"
+           visible="false"
+           tooltip="controlBar_dockedThumbnailsautotourOffTip"
+           />
+
+
+    <layer name="themeunanimebtn_display_help"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_help.png"
+           onclick="themeunanimedisplayHelp();"
+           style="themeunanime_btn_style"
+           tooltip="controlBar_dockedThumbnailsdisplayHelpTip"
+           devices="desktop"
+           visible="false"
+           />
+    <layer name="themeunanimebtn_close_help"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_help.png"
+           onclick="themeunanimecloseHelp();"
+           style="themeunanime_btn_style_on"
+           visible="false"
+           tooltip="controlBar_dockedThumbnailshideHelpTip"
+           devices="desktop"
+           />
+
+
+
+    <layer name="themeunanimebtn_hidecontrols"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_hide_controls.png"
+           style="themeunanime_btn_style"
+           onclick="themeunanimehideMenuControls();hideTourControls();"
+           visible="false"
+            tooltip="controlBar_dockedThumbnailshideControlsTip"
+           />
+
+    <layer name="themeunanimebtn_showcontrols"
+                  crop="0| 0|48|48"
+            onovercrop="0|48|48|48"
+            ondowncrop="0|96|48|48"
+            keep="true"
+            url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_show_controls_bg.png"
+            align="bottomright"
+            zorder="3"
+            height="36"
+            width="36"
+            visible="false"
+            y="12"
+            x="0" >
+    <layer name="themeunanimebtn_showcontrols_fg"
+                  crop="0| 0|48|48"
+            onovercrop="0|48|48|48"
+            ondowncrop="0|96|48|48"
+            onclick="themeunanimeshowMenuControls();showTourControls();"
+            onhover="showTooltip(bottomright, themeunanimemenuTooltipStyle);"
+            onout="hideTooltip();"
+            tooltip="controlBar_dockedThumbnailsdisplayControlsTip"
+            keep="true"
+            url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_show_controls.png"
+            align="center"
+            height="36"
+            width="36"
+            />
+    </layer>
+
+
+<action name="themeunanimehideMenuControls">
+	set(themeunanimeIsOpened, false);
+	set(layer[themeunanime_bg].visible, false);
+	set(layer[themeunanimebtn_showcontrols].visible, true);
+	
+	set(layer[themeunanimebtn_hidecontrols].visible, false);
+	set(layer[themeunanimebtn_in].visible, false);
+	set(layer[themeunanimebtn_out].visible, false);
+	set(layer[themeunanimebtn_right].visible, false);
+	set(layer[themeunanimebtn_left].visible, false);
+	set(layer[themeunanimebtn_down].visible, false);
+	set(layer[themeunanimebtn_up].visible, false);
+
+
+
+		themeunanimeupdateGyroscopeButtons();
+
+		themeunanimeupdateControlModeButtons();
+
+
+
+
+		themeunanimeupdateFullscreenButtons();
+
+		themeunanimeupdateAutotourButtons();
+
+		themeunanimeupdateHelpButtons();
+
+
+</action>
+<action name="themeunanimeshowMenuControls">
+	set(themeunanimeIsOpened, true);
+      themeunanimeupdateFullscreenButtons();
+
+
+
+      themeunanimeupdateAutotourButtons();
+      themeunanimeupdateGyroscopeButtons();
+
+      themeunanimeupdateControlModeButtons();
+
+
+
+
+      themeunanimeupdateHelpButtons();
+      set(layer[themeunanime_bg].visible, true);
+	set(layer[themeunanimebtn_showcontrols].visible, false);
+	
+	set(layer[themeunanimebtn_hidecontrols].visible, true);
+	set(layer[themeunanimebtn_in].visible, true);
+	set(layer[themeunanimebtn_out].visible, true);
+	set(layer[themeunanimebtn_right].visible, true);
+	set(layer[themeunanimebtn_left].visible, true);
+	set(layer[themeunanimebtn_down].visible, true);
+	set(layer[themeunanimebtn_up].visible, true);
+
+
+	
+	
+</action>
+
+
+    <layer name="themeunanimehelpScreenBg" align="center" keep="true" onclick="themeunanimecloseHelp();"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/help_screen_bg.png"
+           visible="false"
+           zorder="97"
+           >
+      <layer name="themeunanimehelpScreen" align="center" keep="true" onclick="themeunanimecloseHelp();" 
+             url="%FIRSTXML%/graphics/dockedthumbscontrolbar/help_screen_fg.png"
+             height="100%" 
+             width="prop" 
+             displayed="false"
+             />
+    </layer>
+    <action name="themeunanimedisplayHelp">
+      if (device.desktop,
+        set(layer[themeunanimehelpScreen].displayed, true);
+        set(layer[themeunanimehelpScreenBg].visible,true);
+        themeunanimeupdateHelpButtons();
+      );
+    </action>
+    <action name="themeunanimecloseHelp">
+      if (device.desktop,
+        set(layer[themeunanimehelpScreen].displayed, false);
+        set(layer[themeunanimehelpScreenBg].visible,false);
+        themeunanimeupdateHelpButtons();
+      );
+    </action>
+	<action name="themeunanimeHideHelpButtons">
+		set(layer[themeunanimebtn_display_help].visible, false);
+		set(layer[themeunanimebtn_close_help].visible, false);
+		
+	</action>
+	<action name="themeunanimeShowHelpButtons">
+		if (layer[themeunanimehelpScreen].displayed,
+			set(layer[themeunanimebtn_close_help].visible, true);
+			set(layer[themeunanimebtn_display_help].visible, false);
+			
+		,
+			set(layer[themeunanimebtn_display_help].visible, true);
+			set(layer[themeunanimebtn_close_help].visible, false);
+			
+		);
+	</action>
+	<action name="themeunanimeupdateHelpButtons">
+	if (device.desktop,
+		set(themeunanimeDisplayHelpButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayHelpButtons, true););
+		if (themeunanimeDisplayHelpButtons,
+			themeunanimeShowHelpButtons();
+		,
+			themeunanimeHideHelpButtons();
+		);
+	,
+		themeunanimeHideHelpButtons();
+	);
+	</action>
+    
+
+
+	<events name="themeunanimemenufullscreenchangeevent"
+		onenterfullscreen="themeunanimeupdateFullscreenButtons();"
+		onexitfullscreen="themeunanimeupdateFullscreenButtons();"
+		keep="true"/>
+	<action name="themeunanimeHideFullscreenButtons">
+		set(layer[themeunanimebtn_openfs].visible , false);
+		set(layer[themeunanimebtn_closefs].visible, false);
+		
+	</action>
+	<action name="themeunanimeShowFullscreenButtons">
+		if (device.fullscreensupport,
+			if(tour_fullscreen,
+				set(layer[themeunanimebtn_openfs].visible , false);
+				set(layer[themeunanimebtn_closefs].visible, true);
+				
+			,
+				set(layer[themeunanimebtn_openfs].visible ,true);
+				set(layer[themeunanimebtn_closefs].visible,false);
+				
+			);
+		,
+			themeunanimeHideFullscreenButtons();
+		);
+	</action>
+	<action name="themeunanimeupdateFullscreenButtons">
+		set(themeunanimeDisplayFullscreenButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayFullscreenButtons, true););
+		if (themeunanimeDisplayFullscreenButtons,
+			themeunanimeShowFullscreenButtons();
+		,
+			themeunanimeHideFullscreenButtons();
+		);
+	</action>
+
+
+	<events name="themeunanimeAutotourEvents"
+		onstartautotour="themeunanimeupdateAutotourButtons();"
+		onstopautotour="themeunanimeupdateAutotourButtons();"
+		keep="true"/>
+	<action name="themeunanimeHideAutotourButtons">
+		set(layer[themeunanimebtn_autotour_off].visible, false);
+		set(layer[themeunanimebtn_autotour_on].visible , false);
+		
+	</action>
+	<action name="themeunanimeShowAutotourButtons">
+		if (tour_autotourenabled == false,
+			set(layer[themeunanimebtn_autotour_off].visible, false);
+			set(layer[themeunanimebtn_autotour_on].visible , true);
+			
+		,
+			set(layer[themeunanimebtn_autotour_off].visible, true);
+			set(layer[themeunanimebtn_autotour_on].visible , false);
+			
+		);
+	</action>
+	<action name="themeunanimeupdateAutotourButtons">
+		set(themeunanimeDisplayAutotourButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayAutotourButtons, true););
+		if (themeunanimeDisplayAutotourButtons,
+			themeunanimeShowAutotourButtons();
+		,
+			themeunanimeHideAutotourButtons();
+		);
+	</action>
+
+
+	<layer name="themeunanimemenuTooltipStyle"
+	keep="true"
+	enabled="false"
+	capture="false"
+	url="%FIRSTXML%/graphics/textfield.swf"
+	align="center"
+	background="true"
+	backgroundcolor="0xffffff"
+	backgroundalpha="0.8"
+	border="false"
+	css="color:#555555;font-family:Times New Roman;font-weight:bold;font-size:14px;text-align:left;"
+	height="20" 
+	autoheight="true"
+	autowidth="auto"
+	edge="bottom"
+	selectable="false"
+	zorder="0"
+	xoffset="0"
+	yoffset="0"
+	visible="false"
+	html=""
+	/>
+
+
+	<!-- ********************** -->
+	<!-- Classic Thumbnails Bar -->
+	<!-- ********************** -->
+
+
+
+
+
+<layer name="thumbnailsBar-thumbnailsBar-theme02" 
+	keep="true" 
+	type="image" 
+	visible="false"
+	align="top" 
+	
+		width="100%" 
+		height="0" 
+	
+	x="0"
+	y="0"
+	
+	url="%FIRSTXML%/graphics/classicthumbnailsbar/frame_bg.png" 
+	scale9grid="10|10|80|80"
+	
+	zorder="4"
+/>
+
+
+
+<layer name="thumbnailBorderSource-thumbnailsBar-theme02"
+	keep="true"
+	visible="false"
+	onloaded="loadedImages-thumbnailsBar-theme02(border);"
+	url="%FIRSTXML%/graphics/classicthumbnailsbar/thumbnails_states.png" 
+	offsetX="10"
+	offsetY="10"
+	quarterHeight="0"
+/>
+
+
+
+
+	<krpano arrow1Loaded-thumbnailsBar-theme02="false" arrow2Loaded-thumbnailsBar-theme02="false" borderLoaded-thumbnailsBar-theme02="false" thumbnailsLoadedCounter-thumbnailsBar-theme02="0" thumbsCount-thumbnailsBar-theme02="0" thumbsCounter-thumbnailsBar-theme02="0" firstInit-thumbnailsBar-theme02="false" />
+	
+	
+	<events name="thumbnailsScrollEvents-thumbnailsBar-theme02" 
+		keep="true" 
+		
+		onxmlcomplete="ifnot(startResize-thumbnailsBar-theme02,set(isLoaded-thumbnailsBar-theme02, true);if(isStarted-thumbnailsBar-theme02,onLoadCompleteHandler-thumbnailsBar-theme02();););"
+		onTourStart="set(isStarted-thumbnailsBar-theme02, true);if(isLoaded-thumbnailsBar-theme02,onLoadCompleteHandler-thumbnailsBar-theme02(););"
+		onnewpano="if(startResize-thumbnailsBar-theme02,if(firstInit-thumbnailsBar-theme02,onLoadCompleteHandler-thumbnailsBar-theme02();););"
+		onresize="onResizeHandler-thumbnailsBar-theme02();"
+		hidetourthumbnails="hideWithThumbnailsButton-thumbnailsBar-theme02();" 
+		showtourthumbnails="showWithThumbnailsButton-thumbnailsBar-theme02();" 
+		hidetourcontrols="hideWithControlsBar-thumbnailsBar-theme02();" 
+		showtourcontrols="showWithControlsBar-thumbnailsBar-theme02();" 
+		onenterfullscreen="delayedcall(0.2,scrollToCurrentThumb-thumbnailsBar-theme02(););"
+		onexitfullscreen="delayedcall(0.2,scrollToCurrentThumb-thumbnailsBar-theme02(););"
+	/>
+	
+	
+	<layer name="scrollAreaContainer-thumbnailsBar-theme02" 
+		keep="true"
+		type="container" 
+		align="topleft"
+		x="5"
+		y="5"
+		
+		marginX="5"
+		marginY="5"
+		
+		width="0" 
+		height="0"
+		
+		scrollSpeedInit="10"
+		scrollSpeed="10"
+		scrollSpeedMax="70"
+		scrollSpeedAcceleration="20"
+		
+		parent="thumbnailsBar-thumbnailsBar-theme02"
+		
+		thumbWidth="0"
+		thumbHeight="0"
+		
+		itemWidth="100"
+		itemHeight="50"
+		
+		offsetX="0"
+		offsetY="0"
+		
+		thumbSpacer="0"
+		currentThumbsCount="0"
+		
+		adjustToContent="false"
+		
+		zorder="1"
+		visible="false"
+		ready="false"
+	>
+	
+		
+		<layer name="thumbsScrollArea-thumbnailsBar-theme02" 
+			url="%FIRSTXML%/graphics/scrollarea.swf" 
+			alturl="%FIRSTXML%/graphics/scrollarea.js" 
+			align="top"
+			onhover_autoscrolling="false"
+			
+			x="0"
+			y="0"
+			 
+				direction="h" 
+		/>
+	
+	</layer>
+	
+	
+	
+	<layer name="scrollPrevArrow-thumbnailsBar-theme02" 
+		keep="true"
+		type="image"
+		visible="false"
+		parent="thumbnailsBar-thumbnailsBar-theme02"
+		targetHeight="0"
+		tagertWidth="0"
+		zorder="2"
+		onloaded="loadedImages-thumbnailsBar-theme02(arrow1);"
+			url="%FIRSTXML%/graphics/classicthumbnailsbar/btn_scroll_left.png"
+			align="left"
+	/>
+	
+	
+	
+	<layer name="scrollNextArrow-thumbnailsBar-theme02" 
+		keep="true"
+		type="image"
+		visible="false"
+		parent="thumbnailsBar-thumbnailsBar-theme02"
+		targetHeight="0"
+		targetWidth="0"
+		zorder="2"
+		onloaded="loadedImages-thumbnailsBar-theme02(arrow2);"
+			url="%FIRSTXML%/graphics/classicthumbnailsbar/btn_scroll_right.png"
+			align="right"
+	/>
+	
+	<action name="loadedImages-thumbnailsBar-theme02">
+		if(%1 == "arrow1",
+			set(arrow1Loaded-thumbnailsBar-theme02, true);
+		);
+		if(%1 == "arrow2",
+			set(arrow2Loaded-thumbnailsBar-theme02, true);
+		);
+		if(%1 == "border",
+			if(layer[thumbnailBorderSource-thumbnailsBar-theme02].url,
+				set(borderLoaded-thumbnailsBar-theme02, true);
+			);
+		);
+		if(%1 == "thumbnail",
+			inc(thumbnailsLoadedCounter-thumbnailsBar-theme02);
+		);
+	</action>
+	
+	<action name="onLoadCompleteHandler-thumbnailsBar-theme02">
+		
+		set(thumbsCount-thumbnailsBar-theme02, 0);
+		
+		
+		set(thumbsCount-thumbnailsBar-theme02, get(scene.count));
+		
+		
+		
+		
+		
+		
+		
+		loadThumbs-thumbnailsBar-theme02();
+		
+		if(firstInit-thumbnailsBar-theme02,
+			onLoadCompleteHandlerPartThree-thumbnailsBar-theme02();
+		,
+			onLoadCompleteHandlerPartTwo-thumbnailsBar-theme02();
+		);
+	</action>
+	
+	<action name="onLoadCompleteHandlerPartTwo-thumbnailsBar-theme02">
+		set(imgCounter-thumbnailsBar-theme02, 3);
+		
+		if(arrow1Loaded-thumbnailsBar-theme02,
+			dec(imgCounter-thumbnailsBar-theme02);
+		);
+		if(arrow2Loaded-thumbnailsBar-theme02,
+			dec(imgCounter-thumbnailsBar-theme02);
+		);
+		if(thumbsCount-thumbnailsBar-theme02 == thumbnailsLoadedCounter-thumbnailsBar-theme02,
+			dec(imgCounter-thumbnailsBar-theme02);
+		);
+		
+		if(imgCounter-thumbnailsBar-theme02 LE 0,
+			stopdelayedcall(delayedCallOnLoadComplete-thumbnailsBar-theme02);
+			onLoadCompleteHandlerPartThree-thumbnailsBar-theme02();
+		,
+			delayedcall(delayedCallOnLoadComplete-thumbnailsBar-theme02, 0.2, onLoadCompleteHandlerPartTwo-thumbnailsBar-theme02());
+		);
+	</action>
+	
+	<action name="onLoadCompleteHandlerPartThree-thumbnailsBar-theme02">
+		resetMouseBehavior-thumbnailsBar-theme02();
+		highlightCurrentThumb-thumbnailsBar-theme02();
+		
+		
+		if(layer[scrollAreaContainer-thumbnailsBar-theme02].adjustToContent,
+			mul(adjustWidth-thumbnailsBar-theme02, get(layer[scrollAreaContainer-thumbnailsBar-theme02].marginX), 2);
+			add(adjustWidth-thumbnailsBar-theme02, get(layer[thumbsScrollArea-thumbnailsBar-theme02].width));
+			mul(adjustHeight-thumbnailsBar-theme02, get(layer[scrollAreaContainer-thumbnailsBar-theme02].marginY), 2);
+			add(adjustHeight-thumbnailsBar-theme02, get(layer[thumbsScrollArea-thumbnailsBar-theme02].height));
+			
+			
+			if(adjustWidth-thumbnailsBar-theme02 GT stagewidth,
+				set(adjustWidth-thumbnailsBar-theme02, get(stagewidth));
+				set(layer[scrollAreaContainer-thumbnailsBar-theme02].adjustToContent, false);
+			,
+				if(adjustHeight-thumbnailsBar-theme02 GT stageheight,
+					set(adjustHeight-thumbnailsBar-theme02, get(stageheight));
+					set(layer[scrollAreaContainer-thumbnailsBar-theme02].adjustToContent, false);
+				);
+			);
+			
+			setSize-thumbnailsBar-theme02(get(adjustWidth-thumbnailsBar-theme02), get(adjustHeight-thumbnailsBar-theme02));
+		);
+		
+		setupArrows-thumbnailsBar-theme02(true);
+		
+		
+		if (thumbsCounter-thumbnailsBar-theme02 LE 0,
+			set(layer[thumbnailsBar-thumbnailsBar-theme02].visible, false);
+		);
+		
+		
+		set(startResize-thumbnailsBar-theme02, true);
+		set(firstInit-thumbnailsBar-theme02, true);
+	</action>
+	
+	
+	<action name="onResizeHandler-thumbnailsBar-theme02">
+		
+		delayedcall(0.1, onResizeCallback-thumbnailsBar-theme02(false); );
+	</action>
+	
+	
+	<action name="onResizeCallback-thumbnailsBar-theme02">
+		if(startResize-thumbnailsBar-theme02,
+			setSize-thumbnailsBar-theme02(get(layer[scrollAreaContainer-thumbnailsBar-theme02].targetWidth), get(layer[scrollAreaContainer-thumbnailsBar-theme02].targetHeight));
+			setupArrows-thumbnailsBar-theme02(%1);
+			
+			
+			if (thumbsCounter-thumbnailsBar-theme02 LE 0,
+				set(layer[thumbnailsBar-thumbnailsBar-theme02].visible, false);
+			);
+		);
+	</action>
+	
+	
+		<action name="showWithThumbnailsButton-thumbnailsBar-theme02">
+			set(layer[thumbnailsBar-thumbnailsBar-theme02].visible, true);
+			onResizeCallback-thumbnailsBar-theme02(true);
+		</action>
+		
+		<action name="hideWithThumbnailsButton-thumbnailsBar-theme02">
+			set(layer[thumbnailsBar-thumbnailsBar-theme02].visible, false);
+		</action>
+	
+	
+		<action name="showWithControlsBar-thumbnailsBar-theme02">
+			
+				if (tour_displaythumbnails,
+					set(layer[thumbnailsBar-thumbnailsBar-theme02].visible, true);
+					onResizeCallback-thumbnailsBar-theme02(true);
+				,
+					set(layer[thumbnailsBar-thumbnailsBar-theme02].visible, false);
+				);
+		</action>
+		
+		<action name="hideWithControlsBar-thumbnailsBar-theme02">
+			set(layer[thumbnailsBar-thumbnailsBar-theme02].visible, false);
+		</action>
+	
+	
+	<action name="thumbnailBorderDrawInit-thumbnailsBar-theme02">
+		
+		set(layer[scrollAreaContainer-thumbnailsBar-theme02].offsetX, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].borderWidth));
+		set(layer[scrollAreaContainer-thumbnailsBar-theme02].offsetY, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].borderWidth));
+		
+		
+		mul(totalOffsetX-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].borderWidth), 2);
+		mul(totalOffsetY-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].borderWidth), 2);
+		
+		
+		if(startResize-thumbnailsBar-theme02,
+			sub(layer[scrollAreaContainer-thumbnailsBar-theme02].itemWidth, get(totalOffsetX-thumbnailsBar-theme02));
+			sub(layer[scrollAreaContainer-thumbnailsBar-theme02].itemHeight, get(totalOffsetY-thumbnailsBar-theme02));
+		);
+		
+		
+		set(layer[scrollAreaContainer-thumbnailsBar-theme02].thumbWidth, get(layer[scrollAreaContainer-thumbnailsBar-theme02].itemWidth));
+		set(layer[scrollAreaContainer-thumbnailsBar-theme02].thumbHeight, get(layer[scrollAreaContainer-thumbnailsBar-theme02].itemHeight));
+		
+		add(layer[scrollAreaContainer-thumbnailsBar-theme02].itemWidth, get(totalOffsetX-thumbnailsBar-theme02));
+		add(layer[scrollAreaContainer-thumbnailsBar-theme02].itemHeight, get(totalOffsetY-thumbnailsBar-theme02));
+	</action>
+		
+	
+	<action name="thumbnailBorderImageInit-thumbnailsBar-theme02">
+		
+		set(layer[scrollAreaContainer-thumbnailsBar-theme02].offsetX, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].offsetX));
+		set(layer[scrollAreaContainer-thumbnailsBar-theme02].offsetY, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].offsetY));
+		
+		
+		mul(totalOffsetX-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].offsetX), 2);
+		mul(totalOffsetY-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].offsetY), 2);
+		
+		
+		if(startResize-thumbnailsBar-theme02,
+			sub(layer[scrollAreaContainer-thumbnailsBar-theme02].itemWidth, get(totalOffsetX-thumbnailsBar-theme02));
+			sub(layer[scrollAreaContainer-thumbnailsBar-theme02].itemHeight, get(totalOffsetY-thumbnailsBar-theme02));
+		);
+		
+		
+		set(layer[scrollAreaContainer-thumbnailsBar-theme02].thumbWidth, get(layer[scrollAreaContainer-thumbnailsBar-theme02].itemWidth));
+		set(layer[scrollAreaContainer-thumbnailsBar-theme02].thumbHeight, get(layer[scrollAreaContainer-thumbnailsBar-theme02].itemHeight));
+		
+		add(layer[scrollAreaContainer-thumbnailsBar-theme02].itemWidth, get(totalOffsetX-thumbnailsBar-theme02));
+		add(layer[scrollAreaContainer-thumbnailsBar-theme02].itemHeight, get(totalOffsetY-thumbnailsBar-theme02));
+		
+		
+		div(layer[thumbnailBorderSource-thumbnailsBar-theme02].quarterHeight, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].height), 4);
+		
+		
+		set(cropX-thumbnailsBar-theme02, 0);
+		set(cropY-thumbnailsBar-theme02, 0);
+		set(cropW-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].width));
+		set(cropH-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].quarterHeight));
+		txtadd(layer[thumbnailBorderSource-thumbnailsBar-theme02].cropDefault, get(cropX-thumbnailsBar-theme02), '|', get(cropY-thumbnailsBar-theme02), '|', get(cropW-thumbnailsBar-theme02), '|', get(cropH-thumbnailsBar-theme02));
+
+		
+		add(cropY-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].quarterHeight));
+		txtadd(layer[thumbnailBorderSource-thumbnailsBar-theme02].cropHover, get(cropX-thumbnailsBar-theme02), '|', get(cropY-thumbnailsBar-theme02), '|', get(cropW-thumbnailsBar-theme02), '|', get(cropH-thumbnailsBar-theme02));
+		
+		
+		add(cropY-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].quarterHeight));
+		txtadd(layer[thumbnailBorderSource-thumbnailsBar-theme02].cropSelected, get(cropX-thumbnailsBar-theme02), '|', get(cropY-thumbnailsBar-theme02), '|', get(cropW-thumbnailsBar-theme02), '|', get(cropH-thumbnailsBar-theme02));
+		
+		
+		add(cropY-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].quarterHeight));
+		txtadd(layer[thumbnailBorderSource-thumbnailsBar-theme02].cropVisited, get(cropX-thumbnailsBar-theme02), '|', get(cropY-thumbnailsBar-theme02), '|', get(cropW-thumbnailsBar-theme02), '|', get(cropH-thumbnailsBar-theme02));
+		
+		
+		set(scaleX-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].offsetX));
+		set(scaleY-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].offsetY));
+		sub(scaleW-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].width), get(totalOffsetX-thumbnailsBar-theme02));
+		sub(scaleH-thumbnailsBar-theme02, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].quarterHeight), get(totalOffsetY-thumbnailsBar-theme02));
+		txtadd(layer[thumbnailBorderSource-thumbnailsBar-theme02].scale9grid, get(scaleX-thumbnailsBar-theme02), '|', get(scaleY-thumbnailsBar-theme02), '|', get(scaleW-thumbnailsBar-theme02), '|', get(scaleH-thumbnailsBar-theme02));
+	</action>
+	
+	
+	<action name="loadThumbs-thumbnailsBar-theme02">
+		if(layer[thumbnailBorderSource-thumbnailsBar-theme02].url,
+			set(imgCounter-thumbnailsBar-theme02, 1);
+		,
+			set(imgCounter-thumbnailsBar-theme02, 0);
+		);
+		
+		if(layer[thumbnailBorderSource-thumbnailsBar-theme02].url,
+			if(borderLoaded-thumbnailsBar-theme02,
+				dec(imgCounter-thumbnailsBar-theme02);
+			);
+		);
+		
+		if(imgCounter-thumbnailsBar-theme02 LE 0,
+			stopdelayedcall(delayedCallOnLoadCompleteBorder-thumbnailsBar-theme02);
+			loadThumbsPartTwo-thumbnailsBar-theme02();
+		,
+			delayedcall(delayedCallOnLoadCompleteBorder-thumbnailsBar-theme02, 0.2, loadThumbs-thumbnailsBar-theme02());
+		);
+	</action>
+	
+	<action name="loadThumbsPartTwo-thumbnailsBar-theme02">
+		ifnot(layer[scrollAreaContainer-thumbnailsBar-theme02].ready,
+			
+			
+			if(layer[thumbnailBorderSource-thumbnailsBar-theme02].url,
+				thumbnailBorderImageInit-thumbnailsBar-theme02();
+			,
+				thumbnailBorderDrawInit-thumbnailsBar-theme02();
+			);
+			
+			
+			set(thumbsCounter-thumbnailsBar-theme02, 0);
+			
+			
+			set(i-thumbnailsBar-theme02-wait,30);
+			
+			
+				for( set(i-thumbnailsBar-theme02, 0), i-thumbnailsBar-theme02 LT scene.count, inc(i-thumbnailsBar-theme02),
+					if(i-thumbnailsBar-theme02-wait == i-thumbnailsBar-theme02,
+						add(i-thumbnailsBar-theme02-wait,30);
+						wait(0);
+					);
+					createThumb-thumbnailsBar-theme02(get(scene[get(i-thumbnailsBar-theme02)].name), get(scene[get(i-thumbnailsBar-theme02)].thumburl), get(i-thumbnailsBar-theme02), get(scene[get(i-thumbnailsBar-theme02)].titleid));
+					inc(thumbsCounter-thumbnailsBar-theme02);
+				);
+			
+			
+			
+			
+			
+			
+			set(layer[scrollAreaContainer-thumbnailsBar-theme02].currentThumbsCount, get(thumbsCounter-thumbnailsBar-theme02));
+			
+			
+			setSize-thumbnailsBar-theme02(get(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].width), get(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].height));
+			
+			
+			set(layer[scrollAreaContainer-thumbnailsBar-theme02].visible, true);
+			
+			
+				if (tour_displaycontrols,
+					showWithControlsBar-thumbnailsBar-theme02();
+				,
+					hideWithControlsBar-thumbnailsBar-theme02();
+				);
+			
+			
+			set(layer[scrollAreaContainer-thumbnailsBar-theme02].ready, true);
+		);
+	</action>
+	
+	
+	<action name="setSize-thumbnailsBar-theme02">
+		
+		
+		set(layer[scrollAreaContainer-thumbnailsBar-theme02].targetWidth, %1);
+		set(layer[scrollAreaContainer-thumbnailsBar-theme02].targetHeight, %2);
+		
+		
+		set(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].width, %1);
+		set(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].height, %2);
+		layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].updatepos();
+		
+		
+		mul(totalMarginX-thumbnailsBar-theme02, get(layer[scrollAreaContainer-thumbnailsBar-theme02].x), 2);
+		mul(totalMarginY-thumbnailsBar-theme02, get(layer[scrollAreaContainer-thumbnailsBar-theme02].y), 2);
+		
+			add(totalPluginHeight-thumbnailsBar-theme02, get(totalMarginY-thumbnailsBar-theme02), get(layer[scrollAreaContainer-thumbnailsBar-theme02].itemHeight));
+			
+			
+			
+			if(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].pixelheight LT totalPluginHeight-thumbnailsBar-theme02,
+				set(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].height, get(totalPluginHeight-thumbnailsBar-theme02));
+			);
+		
+		layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].updatepos();
+		
+		
+		sub(containerWidth-thumbnailsBar-theme02, get(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].pixelwidth), get(totalMarginX-thumbnailsBar-theme02));
+		sub(containerHeight-thumbnailsBar-theme02, get(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].pixelheight), get(totalMarginY-thumbnailsBar-theme02));
+
+		
+		set(layer[scrollAreaContainer-thumbnailsBar-theme02].width, get(containerWidth-thumbnailsBar-theme02));
+		set(layer[scrollAreaContainer-thumbnailsBar-theme02].height, get(containerHeight-thumbnailsBar-theme02));
+		
+		set(scrollAreaSize-thumbnailsBar-theme02, 0);
+		
+		
+		mul(totalThumbsSpacer-thumbnailsBar-theme02, get(layer[scrollAreaContainer-thumbnailsBar-theme02].currentThumbsCount), get(layer[scrollAreaContainer-thumbnailsBar-theme02].thumbSpacer));
+		sub(totalThumbsSpacer-thumbnailsBar-theme02, get(layer[scrollAreaContainer-thumbnailsBar-theme02].thumbSpacer));
+		
+		set(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].visible, true);
+		
+
+			mul(scrollAreaSize-thumbnailsBar-theme02, get(layer[scrollAreaContainer-thumbnailsBar-theme02].itemWidth), get(layer[scrollAreaContainer-thumbnailsBar-theme02].currentThumbsCount));
+			add(scrollAreaSize-thumbnailsBar-theme02, get(totalThumbsSpacer-thumbnailsBar-theme02));
+			
+			set(layer[thumbsScrollArea-thumbnailsBar-theme02].width, get(scrollAreaSize-thumbnailsBar-theme02));
+			set(layer[thumbsScrollArea-thumbnailsBar-theme02].height, get(layer[scrollAreaContainer-thumbnailsBar-theme02].itemHeight));
+			
+			
+			if(layer[scrollAreaContainer-thumbnailsBar-theme02].width LT layer[scrollAreaContainer-thumbnailsBar-theme02].itemWidth,
+				set(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].visible, false);
+			,
+				verifyThumbnailsBarVisibility-thumbnailsBar-theme02();
+			);
+			
+		
+		
+		if(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].width LT 0,
+			set(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].visible, false);
+		);
+		
+	</action>
+	
+	
+	<action name="verifyThumbnailsBarVisibility-thumbnailsBar-theme02">
+		if(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].visible,
+			set(boolValue-thumbnailsBar-theme02, false);
+			
+			if (tour_displaythumbnails,
+				if (tour_displaycontrols,
+					set(boolValue-thumbnailsBar-theme02, true);
+				);
+			);
+			
+			set(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].visible, get(boolValue-thumbnailsBar-theme02));
+		);
+	</action>
+	
+	
+	<action name="createThumb-thumbnailsBar-theme02">
+
+			add(offsetFactor-thumbnailsBar-theme02, get(layer[scrollAreaContainer-thumbnailsBar-theme02].itemWidth), get(layer[scrollAreaContainer-thumbnailsBar-theme02].thumbSpacer));
+	
+			mul(thumbIncPos-thumbnailsBar-theme02, %3, get(offsetFactor-thumbnailsBar-theme02));
+			
+			
+			if(layer[thumbnailBorderSource-thumbnailsBar-theme02].url,
+				add(thumbIncPos-thumbnailsBar-theme02, get(layer[scrollAreaContainer-thumbnailsBar-theme02].offsetX));
+			);
+			
+		
+		mul(negativeOffsetX-thumbnailsBar-theme02, get(layer[scrollAreaContainer-thumbnailsBar-theme02].offsetX), -1);
+		mul(negativeOffsetY-thumbnailsBar-theme02, get(layer[scrollAreaContainer-thumbnailsBar-theme02].offsetY), -1);
+		
+		set(thumbName, 'thumb_');
+		txtadd(thumbName, %1);
+		txtadd(thumbName, '-thumbnailsBar-theme02');
+		addlayer(get(thumbName));
+		
+		set(thumbBorderName, 'thumbBorder_');
+		txtadd(thumbBorderName, %1);
+		txtadd(thumbBorderName, '-thumbnailsBar-theme02');
+		addlayer(get(thumbBorderName));
+		
+		
+		ifnot(layer[thumbnailBorderSource-thumbnailsBar-theme02].url,
+			set(layer[get(thumbBorderName)].type, container);
+			set(layer[get(thumbBorderName)].parent, thumbsScrollArea-thumbnailsBar-theme02);
+		);
+		
+		
+		set(layer[get(thumbName)].onloaded, loadedImages-thumbnailsBar-theme02("thumbnail"););
+		set(layer[get(thumbName)].url, %2);
+		set(layer[get(thumbName)].keep, true);
+		set(layer[get(thumbName)].width, get(layer[scrollAreaContainer-thumbnailsBar-theme02].thumbWidth));
+		set(layer[get(thumbName)].height, get(layer[scrollAreaContainer-thumbnailsBar-theme02].thumbHeight));
+		set(layer[get(thumbName)].align, topleft);
+		
+		
+			set(layer[get(thumbName)].y, get(layer[scrollAreaContainer-thumbnailsBar-theme02].offsetY));
+		
+			if(layer[thumbnailBorderSource-thumbnailsBar-theme02].url,
+				set(layer[get(thumbName)].parent, thumbsScrollArea-thumbnailsBar-theme02);
+				set(layer[get(thumbName)].x, get(thumbIncPos-thumbnailsBar-theme02));
+			,
+				set(layer[get(thumbName)].parent, get(thumbBorderName));
+				set(layer[get(thumbName)].x, get(layer[scrollAreaContainer-thumbnailsBar-theme02].offsetX));
+				set(layer[get(thumbName)].onclick, mainloadscene(%1); resetMouseBehavior-thumbnailsBar-theme02(); highlightThumb-thumbnailsBar-theme02(%1));
+			);	
+			
+		
+		
+		set(layer[get(thumbBorderName)].keep, true);
+		set(layer[get(thumbBorderName)].width, get(layer[scrollAreaContainer-thumbnailsBar-theme02].itemWidth));
+		set(layer[get(thumbBorderName)].height, get(layer[scrollAreaContainer-thumbnailsBar-theme02].itemHeight));
+		set(layer[get(thumbBorderName)].align, topleft);
+		
+		if(layer[thumbnailBorderSource-thumbnailsBar-theme02].url,
+			set(layer[get(thumbBorderName)].url, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].url));
+			set(layer[get(thumbBorderName)].scale9grid, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].scale9grid));
+			set(layer[get(thumbBorderName)].parent, get(thumbName));
+			set(layer[get(thumbBorderName)].x, get(negativeOffsetX-thumbnailsBar-theme02));
+			set(layer[get(thumbBorderName)].y, get(negativeOffsetY-thumbnailsBar-theme02));
+			set(layer[get(thumbBorderName)].onclick, mainloadscene(%1); resetMouseBehavior-thumbnailsBar-theme02(); highlightThumb-thumbnailsBar-theme02(%1));
+		,
+			
+				set(layer[get(thumbBorderName)].x, get(thumbIncPos-thumbnailsBar-theme02)); 
+				
+		);
+		
+		
+		setupMouseBehavior-thumbnailsBar-theme02(%1, %4);
+		
+	</action>
+	
+	
+	<action name="removeThumb-thumbnailsBar-theme02">
+		set(thumbName, 'thumb_');
+		txtadd(thumbName, %1);
+		txtadd(thumbName, '-thumbnailsBar-theme02');
+		removelayer(get(thumbName));
+		
+		set(thumbBorderName, 'thumbBorder_');
+		txtadd(thumbBorderName, %1);
+		txtadd(thumbBorderName, '-thumbnailsBar-theme02');
+		removelayer(get(thumbBorderName));
+	</action>
+	
+	
+	
+	<action name="setupArrows-thumbnailsBar-theme02">
+		
+		if(layer[scrollAreaContainer-thumbnailsBar-theme02].adjustToContent,
+			hideArrows-thumbnailsBar-theme02();
+		,
+			ifnot(device.touchdevice,
+				
+					if(layer[scrollAreaContainer-thumbnailsBar-theme02].width LT layer[thumbsScrollArea-thumbnailsBar-theme02].width,
+				
+					showArrows-thumbnailsBar-theme02();
+				,
+					hideArrows-thumbnailsBar-theme02();
+				);
+			,
+				hideArrows-thumbnailsBar-theme02();
+			);
+		);
+		
+		
+		if(%1,
+			scrollToCurrentThumb-thumbnailsBar-theme02();
+		);
+		
+		
+			
+			if(layer[scrollAreaContainer-thumbnailsBar-theme02].width LT layer[scrollAreaContainer-thumbnailsBar-theme02].itemWidth,
+				set(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].visible, false);
+			);
+	</action>
+	
+	
+	<action name="showArrows-thumbnailsBar-theme02">
+		
+		
+		
+		
+		set(layer[scrollPrevArrow-thumbnailsBar-theme02].visible, true);
+		set(layer[scrollNextArrow-thumbnailsBar-theme02].visible, true);
+		
+		
+		
+			
+			add(totalArrowSize-thumbnailsBar-theme02, get(layer[scrollPrevArrow-thumbnailsBar-theme02].width), get(layer[scrollNextArrow-thumbnailsBar-theme02].width));
+		
+			
+			sub(scrollAreaContainerSize-thumbnailsBar-theme02, get(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].pixelwidth), get(totalArrowSize-thumbnailsBar-theme02));
+		
+			set(layer[scrollAreaContainer-thumbnailsBar-theme02].width, get(scrollAreaContainerSize-thumbnailsBar-theme02));
+			
+			set(layer[scrollAreaContainer-thumbnailsBar-theme02].x, get(layer[scrollPrevArrow-thumbnailsBar-theme02].width));
+			
+		
+		
+		set(layer[scrollPrevArrow-thumbnailsBar-theme02].onhover, scrollPrev-thumbnailsBar-theme02(););
+		set(layer[scrollNextArrow-thumbnailsBar-theme02].onhover, scrollNext-thumbnailsBar-theme02(););
+		
+		set(layer[scrollPrevArrow-thumbnailsBar-theme02].onclick, scrollPrev-thumbnailsBar-theme02(get(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeedAcceleration)););
+		set(layer[scrollNextArrow-thumbnailsBar-theme02].onclick, scrollNext-thumbnailsBar-theme02(get(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeedAcceleration)););
+		
+		
+		
+		
+		
+		set(layer[scrollPrevArrow-thumbnailsBar-theme02].onout, set(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeed, get(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeedInit)););
+		set(layer[scrollNextArrow-thumbnailsBar-theme02].onout, set(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeed, get(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeedInit)););
+		
+	</action>
+	
+	
+	
+	
+	<action name="hideArrows-thumbnailsBar-theme02">
+		
+		set(layer[scrollPrevArrow-thumbnailsBar-theme02].visible, false);
+		set(layer[scrollNextArrow-thumbnailsBar-theme02].visible, false);
+		
+		
+
+			mul(totalMargin-thumbnailsBar-theme02, get(layer[scrollAreaContainer-thumbnailsBar-theme02].marginX), 2);
+			
+			sub(scrollAreaContainerSize-thumbnailsBar-theme02, get(layer[get(layer[scrollAreaContainer-thumbnailsBar-theme02].parent)].pixelwidth), get(totalMargin-thumbnailsBar-theme02));
+
+			set(layer[scrollAreaContainer-thumbnailsBar-theme02].width, get(scrollAreaContainerSize-thumbnailsBar-theme02));
+			set(layer[scrollAreaContainer-thumbnailsBar-theme02].x, get(layer[scrollAreaContainer-thumbnailsBar-theme02].marginX));
+			 
+			
+	</action>
+	
+	
+	<action name="scrollPrev-thumbnailsBar-theme02">
+		
+		
+		if(%1,
+			inc(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeed, %1);
+		);
+		
+		layer[thumbsScrollArea-thumbnailsBar-theme02].stopscrolling();
+		
+		set(scrollLimit-thumbnailsBar-theme02, 0);
+		
+		
+			
+				sub(scrollLimit-thumbnailsBar-theme02, get(layer[thumbsScrollArea-thumbnailsBar-theme02].width), get(layer[scrollAreaContainer-thumbnailsBar-theme02].width));
+				div(scrollLimit-thumbnailsBar-theme02, 2);
+			
+			add(layer[thumbsScrollArea-thumbnailsBar-theme02].x, get(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeed));
+			if(layer[thumbsScrollArea-thumbnailsBar-theme02].x GE scrollLimit-thumbnailsBar-theme02,
+				set(layer[thumbsScrollArea-thumbnailsBar-theme02].x, get(scrollLimit-thumbnailsBar-theme02));
+			);
+		
+		if(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeed LT layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeedMax,
+			inc(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeed);
+		);
+		
+	</action>
+	
+	
+	<action name="scrollNext-thumbnailsBar-theme02">
+		
+		
+		if(%1,
+			inc(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeed, %1);
+		);
+		
+		layer[thumbsScrollArea-thumbnailsBar-theme02].stopscrolling();
+		
+			
+			sub(scrollLimit-thumbnailsBar-theme02, get(layer[thumbsScrollArea-thumbnailsBar-theme02].width), get(layer[scrollAreaContainer-thumbnailsBar-theme02].width));
+			
+				div(scrollLimit-thumbnailsBar-theme02, 2);
+			mul(scrollLimit-thumbnailsBar-theme02, -1);
+			
+			sub(layer[thumbsScrollArea-thumbnailsBar-theme02].x, get(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeed));
+			if(layer[thumbsScrollArea-thumbnailsBar-theme02].x LE scrollLimit-thumbnailsBar-theme02,
+				set(layer[thumbsScrollArea-thumbnailsBar-theme02].x, get(scrollLimit-thumbnailsBar-theme02));
+			);
+		
+		if(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeed LT layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeedMax,
+			inc(layer[scrollAreaContainer-thumbnailsBar-theme02].scrollSpeed);
+		);
+		
+	</action>
+	
+	
+	<action name="resetMouseBehavior-thumbnailsBar-theme02">
+	
+		
+		
+		
+		set(j-thumbnailsBar-theme02-wait,30);
+		
+			for( set(j-thumbnailsBar-theme02, 0), j-thumbnailsBar-theme02 LT scene.count, inc(j-thumbnailsBar-theme02),
+				if(j-thumbnailsBar-theme02-wait == j-thumbnailsBar-theme02,
+					add(j-thumbnailsBar-theme02-wait,30);
+					wait(0);
+				);
+				set(thumbBorderName, 'thumbBorder_');
+				txtadd(thumbBorderName, get(scene[get(j-thumbnailsBar-theme02)].name));
+				txtadd(thumbBorderName, '-thumbnailsBar-theme02');
+				
+				setupMouseBehavior-thumbnailsBar-theme02(get(scene[get(j-thumbnailsBar-theme02)].name), get(scene[get(j-thumbnailsBar-theme02)].titleid));
+			);
+		
+	</action>
+	
+	
+	<action name="setupMouseBehavior-thumbnailsBar-theme02">
+
+		set(thumbName, 'thumb_');
+		txtadd(thumbName, %1);
+		txtadd(thumbName, '-thumbnailsBar-theme02');
+		
+		set(thumbBorderName, 'thumbBorder_');
+		txtadd(thumbBorderName, %1);
+		txtadd(thumbBorderName, '-thumbnailsBar-theme02');
+		
+		if(layer[thumbnailBorderSource-thumbnailsBar-theme02].url,
+			set(layer[get(thumbBorderName)].crop, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].cropDefault));
+			set(layer[get(thumbBorderName)].onovercrop, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].cropHover));
+			set(layer[get(thumbBorderName)].ondowncrop, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].cropHover));
+			set(layer[get(thumbBorderName)].tooltip, %2);
+				set(layer[get(thumbBorderName)].onhover, showTooltip(get(align), ));
+				set(layer[get(thumbBorderName)].onout, hideTooltip());
+		,
+			set(layer[get(thumbBorderName)].bgcolor, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].borderColorDefault));
+			set(layer[get(thumbBorderName)].bgalpha, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].borderAlphaDefault));
+				set(layer[get(thumbName)].tooltip, %2);
+				set(layer[get(thumbName)].onhover, showTooltip(get(align), ));
+			
+			set(layer[get(thumbName)].onover, 
+				set(layer[get(parent)].bgcolor, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].borderColorHover));
+				set(layer[get(parent)].bgalpha, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].borderAlphaHover));
+			);
+			
+			set(layer[get(thumbName)].onout, 
+				set(layer[get(parent)].bgcolor, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].borderColorDefault));
+				set(layer[get(parent)].bgalpha, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].borderAlphaDefault));
+				hideTooltip();
+			);
+		);
+	
+	</action>
+	
+	
+	<action name="highlightCurrentThumb-thumbnailsBar-theme02">
+			highlightThumb-thumbnailsBar-theme02(get(xml.scene));
+	</action>
+	
+	
+	<action name="highlightThumb-thumbnailsBar-theme02">
+	
+		set(thumbBorderName, 'thumbBorder_');
+		txtadd(thumbBorderName, %1);
+		txtadd(thumbBorderName, '-thumbnailsBar-theme02');
+		
+		if(layer[thumbnailBorderSource-thumbnailsBar-theme02].url,
+			set(layer[get(thumbBorderName)].crop, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].cropSelected));
+			set(layer[get(thumbBorderName)].onovercrop, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].cropSelected));
+			set(layer[get(thumbBorderName)].ondowncrop, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].cropSelected));
+		,
+			set(thumbName, 'thumb_');
+			txtadd(thumbName, %1);
+			txtadd(thumbName, '-thumbnailsBar-theme02');
+			
+			set(layer[get(thumbBorderName)].bgcolor, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].borderColorSelected));
+			set(layer[get(thumbBorderName)].bgalpha, get(layer[thumbnailBorderSource-thumbnailsBar-theme02].borderAlphaSelected));
+			
+			set(layer[get(thumbName)].onover, "");
+			set(layer[get(thumbName)].onout, hideTooltip(););
+		);
+
+		scrollToThumb-thumbnailsBar-theme02(%1);
+	</action>
+	
+	
+	<action name="scrollToCurrentThumb-thumbnailsBar-theme02">
+			scrollToThumb-thumbnailsBar-theme02(get(xml.scene));
+	</action>
+	
+	
+	<action name="scrollToThumb-thumbnailsBar-theme02">
+		
+		set(thumbName, 'thumb_');
+		set(thumbBorderName, 'thumbBorder_');
+		
+		txtadd(thumbName, %1);
+		txtadd(thumbName, '-thumbnailsBar-theme02');
+		txtadd(thumbBorderName, %1);
+		txtadd(thumbBorderName, '-thumbnailsBar-theme02');
+
+			set(posX-thumbnailsBar-theme02, 0);
+			if(layer[thumbnailBorderSource-thumbnailsBar-theme02].url,
+				div(halfThumbWidth-thumbnailsBar-theme02, get(layer[get(thumbName)].width), 2);
+				ifnot(layer[scrollAreaContainer-thumbnailsBar-theme02].adjustToContent,
+					add(posX-thumbnailsBar-theme02, get(layer[get(thumbName)].x), get(halfThumbWidth-thumbnailsBar-theme02));
+				);
+				if(layer[thumbsScrollArea-thumbnailsBar-theme02].scrolltocenter,
+					layer[thumbsScrollArea-thumbnailsBar-theme02].scrolltocenter(get(posX-thumbnailsBar-theme02), 0);
+				);
+			,
+				div(halfThumbWidth-thumbnailsBar-theme02, get(layer[get(thumbBorderName)].width), 2);
+				ifnot(layer[scrollAreaContainer-thumbnailsBar-theme02].adjustToContent,
+					add(posX-thumbnailsBar-theme02, get(layer[get(thumbBorderName)].x), get(halfThumbWidth-thumbnailsBar-theme02));
+				);
+				if(layer[thumbsScrollArea-thumbnailsBar-theme02].scrolltocenter,
+					layer[thumbsScrollArea-thumbnailsBar-theme02].scrolltocenter(get(posX-thumbnailsBar-theme02), 0);
+				);
+			);
+		
+	</action>
+
+
+
+
+<!-- ************ -->
+<!-- Context Menu -->
+<!-- ************ -->
+  <contextmenu fullscreen="false">
+    <item name="author" onclick="getmessage(urltoopen,project_author_url);openurl(get(urltoopen),_blank);" />
+    <item name="website1" onclick="getmessage(urltoopen,contextmenuwebsiteurl1);openurl(get(urltoopen),_blank);" />
+    <item name="normal"        onclick="setViewNormal();" separator="true"/>
+    <item name="fisheye"       onclick="setViewFisheye();"/>
+    <item name="architectural" onclick="setViewArchitectural();"/>
+    <item name="littleplanet"  onclick="setViewLittlePlanet();"/>
+    <item name="fullscreenentry" onclick="enterFullscreen();" separator="true"/>
+  </contextmenu>
+
+  <events name="contextmenuevents" keep="true" onenterfullscreen="updateContextMenu" onexitfullscreen="updateContextMenu" onxmlcomplete="updateContextMenu"/>
+  <action name="updateContextMenu">
+    getmessage(contextmenu.item[author].caption, project_author_name);
+    getmessage(contextmenu.item[website1].caption, contextmenuopenwebsitelabel1);
+    getmessage(contextmenu.item[normal].caption, contextmenunormallabel);
+    getmessage(contextmenu.item[architectural].caption, contextmenuarchitecturallabel);
+    
+    set(sceneisfull360, false);
+    if(scene[get(xml.scene)].full360,
+      sub(viewhfov, view.hlookatmax, view.hlookatmin);
+      if (viewhfov == 360,
+        sub(viewvfov, view.vlookatmax, view.vlookatmin);
+        if (viewvfov == 180,
+          set(sceneisfull360, true);
+        );
+      );
+    );
+    if (sceneisfull360,
+      set(contextmenu.item[fisheye].visible, true);
+      getmessage(contextmenu.item[fisheye].caption, contextmenufisheyelabel);
+      set(contextmenu.item[littleplanet].visible, true);
+      getmessage(contextmenu.item[littleplanet].caption, contextmenulittleplanetlabel);
+    ,
+      set(contextmenu.item[fisheye].visible, false);
+      set(contextmenu.item[littleplanet].visible, false);
+    );
+    if(tour_fullscreen,
+      getmessage(contextmenu.item[fullscreenentry].caption, contextmenucloseFsLabel);
+      set(contextmenu.item[fullscreenentry].onclick, exitFullscreen(););
+     ,
+      getmessage(contextmenu.item[fullscreenentry].caption, contextmenuopenFsLabel);
+      set(contextmenu.item[fullscreenentry].onclick, enterFullscreen(););
+    );
+  </action>
+  <!-- ************************* -->
+  <!-- Progress Bar and Loopings -->
+  <!-- ************************* -->
+  <progress showload="bar(
+                midbottom
+                ,
+				100%,
+                5,
+				0,
+                0,
+				solid,
+				0xffffff,0x555555,0x555555,
+				0x111111,0,
+				0xffffff,0
+				)"
+			showwait="loopings(
+				0xffffff,
+				15,15,
+				0,0,
+				0xffffff,0,
+				0,0,center
+				)"
+			showreloads="false"
+			parent=""
+			/>
+  <!-- ************************ -->
+  <!-- Title : current panorama -->
+  <!-- ************************ -->
+
+  <events name="title_currentpanorama_events" 
+    onTourStart="showtitle_currentpanorama();"
+    hidetourcontrols="hidetitle_currentpanorama();" 
+    showtourcontrols="showtitle_currentpanorama();" 
+    onnewpano="updatetitle_currentpanorama();" 
+    keep="true" />
+
+  <action name="hidetitle_currentpanorama">set(layer[title_currentpanorama].visible, false);</action>
+  <action name="showtitle_currentpanorama">set(layer[title_currentpanorama].visible, true );</action>
+
+  <action name="updatetitle_currentpanorama">
+    getmessage(layer[title_currentpanorama].html, get(scene[get(xml.scene)].titleid));
+    escape(layer[title_currentpanorama].html);
+  </action>
+  <layer name="title_currentpanorama" keep="true" zorder="7"
+         url="%FIRSTXML%/graphics/textfield.swf"
+         align="bottomleft" x="10" y="15" width="100%" autoheight="true"
+         background="false" capture="false" handcursor="false" selectable="false" enabled="false"
+         borderwidth="0"
+         alpha="1"
+         visible="false"
+         css="text-align:left;
+              color:#000000;
+              font-family:Arial;
+              font-size:28px;"/>
+  <!-- *********** -->
+  <!-- Description -->
+  <!-- *********** -->
+
+
+<ptplugin name="description" canStart="false" newPano="false" openatstart="true" startMethod="showPanoDescription-description" engine="kolorArea">
+	<settings>
+		<option name="position" value="bottomleft" type="string" />
+		<option name="start_position" value="left" type="string" />
+		<option name="margin_x" value="75" type="int" />
+		<option name="margin_y" value="75" type="int" />
+		<option name="background_color" value="ffffff" type="string" />
+		<option name="background_alpha" value="0.700007629510948" type="float" />
+		<option name="topleft_radius" value="0" type="int" />
+		<option name="topright_radius" value="0" type="int" />
+		<option name="bottomleft_radius" value="0" type="int" />
+		<option name="bottomright_radius" value="0" type="int" />
+		<option name="area_border_width" value="0" type="int" />
+		<option name="area_border_color" value="f2f2f2" type="string" />
+		<option name="padding" value="15" type="int" />
+		<option name="display_title" value="false" type="bool" />
+		<option name="close_displayed" value="false" type="bool" />
+		<option name="overlay_displayed" value="false" type="bool" />
+		<option name="overlay_color" value="000000" type="string" />
+		<option name="overlay_alpha" value="0.500007629510948" type="float" />
+		<option name="area_width" value="22" type="int" />
+		<option name="area_height" value="19" type="int" />
+		<option name="area_width_unit" value="percent" type="string" />
+		<option name="area_height_unit" value="percent" type="string" />
+		<option name="animation" value="false" type="bool" />
+		<option name="animation_duration" value="500" type="int" />
+		<option name="refresh_content" value="true" type="bool" />
+		<option name="close_callback" value="invokeKrFunction('closeKolorAreaCallback-description')" type="string" />
+		<option name="close_on_click" value="false" type="bool" />
+		<option name="zorder" value="8" type="int" />
+		<option name="use_i18n" value="true" type="bool" />
+	</settings>
+</ptplugin>
+
+<action name="kolorAreaJsReady-description">
+	set(ptplugin[description].jsready, true);
+</action>
+
+<action name="updateTitle-description">
+	js(invokePluginFunction(description, changeTitle, get(scene[get(xml.scene)].titleid)));
+</action>
+
+<action name="openKolorArea-description">
+	set(ptplugin[description].isOpen, true);
+	js(showKolorArea(description, get(ptplugin[description].descID)));
+</action>
+
+<action name="closeKolorArea-description">
+	set(ptplugin[description].isOpen, false);
+	js(invokePluginFunction(description, closeKolorArea));
+</action>
+
+<action name="toggleKolorArea-description">
+	if(ptplugin[description].isOpen,
+		closeKolorArea-description();
+	,
+		openKolorArea-description();
+	);
+</action>
+
+<action name="closeKolorAreaCallback-description">
+	set(ptplugin[description].isOpen, false);
+	if(tour_displayinfo,hideTourInfo();
+	);
+</action>
+
+
+
+<action name="showKolorArea-description">
+	ifnot(ptplugin[description].startMethod == "",
+		delayedcall(0,get(ptplugin[description].startMethod));
+	,
+		js(invokePluginFunction(description, showKolorArea, %1));
+	);
+</action>
+	
+<action name="hideKolorArea-description">
+	js(invokePluginFunction(description, hideKolorArea, %1));
+</action>
+
+<action name="openDescription-description">
+	openKolorArea-description();
+</action>
+
+<action name="openSpotDescription-description">
+	set(ptplugin[description].descID, %1);
+	openKolorArea-description();
+</action>
+
+<action name="closeDescription-description">
+	set(ptplugin[description].currentGroup, false);
+	closeKolorArea-description();
+</action> 
+
+
+
+<action name="showPanoDescription-description">
+	if(ptplugin[description].canStart,
+		set(ptplugin[description].descID, get(scene[get(xml.scene)].descriptionid));
+		if(ptplugin[description].descID == null,
+			set(ptplugin[description].descID, "");
+		);
+		if(ptplugin[description].descID != "",
+			openDescription-description();
+		,
+			hideKolorArea-description(false);
+		);
+		set(ptplugin[description].startMethod, "");
+	);
+</action>
+
+<action name="refreshPanoDescription-description">
+	set(ptplugin[description].descID, get(scene[get(xml.scene)].descriptionid));
+	if(ptplugin[description].descID == null,
+		set(ptplugin[description].descID, "");
+	);
+	if(ptplugin[description].descID != "",
+		if(ptplugin[description].isOpen,
+			js(invokePluginFunction(description, updateKolorArea, get(ptplugin[description].descID)));
+		);
+	,
+		closeDescription-description();
+	);
+</action>
+
+<action name="onNewPano-description">
+	if(ptplugin[description].newPano,
+		if(ptplugin[description].startMethod == "",
+			if(ptplugin[description].isOpen,
+				refreshPanoDescription-description();
+			,
+				if(tour_displaycontrols,
+				if(tour_displayinfo,
+				showPanoDescription-description();
+				,
+				refreshPanoDescription-description();
+				);
+				,
+				refreshPanoDescription-description();
+				);
+			);
+		);
+	);
+	set(ptplugin[description].newPano, true);
+</action>
+
+<events name="kolorAreaEvents-description" 
+	keep="true"
+	onTourStart="set(ptplugin[description].canStart, true);if(ptplugin[description].openatstart,showTourInfo();,if(tour_displaycontrols,if(tour_displayinfo,showTourInfo(););););"
+	onshowtourinfo="showPanoDescription-description();"
+	onhidetourinfo="closeDescription-description();"
+	onnewpano="onNewPano-description();"
+	hidetourcontrols="hideKolorArea-description(false);"
+	showtourcontrols="if(tour_displayinfo,if(ptplugin[description].isOpen,showKolorArea-description(false);,showPanoDescription-description();););"
+/>
+	
+	<!-- ************ -->
+	<!-- PanotourMaps -->
+	<!-- ************ -->
+	
+		<ptplugin name="panotourmaps" lat="-9999" lng="-9999" zoom="11" maptypelayer="physical" openatstart="true" state="true" bgcolor="f2f2f2" zorder="9" engine="KolorMap">
+	
+		<radar visible="true" radius="8000" linktozoom="true" quality="8" linecolor="ffffff" lineopacity="0.500007629510948" linewidth="1" fillcolor="ffffff" fillopacity="0.300007629510948" />
+		
+		<markers animation="false" />
+		
+		
+		<controls zoom="true" pan="true" scale="false" maptype="true" overview="false">
+			<ui draggable="true" scrollable="true" dblclick="true" />
+		</controls>
+		
+		<markerSelected name="" heading="" fov="" />
+		
+		
+		
+			<!-- PanotourMaps markers counter : 10 -->
+				<marker name="spotmap64" lat="35.3212547302" lng="-82.84009552" heading="63.6000000000001" draggable="false" desc="spotmap64_tooltip" desctype="info" onhover="false" isscene="true" scene="pano62" jsclick="spotmap64ActionSpotMap">
+					<markericon url="spots/pin_2d_shadowed_user_defaultmap1.png" iconwidth="32" iconheight="32" shadow="false" iconanchor="center" />
+				</marker>
+				<marker name="spotmap26" lat="35.4096374512" lng="-82.9310302734" heading="46.9999999999996" draggable="false" desc="spotmap26_tooltip" desctype="info" onhover="false" isscene="true" scene="pano24" jsclick="spotmap26ActionSpotMap">
+					<markericon url="spots/pin_2d_shadowed_user_defaultmap1.png" iconwidth="32" iconheight="32" shadow="false" iconanchor="center" />
+				</marker>
+				<marker name="spotmap29" lat="35.3163986206" lng="-82.8592681885" heading="157.2" draggable="false" desc="spotmap29_tooltip" desctype="info" onhover="false" isscene="true" scene="pano27" jsclick="spotmap29ActionSpotMap">
+					<markericon url="spots/pin_2d_shadowed_user_defaultmap1.png" iconwidth="32" iconheight="32" shadow="false" iconanchor="center" />
+				</marker>
+				<marker name="spotmap34" lat="35.3382873535" lng="-82.9034423828" heading="-17.6" draggable="false" desc="spotmap34_tooltip" desctype="info" onhover="false" isscene="true" scene="pano32" jsclick="spotmap34ActionSpotMap">
+					<markericon url="spots/pin_2d_shadowed_user_defaultmap1.png" iconwidth="32" iconheight="32" shadow="false" iconanchor="center" />
+				</marker>
+				<marker name="spotmap104" lat="35.7381515503" lng="-82.1972808838" heading="-22.3999999999993" draggable="false" desc="spotmap104_tooltip" desctype="info" onhover="false" isscene="true" scene="pano30" jsclick="spotmap104ActionSpotMap">
+					<markericon url="spots/pin_2d_shadowed_user_defaultmap1.png" iconwidth="32" iconheight="32" shadow="false" iconanchor="center" />
+				</marker>
+				<marker name="spotmap43" lat="35.3539161682" lng="-82.8182144165" heading="-62.7999999999999" draggable="false" desc="spotmap43_tooltip" desctype="info" onhover="false" isscene="true" scene="pano41" jsclick="spotmap43ActionSpotMap">
+					<markericon url="spots/pin_2d_shadowed_user_defaultmap1.png" iconwidth="32" iconheight="32" shadow="false" iconanchor="center" />
+				</marker>
+				<marker name="spotmap37" lat="35.5947036743" lng="-83.4153213501" heading="-172.8" draggable="false" desc="spotmap37_tooltip" desctype="info" onhover="false" isscene="true" scene="pano35" jsclick="spotmap37ActionSpotMap">
+					<markericon url="spots/pin_2d_shadowed_user_defaultmap1.png" iconwidth="32" iconheight="32" shadow="false" iconanchor="center" />
+				</marker>
+				<marker name="spotmap67" lat="35.5527496338" lng="-83.3094940186" heading="83" draggable="false" desc="spotmap67_tooltip" desctype="info" onhover="false" isscene="true" scene="pano65" jsclick="spotmap67ActionSpotMap">
+					<markericon url="spots/pin_2d_shadowed_user_defaultmap1.png" iconwidth="32" iconheight="32" shadow="false" iconanchor="center" />
+				</marker>
+				<marker name="spotmap40" lat="35.6109237671" lng="-83.4253540039" heading="-171" draggable="false" desc="spotmap40_tooltip" desctype="info" onhover="false" isscene="true" scene="pano38" jsclick="spotmap40ActionSpotMap">
+					<markericon url="spots/pin_2d_shadowed_user_defaultmap1.png" iconwidth="32" iconheight="32" shadow="false" iconanchor="center" />
+				</marker>
+				<marker name="spotmap46" lat="35.7650375366" lng="-82.2650527954" heading="117.4" draggable="false" desc="spotmap46_tooltip" desctype="info" onhover="false" isscene="true" scene="pano44" jsclick="spotmap46ActionSpotMap">
+					<markericon url="spots/pin_2d_shadowed_user_defaultmap1.png" iconwidth="32" iconheight="32" shadow="false" iconanchor="center" />
+				</marker>
+		
+		
+		
+	</ptplugin>
+	
+	<action name="kolorMapJsReady-panotourmaps">
+		set(ptplugin[panotourmaps].jsready, true);
+	</action>
+	
+	<ptplugin name="panotourmapsArea" engine="kolorArea">
+	<settings>
+		<option name="position" value="right" type="string" />
+		<option name="start_position" value="left" type="string" />
+		<option name="margin_x" value="0" type="int" />
+		<option name="margin_y" value="0" type="int" />
+		<option name="background_color" value="f2f2f2" type="string" />
+		<option name="background_alpha" value="1" type="float" />
+		<option name="padding" value="15" type="int" />
+		<option name="topleft_radius" value="0" type="int" />
+		<option name="topright_radius" value="0" type="int" />
+		<option name="bottomleft_radius" value="0" type="int" />
+		<option name="bottomright_radius" value="0" type="int" />
+		<option name="area_border_width" value="0" type="int" />
+		<option name="area_border_color" value="f2f2f2" type="string" />
+		<option name="display_title" value="false" type="bool" />
+		<option name="close_displayed" value="false" type="bool" />
+		<option name="overlay_displayed" value="false" type="bool" />
+		<option name="overlay_color" value="000000" type="string" />
+		<option name="overlay_alpha" value="0.500007629510948" type="float" />
+		<option name="area_width" value="20" type="int" />
+		<option name="area_height" value="80" type="int" />
+		<option name="area_width_unit" value="percent" type="string" />
+		<option name="area_height_unit" value="percent" type="string" />
+		<option name="animation" value="false" type="bool" />
+		<option name="animation_duration" value="500" type="int" />
+		<option name="close_on_click" value="false" type="bool" />
+		<option name="refresh_content" value="false" type="bool" />
+		<option name="open_callback" value="addKolorMap('panotourmaps', [['googlev3','']], 'panotourmapsArea-mapDIV');" type="string" />
+		<option name="close_callback" value="invokeKrFunction('closeKolorAreaCallback-panotourmapsArea')" type="string" />
+		<option name="zorder" value="9" type="int" />
+	</settings>
+	</ptplugin>
+	
+	<action name="kolorAreaJsReady-panotourmapsArea">
+		set(ptplugin[panotourmapsArea].jsready, true);
+	</action>
+	
+	<action name="openKolorArea-panotourmapsArea">
+		ifnot(ptplugin[panotourmapsArea].isOpen,
+			set(ptplugin[panotourmapsArea].isOpen, true);
+			set(ptplugin[panotourmapsArea].visible, true);
+			set(ptplugin[panotourmapsArea].doNotDeleteMe, false);
+			pauseautorotation(forceplugin);
+			js(showKolorArea(panotourmapsArea, &lt;div id="panotourmapsArea-mapDIV"&gt;&lt;/div&gt;));
+			js(invokePluginFunction(panotourmaps, forceResizeMapLayer, panotourmapsArea-mapDIV));
+			events.dispatch(onremovedisplayedobject);
+		);
+	</action>
+	
+	<action name="closeKolorArea-panotourmapsArea">
+			resumeautorotation(forceplugin);
+			js(invokePluginFunction(panotourmapsArea, closeKolorArea));
+			set(ptplugin[panotourmapsArea].isOpen, false);
+	</action>
+	
+	<action name="toggleKolorArea-panotourmapsArea">
+		if(ptplugin[panotourmapsArea].isOpen,
+			closeKolorArea-panotourmapsArea();
+		,
+			openKolorArea-panotourmapsArea();
+		);
+	</action>
+	
+	<action name="closeKolorAreaCallback-panotourmapsArea">
+		set(ptplugin[panotourmapsArea].isOpen, false);hideMap();
+	</action>
+	
+	<action name="showKolorArea-panotourmapsArea">
+		set(ptplugin[panotourmapsArea].visible, true);
+		set(ptplugin[panotourmapsArea].doNotDeleteMe, false);
+		pauseautorotation(forceplugin);
+		js(invokePluginFunction(panotourmapsArea, showKolorArea, %1));
+		js(invokePluginFunction(panotourmaps, forceResizeMapLayer, panotourmapsArea-mapDIV));
+		events.dispatch(onremovedisplayedobject);
+	</action> 
+		
+	<action name="hideKolorArea-panotourmapsArea">
+		resumeautorotation(forceplugin);
+		set(ptplugin[panotourmapsArea].visible, false);
+		js(invokePluginFunction(panotourmapsArea, hideKolorArea, %1));
+	</action>
+	
+	
+	<action name="updateDefaultMarkerValues-panotourmapsArea">
+		if( ptplugin[panotourmaps].markerSelected.name != "",
+			set(ptplugin[panotourmaps].markerSelected.heading, get(view.hlookat));
+			set(ptplugin[panotourmaps].markerSelected.fov, get(view.hfov));
+		);
+		
+		set(loadedState-panotourmapsArea, get(tour_displaycontrols));
+	</action>
+	
+	<events name="kolorAreaEvents-panotourmapsArea" 
+		keep="true"
+		hidetourcontrols="if(loadedState-panotourmapsArea,hideKolorArea-panotourmapsArea(false););"
+		showtourcontrols="if(tour_displaymap,showKolorArea-panotourmapsArea(false););set(loadedState-panotourmapsArea, get(tour_displaycontrols));"
+		onhidetourmap="panotourmapsClosetourmap();" 
+		onshowtourmap="if(tour_displaymap,panotourmapsOpentourmap(););" 
+		
+		onTourStart="updateDefaultMarkerValues-panotourmapsArea();panotourmapsOpentourmap();"
+	/>
+	
+	
+		<!-- PanotourMaps markers counter : 10 -->
+				<action name="spotmap64ActionSpotMap">
+          if (xml.scene != pano62,
+            mainloadscene(pano62);
+          );
+      lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+    </action>
+				<action name="spotmap26ActionSpotMap">
+          if (xml.scene != pano24,
+            mainloadscene(pano24);
+          );
+      lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+    </action>
+				<action name="spotmap29ActionSpotMap">
+          if (xml.scene != pano27,
+            mainloadscene(pano27);
+          );
+      lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+    </action>
+				<action name="spotmap34ActionSpotMap">
+          if (xml.scene != pano32,
+            mainloadscene(pano32);
+          );
+      lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+    </action>
+				<action name="spotmap104ActionSpotMap">
+          if (xml.scene != pano30,
+            mainloadscene(pano30);
+          );
+      lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+    </action>
+				<action name="spotmap43ActionSpotMap">
+          if (xml.scene != pano41,
+            mainloadscene(pano41);
+          );
+      lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+    </action>
+				<action name="spotmap37ActionSpotMap">
+          if (xml.scene != pano35,
+            mainloadscene(pano35);
+          );
+      lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+    </action>
+				<action name="spotmap67ActionSpotMap">
+          if (xml.scene != pano65,
+            mainloadscene(pano65);
+          );
+      lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+    </action>
+				<action name="spotmap40ActionSpotMap">
+          if (xml.scene != pano38,
+            mainloadscene(pano38);
+          );
+      lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+    </action>
+				<action name="spotmap46ActionSpotMap">
+          if (xml.scene != pano44,
+            mainloadscene(pano44);
+          );
+      lookat(get(panoview.h), get(panoview.v), get(panoview.fov));
+    </action>
+	
+	
+	
+	
+	
+	<!-- Begin PanotourMaps events and actions -->
+	<events name="panotourmapsEvents" 
+	onxmlcomplete="ifnot(panotourmapsMapLoaded,set(tour_displaymap,true););" 
+	onnewpano="panotourmapsActivateDefaultMarker();" 
+	onremovepano="panotourmapsUnselectMarker();" 
+	onviewchanged="panotourmapsOnviewchange()" 
+	keep="true" />
+	
+	
+	<krpano panotourmapsMarkerDefaultSet="false" />
+	<krpano panotourmapsMapLoaded="false" />
+	
+	
+	
+	<action name="panotourmapsClosetourmap">
+		if(ptplugin[panotourmapsArea].isOpen,
+			closeKolorArea-panotourmapsArea();
+		);
+	</action>
+	
+	<action name="panotourmapsHidetourmap">
+		ifnot(ptplugin[panotourmapsArea].isOpen,
+			panotourmapsClosetourmap();
+		,
+			hideKolorArea-panotourmapsArea(false);
+		);
+	</action>
+	
+	<action name="panotourmapsOpentourmap">
+		ifnot(ptplugin[panotourmapsArea].isOpen,
+			openKolorArea-panotourmapsArea();
+		);
+	</action>
+	
+	<action name="panotourmapsShowtourmap">
+		ifnot(ptplugin[panotourmapsArea].isOpen,
+			panotourmapsOpentourmap();
+		,
+			showKolorArea-panotourmapsArea(false);
+		);
+	</action>
+	
+	<action name="panotourmapsChangescene">
+		if(xml.scene != '%1',mainloadscene(%1);panotourmapsGoMarker(%2));
+	</action>
+	
+	<action name="panotourmapsOnviewchange">
+		if ( panotourmapsMapLoaded == true,
+			ifnot(ptplugin[panotourmaps].markerSelected.name == "",
+				js(invokePluginFunction(panotourmaps, changeDirection, get(view.hlookat), get(view.hfov)));
+			);
+			updateDefaultMarkerValues-panotourmapsArea();
+		);
+	</action>
+	
+	<action name="panotourmapsGoMarker">
+		if ( panotourmapsMapLoaded == true,
+			
+			set(ptplugin[panotourmaps].markerSelected.name, %1);
+			set(ptplugin[panotourmaps].markerSelected.heading, get(view.hlookat));
+			set(ptplugin[panotourmaps].markerSelected.fov, get(view.hfov));
+			js(invokePluginFunction(panotourmaps, changeCurrentMarker, %1, get(view.hlookat), get(view.hfov)));
+			
+			if( panotourmapsMarkerDefaultSet == false,
+				js(setMapDefaultMarker(panotourmaps, %1, get(view.hlookat), get(view.hfov)));
+				set(panotourmapsMarkerDefaultSet,true);
+			);
+		);
+	</action>
+	
+	<action name="panotourmapsUnselectMarker">
+		set(ptplugin[panotourmaps].markerSelected.name, "");
+		js(invokePluginFunction(panotourmaps, unselectCurrentMarker));
+		
+		js(setMapDefaultMarker(panotourmaps, null, null, null));
+	</action>
+	
+	<action name="panotourmapsActivateDefaultMarker">
+		set(panotourmapsMapLoaded, true);
+		
+		set(panotourmapsMapSpotFound, false);
+		set(defaultmarkerinc-wait,50);
+		for(set(defaultmarkerinc,0), defaultmarkerinc LT ptplugin[panotourmaps].marker.count , inc(defaultmarkerinc),
+			if(defaultmarkerinc-wait == defaultmarkerinc,
+				add(defaultmarkerinc-wait,50);
+				wait(0);
+			);
+			if(ptplugin[panotourmaps].marker[get(defaultmarkerinc)].isscene == true,
+				if(panotourmapsMapSpotFound == false,
+					if(ptplugin[panotourmaps].marker[get(defaultmarkerinc)].scene == xml.scene,
+						ifnot(ptplugin[panotourmaps].marker[get(defaultmarkerinc)].name == ptplugin[panotourmaps].markerSelected.name,
+							panotourmapsGoMarker(get(ptplugin[panotourmaps].marker[get(defaultmarkerinc)].name));
+						);
+						set(panotourmapsMapSpotFound, true);
+					);
+				);
+			);
+		);
+		
+		if(panotourmapsMapSpotFound == false,
+			panotourmapsUnselectMarker();
+		);
+	</action>
+	<action name="setViewFisheye">
+	set(sceneisfull360, false);
+	if(scene[get(xml.scene)].full360,
+		sub(viewhfov, view.hlookatmax, view.hlookatmin);
+		if (viewhfov == 360,
+			sub(viewvfov, view.vlookatmax, view.vlookatmin);
+			if (viewvfov == 180,
+				set(sceneisfull360, true);
+			);
+		);
+	);
+	if (sceneisfull360,
+		stopSetViewTweens();
+		setViewFisheyeComplete();
+	);
+</action>
+
+<action name="setViewFisheyeComplete">
+	tween(view.architectural, 0.0, distance(1.0, 0.30), easeoutquad, 
+		tween(view.fisheye, 0.0, distance(1.0, 0.30), easeoutquad,
+			set(view.stereographic,false);
+			if(view.pannini, set(view.pannini,false); delayedcall(0,updateobject(true,true)); );
+			tween(view.fovmax, 179, 0.25);
+			set(view.fisheyefovlink, 1.5);
+			if(panoview.fov LE view.fov, tween(view.fov, get(panoview.fov), distance(50, 0.45)); );
+			tween(view.fisheye, 0.40, distance(1.0, 1.25));
+			tween(view.vlookat, get(panoview.v), 1.25);
+		);
+	);
+</action>
+  <!-- Hide / Show Controls -->
+  <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
+  <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
+  <!-- Fullscreen Management -->
+  <action name="exitFullScreen" devices="fullscreensupport">set(tour_fullscreen,false);js(setFullscreen(false));</action>
+  <action name="enterFullScreen" devices="fullscreensupport">set(tour_fullscreen,true);js(setFullscreen(true));</action>
+  <action name="switchFullScreen">if(tour_fullscreen,exitFullScreen();,enterFullScreen(););</action>
+
+  
+  <events name="krpanoExitFullscreenEvent"
+    onexitfullscreen="if(tour_fullscreen,exitFullScreenChangeEvent(););"
+    keep="true" />
+
+  <action name="exitFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,false);events.dispatch(onexitfullscreen);</action>
+  <action name="enterFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,true);events.dispatch(onenterfullscreen);</action>
+  <action name="exitFullScreenFallback">set(fullscreen,false);</action>
+  <action name="enterFullScreenFallback">set(fullscreen,true);</action>
+  
+  <action name="resizeFullScreenEvent">delayedcall(0,updatescreen(););</action>
+  <action name="enableGyroscope">
+    changeGyroscopeState(true);
+  </action>
+  <action name="disableGyroscope">
+    changeGyroscopeState(false);
+  </action>
+  <!-- Tour Information -->
+  <action name="hideTourInfo">set(tour_displayinfo, false);events.dispatch(onhidetourinfo);</action>
+  <action name="showTourInfo">set(tour_displayinfo, true); events.dispatch(onshowtourinfo);</action><action name="setViewArchitectural">
+	stopSetViewTweens();
+	setViewArchitecturalComplete();
+</action>
+
+<action name="setViewArchitecturalComplete">
+	tween(view.fovmax, get(panoview.fovmax), distance(179, 1.00), easeoutquad);
+	tween(view.architectural, 1.0, distance(1.0, 0.45), easeoutquad, 
+		tween(view.fisheye, 0.0, distance(1.0, 0.45), easeoutquad, 
+			set(view.fisheyefovlink, 0.5);
+			set(view.stereographic,false);
+			if(view.pannini, set(view.pannini,false); delayedcall(0,updateobject(true,true)); );
+			tween(view.vlookat, get(panoview.v), 1.25);
+			if(panoview.fov LE view.fov, tween(view.fov, get(panoview.fov), distance(50, 0.45)); );
+		);
+	);
+</action><action name="setViewLittlePlanet">
+	set(sceneisfull360, false);
+	if(scene[get(xml.scene)].full360,
+		sub(viewhfov, view.hlookatmax, view.hlookatmin);
+		if (viewhfov == 360,
+			sub(viewvfov, view.vlookatmax, view.vlookatmin);
+			if (viewvfov == 180,
+				set(sceneisfull360, true);
+			);
+		);
+	);
+	if (sceneisfull360,
+		stopSetViewTweens();
+		setViewLittlePlanetComplete();
+	);
+</action>
+
+<action name="setViewLittlePlanetComplete">
+	tween(view.architectural, 0.0, 0.25, easeoutquad, 
+		tween(view.vlookat, 90, distance(179, 1.50), easeoutquad);
+		set(backtonormalfirst,false);
+		if(view.pannini == true, set(backtonormalfirst,true) );
+		if(view.stereographic == false, set(backtonormalfirst,true) );
+		if(backtonormalfirst, tween(view.fisheye, 0.0 ,distance(1.0, 0.25), easeoutquad, WAIT); );
+		if(view.pannini, set(view.pannini,false); delayedcall(0, updateobject(true,true)); );
+		if(panoview.fovmax LE 150, set(view.fovmax, 150); , set(view.fovmax, get(panoview.fovmax)); );
+		set(view.stereographic, true);
+		set(view.fisheyefovlink, 1.5);
+		tween(view.fisheye, 1.0, distance(1.0, 0.75), easeoutquad);
+		tween(view.fov, 150, distance(179, 0.75), easeoutquad);
+	);
+</action>
+  <!-- MAP -->
+  <action name="hideMap">set(tour_displaymap, false);events.dispatch(onhidetourmap);</action>
+  <action name="showMap">set(tour_displaymap, true); events.dispatch(onshowtourmap);</action><action name="setViewNormal">
+	stopSetViewTweens();
+	setViewNormalComplete();
+</action>
+
+<action name="setViewNormalComplete">
+	tween(view.architectural, 0.0, distance(1.0, 0.45), easeoutquad,
+		tween(view.fovmax, get(panoview.fovmax), distance(179, 1.00));
+		tween(view.vlookat, get(panoview.v), distance(90, 0.45));
+		tween(view.fisheye, 0.0, distance(1.0, 0.45), easeoutquad,
+			set(view.stereographic,false);
+			if(view.pannini, set(view.pannini,false); delayedcall(0,updateobject(true,true)); );
+			set(view.fisheyefovlink, 0.5);
+			if(panoview.fov LE view.fov, tween(view.fov, get(panoview.fov), distance(50, 0.45)); );
+		);
+	);
+</action>
+
+<action name="stopSetViewTweens">
+	stoptween(view.fov);
+	stoptween(view.fovmax);
+	stoptween(view.vlookat);
+	stoptween(view.fisheye);
+	stoptween(view.architectural);
+</action>
+</krpano>
