@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano>
+
+<!-- ************************ -->
+<!--         Messages         -->
+<!-- ************************ -->
+
+  <data name="en_project_title"><![CDATA[2016.10 Spotting]]></data>
+  <data name="en_project_author_name"><![CDATA[Mike Storey]]></data>
+  <data name="en_project_author_url"><![CDATA[http://www.ssgpp.com]]></data>
+
+
+
+  <data name="en_pano20_title"><![CDATA[2106.10.04.02.S01]]></data>
+
+
+  <data name="en_pano25_title"><![CDATA[2016.10.04.04.S01]]></data>
+
+
+  <data name="en_pano27_title"><![CDATA[2016.10.04.06.S01]]></data>
+
+
+  <data name="en_pano31_title"><![CDATA[2016.10.04.09.S01]]></data>
+
+
+  <data name="en_pano32_title"><![CDATA[2016.10.04.10.S01]]></data>
+
+
+  <data name="en_pano33_title"><![CDATA[2016.10.04.11.S01]]></data>
+
+
+  <data name="en_pano34_title"><![CDATA[2016.10.04.12.S01]]></data>
+
+
+  <data name="en_pano46_title"><![CDATA[2016.10.13.02E.S01.flat]]></data>
+
+
+
+
+
+
+  <data name="en_contextmenuopenFsLabel"><![CDATA[Enter Fullscreen]]></data>
+  <data name="en_contextmenucloseFsLabel"><![CDATA[Exit Fullscreen]]></data>
+  <data name="en_contextmenunormallabel"><![CDATA[Normal View]]></data>
+  <data name="en_contextmenuarchitecturallabel"><![CDATA[Architectural View]]></data>
+  <data name="en_contextmenulittleplanetlabel"><![CDATA[Little Planet View]]></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</krpano>
