@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano>
+
+<!-- ************************ -->
+<!--         Messages         -->
+<!-- ************************ -->
+
+  <data name="en_project_title"><![CDATA[Dominical Costa Rica]]></data>
+  <data name="en_project_author_name"><![CDATA[Mike Storey]]></data>
+  <data name="en_project_author_url"><![CDATA[http://www.ssgpp.com]]></data>
+
+
+
+  <data name="en_pano24_title"><![CDATA[Dominical Beach]]></data>
+  <data name="en_spotpoint59_tooltip"><![CDATA[Dominical Overlook]]></data>
+
+
+  <data name="en_pano20_title"><![CDATA[Pool Deck]]></data>
+
+
+  <data name="en_pano22_title"><![CDATA[Dominical Overlook]]></data>
+  <data name="en_spotpoint58_tooltip"><![CDATA[Dominical Beach]]></data>
+
+
+  <data name="en_pano68_title"><![CDATA[Back Poarch]]></data>
+
+
+  <data name="en_pano71_title"><![CDATA[Front Poarch]]></data>
+
+
+
+
+
+
+  <data name="en_contextmenuopenFsLabel"><![CDATA[Enter Fullscreen]]></data>
+  <data name="en_contextmenucloseFsLabel"><![CDATA[Exit Fullscreen]]></data>
+  <data name="en_contextmenunormallabel"><![CDATA[Normal View]]></data>
+  <data name="en_contextmenuarchitecturallabel"><![CDATA[Architectural View]]></data>
+  <data name="en_contextmenulittleplanetlabel"><![CDATA[Little Planet View]]></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</krpano>
