@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surround Sight · Gigapixel Panoramic Photography</title>
+  <meta name="description" content="Immersive Gigapixel Panoramic Photography and Virtual Tours by Mike Storey (ssgpp.com)" />
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-elev: #131720;
+      --bg-card: #161b26;
+      --bg-card-hover: #1c2230;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.2);
+      --text: #f3f5f8;
+      --text-muted: #94a0b8;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+      --badge-root: rgba(56, 189, 248, 0.14);
+      --badge-root-text: #7dd3fc;
+      --badge-tour: rgba(168, 85, 247, 0.16);
+      --badge-tour-text: #d8b4fe;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.08), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.08), transparent 40%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+    }
+
+    /* Header / Hero */
+    header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 13, 18, 0.82);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .header-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 1.25rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.03em;
+      color: #0b0d12;
+      box-shadow: 0 4px 18px rgba(56, 189, 248, 0.25);
+    }
+
+    .brand-text h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-text p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.55rem 0.9rem 0.55rem 2.25rem;
+      border-radius: 9px;
+      font-size: 0.88rem;
+      width: 250px;
+      transition: border-color 0.15s, width 0.2s;
+      outline: none;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+      width: 290px;
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 15px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .btn {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.55rem 0.9rem;
+      border-radius: 9px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+    }
+
+    .btn-accent {
+      border-color: rgba(168, 85, 247, 0.35);
+      background: rgba(168, 85, 247, 0.12);
+      color: #e9d5ff;
+    }
+
+    .btn-accent:hover {
+      background: rgba(168, 85, 247, 0.22);
+      border-color: rgba(168, 85, 247, 0.55);
+    }
+
+    /* Category Filter Bar */
+    .filter-bar {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 1rem 2rem 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .pill {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.36rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.79rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .pill:hover {
+      color: var(--text);
+      border-color: var(--border-hover);
+    }
+
+    .pill.active {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+      font-weight: 600;
+    }
+
+    .stats-bar {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Main Content */
+    main {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+    }
+
+    .category-section {
+      margin-bottom: 3rem;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.15rem;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .category-title-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+    }
+
+    .category-header h2 {
+      font-size: 1.25rem;
+      font-weight: 650;
+      letter-spacing: -0.01em;
+    }
+
+    .category-header .cat-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .category-count {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      padding: 0.18rem 0.6rem;
+      border-radius: 999px;
+    }
+
+    /* Grid & Cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Media Preview Box */
+    .card-media {
+      position: relative;
+      height: 196px;
+      background: #080a0f;
+      overflow: hidden;
+    }
+
+    .card-media img.primary-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s;
+    }
+
+    .card:hover .card-media img.primary-img {
+      transform: scale(1.06);
+    }
+
+    /* Creative Multi-Tile / Panorama Strip Mode for items without dedicated outer thumbnail */
+    .card-media.creative-pano img.primary-img {
+      animation: panoPan 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes panoPan {
+      0% { object-position: 0% 50%; transform: scale(1.05); }
+      100% { object-position: 100% 50%; transform: scale(1.05); }
+    }
+
+    /* Inset random tile badge for creative fallback cards */
+    .tile-pip {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 66px;
+      height: 66px;
+      border-radius: 9px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.82);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.65);
+      background: #000;
+      z-index: 3;
+      transition: transform 0.25s ease, width 0.25s ease, height 0.25s ease;
+    }
+
+    .card:hover .tile-pip {
+      transform: scale(1.12);
+    }
+
+    .tile-pip img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .tile-pip-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.72);
+      color: #e2e8f0;
+      font-size: 9px;
+      text-align: center;
+      padding: 1px 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: 0.02em;
+    }
+
+    /* Top overlay badges */
+    .media-badges {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .badge {
+      padding: 0.22rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      backdrop-filter: blur(8px);
+    }
+
+    .badge-root {
+      background: rgba(11, 13, 18, 0.76);
+      color: var(--badge-root-text);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .badge-tour {
+      background: rgba(11, 13, 18, 0.76);
+      color: var(--badge-tour-text);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+    }
+
+    .badge-scenes {
+      background: rgba(11, 13, 18, 0.76);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* Card Body */
+    .card-body {
+      padding: 1rem 1.15rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 0.3rem;
+    }
+
+    .card-title {
+      font-size: 1.02rem;
+      font-weight: 650;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .card-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .card-meta {
+      margin-top: auto;
+      padding-top: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.73rem;
+      color: #64748b;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .card-meta span.thumb-source {
+      color: #94a3b8;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    @media (max-width: 720px) {
+      .header-inner, .filter-bar, main {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .search-box input, .search-box input:focus {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">360°</div>
+        <div class="brand-text">
+          <h1>Surround Sight Gigapixel Panoramas</h1>
+          <p>Immersive Photography &amp; Virtual Tours by Mike Storey</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="search" id="searchInput" placeholder="Search panoramas, places, years..." />
+        </div>
+
+        <button class="btn" id="patternFilterBtn" title="Cycle between All, Pictures, and Tours">
+          Type: <strong id="patternLabel">All (46)</strong>
+        </button>
+
+        <button class="btn btn-accent" id="shuffleTilesBtn" title="Pick a fresh random tile from the data folder for tours without outer thumbnails">
+          🎲 Shuffle Data Tiles
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="filter-bar">
+    <div class="pills" id="categoryPills"></div>
+    <div class="stats-bar">
+      <span id="visibleCount">Showing 46 panoramas</span>
+    </div>
+  </div>
+
+  <main id="galleryRoot"></main>
+  <div class="empty-state" id="emptyState">No panoramas match your current search or filter.</div>
+
+  <script>
+    const CATALOG = {
+  "categories": [
+    {
+      "id": "Asheville",
+      "label": "Asheville, NC",
+      "desc": "Urban & mountain vistas across downtown Asheville"
+    },
+    {
+      "id": "WNC",
+      "label": "Western North Carolina",
+      "desc": "Blue Ridge & Great Smoky Mountains"
+    },
+    {
+      "id": "Appalachia",
+      "label": "Appalachia",
+      "desc": "11-scene master tour across the Appalachian Fall"
+    },
+    {
+      "id": "2014.Fall",
+      "label": "Fall 2014 \u00b7 Blue Ridge",
+      "desc": "Autumn foliage along the Parkway, Graveyard Fields & Lake Logan"
+    },
+    {
+      "id": "2016",
+      "label": "2016 Tours",
+      "desc": "Oconaluftee, Blue Farm & Stecoah Valley"
+    },
+    {
+      "id": "2016.fall.spoting",
+      "label": "Fall 2016 Spotting",
+      "desc": "Multi-scene autumn spotting tours"
+    },
+    {
+      "id": "2017",
+      "label": "2017 Collection",
+      "desc": "Solar Eclipse, Mountain Beauties & Brothers"
+    },
+    {
+      "id": "NYC",
+      "label": "New York City",
+      "desc": "Manhattan & East River sunsets"
+    },
+    {
+      "id": "CostaRica",
+      "label": "Costa Rica",
+      "desc": "Dominical beach, coastal overlook & villa tour"
+    },
+    {
+      "id": "Valparaiso",
+      "label": "Valpara\u00edso, Chile",
+      "desc": "Harbor & hillside gigapixel panorama"
+    },
+    {
+      "id": "2012",
+      "label": "2012 \u00b7 Valpara\u00edso Sunset",
+      "desc": "Valpara\u00edso at sunset"
+    },
+    {
+      "id": "2014.Spring",
+      "label": "Spring 2014 \u00b7 Southwest",
+      "desc": "Mesa Verde Cliff Palace & Arizona roadside"
+    },
+    {
+      "id": "TampaBay",
+      "label": "Tampa Bay, FL",
+      "desc": "Salvador Dal\u00ed Museum"
+    },
+    {
+      "id": "gcw",
+      "label": "Grand Canyon West",
+      "desc": "2011 canyon rim gigapixel panorama"
+    },
+    {
+      "id": "Family",
+      "label": "Family & Alabama",
+      "desc": "Orange Beach & McDougle Vista"
+    }
+  ],
+  "items": [
+    {
+      "href": "Asheville/2014.10.03.01.html",
+      "dataDir": "Asheville/2014.10.03.01data",
+      "category": "Asheville",
+      "categoryLabel": "Asheville, NC",
+      "categoryDesc": "Urban & mountain vistas across downtown Asheville",
+      "pattern": "root",
+      "title": "Sunset from Aloft Pool",
+      "subtitle": "Downtown Asheville \u00b7 Oct 2014",
+      "scenes": 1,
+      "outerThumb": "Asheville/aLoft.fb.thumbnail.jpg",
+      "dataThumb": "Asheville/2014.10.03.01data/thumbnail.jpg",
+      "previews": [
+        "Asheville/2014.10.03.01data/_2014_10_03_sunset_fr_20/preview.jpg"
+      ],
+      "tiles": [
+        "Asheville/2014.10.03.01data/_2014_10_03_sunset_fr_20/1/1_4.jpg",
+        "Asheville/2014.10.03.01data/_2014_10_03_sunset_fr_20/1/1_3.jpg",
+        "Asheville/2014.10.03.01data/_2014_10_03_sunset_fr_20/1/1_5.jpg",
+        "Asheville/2014.10.03.01data/_2014_10_03_sunset_fr_20/1/1_2.jpg"
+      ]
+    },
+    {
+      "href": "Asheville/AstonPark.html",
+      "dataDir": "Asheville/AstonParkdata",
+      "category": "Asheville",
+      "categoryLabel": "Asheville, NC",
+      "categoryDesc": "Urban & mountain vistas across downtown Asheville",
+      "pattern": "root",
+      "title": "Aston Park",
+      "subtitle": "Asheville from Aston Park",
+      "scenes": 1,
+      "outerThumb": "Asheville/AstonPark.link.jpg",
+      "dataThumb": "Asheville/AstonParkdata/thumbnail.jpg",
+      "previews": [
+        "Asheville/AstonParkdata/_2014_10_13_0x_s2_fla_20/preview.jpg"
+      ],
+      "tiles": [
+        "Asheville/AstonParkdata/_2014_10_13_0x_s2_fla_20/1/1_9.jpg",
+        "Asheville/AstonParkdata/_2014_10_13_0x_s2_fla_20/1/1_10.jpg",
+        "Asheville/AstonParkdata/_2014_10_13_0x_s2_fla_20/1/1_8.jpg",
+        "Asheville/AstonParkdata/_2014_10_13_0x_s2_fla_20/1/1_11.jpg"
+      ]
+    },
+    {
+      "href": "Asheville/AstonParkStretched.html",
+      "dataDir": "Asheville/AstonParkStretcheddata",
+      "category": "Asheville",
+      "categoryLabel": "Asheville, NC",
+      "categoryDesc": "Urban & mountain vistas across downtown Asheville",
+      "pattern": "root",
+      "title": "Aston Park (Stretched)",
+      "subtitle": "Asheville from Aston Park",
+      "scenes": 1,
+      "outerThumb": "Asheville/AstonParkStretched.thumb1.jpg",
+      "dataThumb": "Asheville/AstonParkStretcheddata/thumbnail.jpg",
+      "previews": [
+        "Asheville/AstonParkStretcheddata/_2014_10_13_0y_c1s_10_20/preview.jpg"
+      ],
+      "tiles": [
+        "Asheville/AstonParkStretcheddata/_2014_10_13_0y_c1s_10_20/1/1_12.jpg",
+        "Asheville/AstonParkStretcheddata/_2014_10_13_0y_c1s_10_20/1/1_13.jpg",
+        "Asheville/AstonParkStretcheddata/_2014_10_13_0y_c1s_10_20/1/1_11.jpg",
+        "Asheville/AstonParkStretcheddata/_2014_10_13_0y_c1s_10_20/1/1_10.jpg"
+      ]
+    },
+    {
+      "href": "Asheville/aLoft.html",
+      "dataDir": "Asheville/aLoftdata",
+      "category": "Asheville",
+      "categoryLabel": "Asheville, NC",
+      "categoryDesc": "Urban & mountain vistas across downtown Asheville",
+      "pattern": "root",
+      "title": "Asheville from Aloft Hotel",
+      "subtitle": "Downtown Asheville",
+      "scenes": 1,
+      "outerThumb": "Asheville/aloft.thumb1.jpg",
+      "dataThumb": "Asheville/aLoftdata/thumbnail.jpg",
+      "previews": [
+        "Asheville/aLoftdata/aloft_flat_532_84_31/preview.jpg"
+      ],
+      "tiles": [
+        "Asheville/aLoftdata/aloft_flat_532_84_31/1/1_9.jpg",
+        "Asheville/aLoftdata/aloft_flat_532_84_31/1/1_10.jpg",
+        "Asheville/aLoftdata/aloft_flat_532_84_31/1/1_8.jpg",
+        "Asheville/aLoftdata/aloft_flat_532_84_31/1/1_11.jpg"
+      ]
+    },
+    {
+      "href": "Asheville/asheville.html",
+      "dataDir": "Asheville/ashevilledata",
+      "category": "Asheville",
+      "categoryLabel": "Asheville, NC",
+      "categoryDesc": "Urban & mountain vistas across downtown Asheville",
+      "pattern": "root",
+      "title": "Asheville, NC (14 Gigapixels)",
+      "subtitle": "5-Scene City & Mountain Tour",
+      "scenes": 5,
+      "outerThumb": "Asheville/skyloft.fb.thumbnail.jpg",
+      "dataThumb": "Asheville/ashevilledata/thumbnail.jpg",
+      "previews": [
+        "Asheville/ashevilledata/aloft_hotel_135/preview.jpg",
+        "Asheville/ashevilledata/eagle_st__146/preview.jpg",
+        "Asheville/ashevilledata/skyloft_59/preview.jpg",
+        "Asheville/ashevilledata/sunset_at_sunset_vie_156/preview.jpg",
+        "Asheville/ashevilledata/sunset_view_dr__55/preview.jpg"
+      ],
+      "tiles": [
+        "Asheville/ashevilledata/aloft_hotel_135/html5/0.jpg",
+        "Asheville/ashevilledata/aloft_hotel_135/html5/1.jpg",
+        "Asheville/ashevilledata/aloft_hotel_135/html5/2.jpg",
+        "Asheville/ashevilledata/aloft_hotel_135/html5/3.jpg",
+        "Asheville/ashevilledata/eagle_st__146/html5/0.jpg",
+        "Asheville/ashevilledata/eagle_st__146/html5/1.jpg",
+        "Asheville/ashevilledata/eagle_st__146/html5/2.jpg",
+        "Asheville/ashevilledata/eagle_st__146/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "Asheville/eagle.html",
+      "dataDir": "Asheville/eagledata",
+      "category": "Asheville",
+      "categoryLabel": "Asheville, NC",
+      "categoryDesc": "Urban & mountain vistas across downtown Asheville",
+      "pattern": "root",
+      "title": "Eagle St. Shops",
+      "subtitle": "Before Mountain Housing construction",
+      "scenes": 1,
+      "outerThumb": "Asheville/eagle.thumb1.jpg",
+      "dataThumb": "Asheville/eagledata/thumbnail.jpg",
+      "previews": [
+        "Asheville/eagledata/eagle_st__9/preview.jpg"
+      ],
+      "tiles": [
+        "Asheville/eagledata/eagle_st__9/html5/0.jpg",
+        "Asheville/eagledata/eagle_st__9/html5/1.jpg",
+        "Asheville/eagledata/eagle_st__9/html5/2.jpg",
+        "Asheville/eagledata/eagle_st__9/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "Asheville/skyloft.html",
+      "dataDir": "Asheville/skyloftdata",
+      "category": "Asheville",
+      "categoryLabel": "Asheville, NC",
+      "categoryDesc": "Urban & mountain vistas across downtown Asheville",
+      "pattern": "root",
+      "title": "Asheville from SkyLoft",
+      "subtitle": "Panoramic City View",
+      "scenes": 1,
+      "outerThumb": "Asheville/skyloft.fb.thumbnail.jpg",
+      "dataThumb": "Asheville/skyloftdata/thumbnail.jpg",
+      "previews": [
+        "Asheville/skyloftdata/asheville_from_skylo_9/preview.jpg"
+      ],
+      "tiles": [
+        "Asheville/skyloftdata/asheville_from_skylo_9/1/1_7.jpg",
+        "Asheville/skyloftdata/asheville_from_skylo_9/1/1_8.jpg",
+        "Asheville/skyloftdata/asheville_from_skylo_9/1/1_6.jpg",
+        "Asheville/skyloftdata/asheville_from_skylo_9/1/1_9.jpg"
+      ]
+    },
+    {
+      "href": "Asheville/svdbs.html",
+      "dataDir": "Asheville/svdbsdata",
+      "category": "Asheville",
+      "categoryLabel": "Asheville, NC",
+      "categoryDesc": "Urban & mountain vistas across downtown Asheville",
+      "pattern": "root",
+      "title": "Sunset View Dr. (Daylight)",
+      "subtitle": "Asheville Overlook",
+      "scenes": 1,
+      "outerThumb": "Asheville/svdbs.thumb1.jpg",
+      "dataThumb": "Asheville/svdbsdata/thumbnail.jpg",
+      "previews": [
+        "Asheville/svdbsdata/asheville_from_sunse_9/preview.jpg"
+      ],
+      "tiles": [
+        "Asheville/svdbsdata/asheville_from_sunse_9/1/1_5.jpg",
+        "Asheville/svdbsdata/asheville_from_sunse_9/1/1_4.jpg",
+        "Asheville/svdbsdata/asheville_from_sunse_9/1/1_6.jpg",
+        "Asheville/svdbsdata/asheville_from_sunse_9/1/1_3.jpg"
+      ]
+    },
+    {
+      "href": "Asheville/svdss.html",
+      "dataDir": "Asheville/svdssdata",
+      "category": "Asheville",
+      "categoryLabel": "Asheville, NC",
+      "categoryDesc": "Urban & mountain vistas across downtown Asheville",
+      "pattern": "root",
+      "title": "Sunset from Sunset View Dr.",
+      "subtitle": "Asheville Overlook at Sunset",
+      "scenes": 1,
+      "outerThumb": "Asheville/svdss.thumb1.jpg",
+      "dataThumb": "Asheville/svdssdata/thumbnail.jpg",
+      "previews": [
+        "Asheville/svdssdata/sunset_from_sunset_v_9/preview.jpg"
+      ],
+      "tiles": [
+        "Asheville/svdssdata/sunset_from_sunset_v_9/1/1_5.jpg",
+        "Asheville/svdssdata/sunset_from_sunset_v_9/1/1_4.jpg",
+        "Asheville/svdssdata/sunset_from_sunset_v_9/1/1_6.jpg",
+        "Asheville/svdssdata/sunset_from_sunset_v_9/1/1_3.jpg"
+      ]
+    },
+    {
+      "href": "WNC/bef.html",
+      "dataDir": "WNC/befdata",
+      "category": "WNC",
+      "categoryLabel": "Western North Carolina",
+      "categoryDesc": "Blue Ridge & Great Smoky Mountains",
+      "pattern": "root",
+      "title": "Big East Fork, NC",
+      "subtitle": "Western North Carolina",
+      "scenes": 1,
+      "outerThumb": "WNC/bef.thumb1.jpg",
+      "dataThumb": "WNC/befdata/thumbnail.jpg",
+      "previews": [
+        "WNC/befdata/big_east_fork_9/preview.jpg"
+      ],
+      "tiles": [
+        "WNC/befdata/big_east_fork_9/html5/0.jpg",
+        "WNC/befdata/big_east_fork_9/html5/1.jpg",
+        "WNC/befdata/big_east_fork_9/html5/2.jpg",
+        "WNC/befdata/big_east_fork_9/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "WNC/dcv.html",
+      "dataDir": "WNC/dcvdata",
+      "category": "WNC",
+      "categoryLabel": "Western North Carolina",
+      "categoryDesc": "Blue Ridge & Great Smoky Mountains",
+      "pattern": "root",
+      "title": "Deep Creek Valley, NC",
+      "subtitle": "3-Scene Valley Panorama",
+      "scenes": 3,
+      "outerThumb": "WNC/dcv.thumb1.jpg",
+      "dataThumb": "WNC/dcvdata/thumbnail.jpg",
+      "previews": [
+        "WNC/dcvdata/deep_creek_valey_11/preview.jpg",
+        "WNC/dcvdata/deep_creek_valey_48/preview.jpg",
+        "WNC/dcvdata/deep_creek_valey_9/preview.jpg"
+      ],
+      "tiles": [
+        "WNC/dcvdata/deep_creek_valey_11/1/1_4.jpg",
+        "WNC/dcvdata/deep_creek_valey_11/1/1_3.jpg",
+        "WNC/dcvdata/deep_creek_valey_11/1/1_5.jpg",
+        "WNC/dcvdata/deep_creek_valey_11/1/1_2.jpg",
+        "WNC/dcvdata/deep_creek_valey_48/1/1_4.jpg",
+        "WNC/dcvdata/deep_creek_valey_48/1/1_3.jpg",
+        "WNC/dcvdata/deep_creek_valey_48/1/1_5.jpg",
+        "WNC/dcvdata/deep_creek_valey_48/1/1_2.jpg"
+      ]
+    },
+    {
+      "href": "WNC/mtm.html",
+      "dataDir": "WNC/mtmdata",
+      "category": "WNC",
+      "categoryLabel": "Western North Carolina",
+      "categoryDesc": "Blue Ridge & Great Smoky Mountains",
+      "pattern": "root",
+      "title": "Mt. Mitchell, NC",
+      "subtitle": "Highest Peak East of the Mississippi",
+      "scenes": 1,
+      "outerThumb": "WNC/mtm.thumb1.jpg",
+      "dataThumb": "WNC/mtmdata/thumbnail.jpg",
+      "previews": [
+        "WNC/mtmdata/mt__mitchel_9/preview.jpg"
+      ],
+      "tiles": [
+        "WNC/mtmdata/mt__mitchel_9/1/1_15.jpg",
+        "WNC/mtmdata/mt__mitchel_9/1/1_14.jpg",
+        "WNC/mtmdata/mt__mitchel_9/1/1_16.jpg",
+        "WNC/mtmdata/mt__mitchel_9/1/1_13.jpg"
+      ]
+    },
+    {
+      "href": "WNC/nfg.html",
+      "dataDir": "WNC/nfgdata",
+      "category": "WNC",
+      "categoryLabel": "Western North Carolina",
+      "categoryDesc": "Blue Ridge & Great Smoky Mountains",
+      "pattern": "root",
+      "title": "Newfound Gap, NC",
+      "subtitle": "Great Smoky Mountains",
+      "scenes": 1,
+      "outerThumb": "WNC/nfg.thumb1.jpg",
+      "dataThumb": "WNC/nfgdata/thumbnail.jpg",
+      "previews": [
+        "WNC/nfgdata/newfound_gap_9/preview.jpg"
+      ],
+      "tiles": [
+        "WNC/nfgdata/newfound_gap_9/1/1_3.jpg",
+        "WNC/nfgdata/newfound_gap_9/1/1_2.jpg",
+        "WNC/nfgdata/newfound_gap_9/1/1_4.jpg",
+        "WNC/nfgdata/newfound_gap_9/1/1_1.jpg"
+      ]
+    },
+    {
+      "href": "Appalachia/AppalacianFall.html",
+      "dataDir": "Appalachia/AppalacianFalldata",
+      "category": "Appalachia",
+      "categoryLabel": "Appalachia",
+      "categoryDesc": "11-scene master tour across the Appalachian Fall",
+      "pattern": "root",
+      "title": "Appalachian Fall",
+      "subtitle": "11-Scene Master Tour of Western NC",
+      "scenes": 11,
+      "outerThumb": "Appalachia/AppalacianFall.thumb1.jpg",
+      "dataThumb": "Appalachia/AppalacianFalldata/thumbnail.jpg",
+      "previews": [
+        "Appalachia/AppalacianFalldata/_2010_12_31_01_44/preview.jpg",
+        "Appalachia/AppalacianFalldata/_2013100401_41/preview.jpg",
+        "Appalachia/AppalacianFalldata/_2013101101_38/preview.jpg",
+        "Appalachia/AppalacianFalldata/_2014100601_30/preview.jpg",
+        "Appalachia/AppalacianFalldata/_2014100805_27/preview.jpg",
+        "Appalachia/AppalacianFalldata/_2014100902_24/preview.jpg"
+      ],
+      "tiles": [
+        "Appalachia/AppalacianFalldata/_2010_12_31_01_44/html5/0.jpg",
+        "Appalachia/AppalacianFalldata/_2010_12_31_01_44/html5/1.jpg",
+        "Appalachia/AppalacianFalldata/_2010_12_31_01_44/html5/2.jpg",
+        "Appalachia/AppalacianFalldata/_2010_12_31_01_44/html5/3.jpg",
+        "Appalachia/AppalacianFalldata/_2013100401_41/html5/0.jpg",
+        "Appalachia/AppalacianFalldata/_2013100401_41/html5/1.jpg",
+        "Appalachia/AppalacianFalldata/_2013100401_41/html5/2.jpg",
+        "Appalachia/AppalacianFalldata/_2013100401_41/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "2014.Fall/2014.10.06.html",
+      "dataDir": "2014.Fall/2014.10.06data",
+      "category": "2014.Fall",
+      "categoryLabel": "Fall 2014 \u00b7 Blue Ridge",
+      "categoryDesc": "Autumn foliage along the Parkway, Graveyard Fields & Lake Logan",
+      "pattern": "root",
+      "title": "Hewat Overlook",
+      "subtitle": "Blue Ridge Parkway \u00b7 Oct 2014",
+      "scenes": 1,
+      "outerThumb": "2014.Fall/2014.10.06.01.s1.thumb1.jpg",
+      "dataThumb": "2014.Fall/2014.10.06data/thumbnail.jpg",
+      "previews": [
+        "2014.Fall/2014.10.06data/_2014_10_06_01_s1_fal_20/preview.jpg"
+      ],
+      "tiles": [
+        "2014.Fall/2014.10.06data/_2014_10_06_01_s1_fal_20/html5/0.jpg",
+        "2014.Fall/2014.10.06data/_2014_10_06_01_s1_fal_20/html5/1.jpg",
+        "2014.Fall/2014.10.06data/_2014_10_06_01_s1_fal_20/html5/2.jpg",
+        "2014.Fall/2014.10.06data/_2014_10_06_01_s1_fal_20/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "2014.Fall/2014.10.08.html",
+      "dataDir": "2014.Fall/2014.10.08data",
+      "category": "2014.Fall",
+      "categoryLabel": "Fall 2014 \u00b7 Blue Ridge",
+      "categoryDesc": "Autumn foliage along the Parkway, Graveyard Fields & Lake Logan",
+      "pattern": "root",
+      "title": "Graveyard Falls #3",
+      "subtitle": "South of Graveyard Falls \u00b7 Oct 2014",
+      "scenes": 1,
+      "outerThumb": "2014.Fall/2014.10.08.05.s1.thumb1.jpg",
+      "dataThumb": "2014.Fall/2014.10.08data/thumbnail.jpg",
+      "previews": [
+        "2014.Fall/2014.10.08data/graveyard_falls__3_20/preview.jpg"
+      ],
+      "tiles": [
+        "2014.Fall/2014.10.08data/graveyard_falls__3_20/1/1_7.jpg",
+        "2014.Fall/2014.10.08data/graveyard_falls__3_20/1/1_8.jpg",
+        "2014.Fall/2014.10.08data/graveyard_falls__3_20/1/1_6.jpg",
+        "2014.Fall/2014.10.08data/graveyard_falls__3_20/1/1_9.jpg"
+      ]
+    },
+    {
+      "href": "2014.Fall/2014100902.html",
+      "dataDir": "2014.Fall/2014100902data",
+      "category": "2014.Fall",
+      "categoryLabel": "Fall 2014 \u00b7 Blue Ridge",
+      "categoryDesc": "Autumn foliage along the Parkway, Graveyard Fields & Lake Logan",
+      "pattern": "root",
+      "title": "Lake Logan, NC",
+      "subtitle": "Fall 2014",
+      "scenes": 1,
+      "outerThumb": "2014.Fall/2014100902.s3.thumb1.jpg",
+      "dataThumb": "2014.Fall/2014100902data/thumbnail.jpg",
+      "previews": [
+        "2014.Fall/2014100902data/lake_logan__nc_20/preview.jpg"
+      ],
+      "tiles": [
+        "2014.Fall/2014100902data/lake_logan__nc_20/html5/0.jpg",
+        "2014.Fall/2014100902data/lake_logan__nc_20/html5/1.jpg",
+        "2014.Fall/2014100902data/lake_logan__nc_20/html5/2.jpg",
+        "2014.Fall/2014100902data/lake_logan__nc_20/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "2014.Fall/2014100903.html",
+      "dataDir": "2014.Fall/2014100903data",
+      "category": "2014.Fall",
+      "categoryLabel": "Fall 2014 \u00b7 Blue Ridge",
+      "categoryDesc": "Autumn foliage along the Parkway, Graveyard Fields & Lake Logan",
+      "pattern": "root",
+      "title": "Sam Branch Falls",
+      "subtitle": "Fall 2014",
+      "scenes": 1,
+      "outerThumb": "2014.Fall/2014100903.s3.thumb1.jpg",
+      "dataThumb": "2014.Fall/2014100903data/thumbnail.jpg",
+      "previews": [
+        "2014.Fall/2014100903data/sam_branch_falls_20/preview.jpg"
+      ],
+      "tiles": [
+        "2014.Fall/2014100903data/sam_branch_falls_20/html5/0.jpg",
+        "2014.Fall/2014100903data/sam_branch_falls_20/html5/1.jpg",
+        "2014.Fall/2014100903data/sam_branch_falls_20/html5/2.jpg",
+        "2014.Fall/2014100903data/sam_branch_falls_20/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "2014.Fall/GraveyardUpper.html",
+      "dataDir": "2014.Fall/GraveyardUpperdata",
+      "category": "2014.Fall",
+      "categoryLabel": "Fall 2014 \u00b7 Blue Ridge",
+      "categoryDesc": "Autumn foliage along the Parkway, Graveyard Fields & Lake Logan",
+      "pattern": "root",
+      "title": "Graveyard Fields Upper Falls",
+      "subtitle": "Blue Ridge Parkway \u00b7 Fall 2014",
+      "scenes": 1,
+      "outerThumb": "2014.Fall/GraveyardUpper.link.jpg",
+      "dataThumb": "2014.Fall/GraveyardUpperdata/thumbnail.jpg",
+      "previews": [
+        "2014.Fall/GraveyardUpperdata/upper_falls_20/preview.jpg"
+      ],
+      "tiles": [
+        "2014.Fall/GraveyardUpperdata/upper_falls_20/html5/0.jpg",
+        "2014.Fall/GraveyardUpperdata/upper_falls_20/html5/1.jpg",
+        "2014.Fall/GraveyardUpperdata/upper_falls_20/html5/2.jpg",
+        "2014.Fall/GraveyardUpperdata/upper_falls_20/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "2014.Fall/wncFall.html",
+      "dataDir": "2014.Fall/wncFalldata",
+      "category": "2014.Fall",
+      "categoryLabel": "Fall 2014 \u00b7 Blue Ridge",
+      "categoryDesc": "Autumn foliage along the Parkway, Graveyard Fields & Lake Logan",
+      "pattern": "root",
+      "title": "Big East Overlook",
+      "subtitle": "Western NC \u00b7 Fall 2014",
+      "scenes": 1,
+      "outerThumb": "2014.Fall/wncFall.thumb1.jpg",
+      "dataThumb": "2014.Fall/wncFalldata/thumbnail.jpg",
+      "previews": [
+        "2014.Fall/wncFalldata/big_east_overlook_20/preview.jpg"
+      ],
+      "tiles": [
+        "2014.Fall/wncFalldata/big_east_overlook_20/html5/0.jpg",
+        "2014.Fall/wncFalldata/big_east_overlook_20/html5/1.jpg",
+        "2014.Fall/wncFalldata/big_east_overlook_20/html5/2.jpg",
+        "2014.Fall/wncFalldata/big_east_overlook_20/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "2016/Oconaluftee/tour.html",
+      "dataDir": "2016/Oconaluftee/tourdata",
+      "category": "2016",
+      "categoryLabel": "2016 Tours",
+      "categoryDesc": "Oconaluftee, Blue Farm & Stecoah Valley",
+      "pattern": "tour",
+      "title": "Oconaluftee with Kenya",
+      "subtitle": "Flat & 360\u00b0 Sphere Tour",
+      "scenes": 2,
+      "outerThumb": null,
+      "dataThumb": "2016/Oconaluftee/tourdata/thumbnail.jpg",
+      "previews": [
+        "2016/Oconaluftee/tourdata/flat_22/preview.jpg",
+        "2016/Oconaluftee/tourdata/sphere_24/preview.jpg"
+      ],
+      "tiles": [
+        "2016/Oconaluftee/tourdata/flat_22/1/1_9.jpg",
+        "2016/Oconaluftee/tourdata/flat_22/1/1_10.jpg",
+        "2016/Oconaluftee/tourdata/flat_22/1/1_8.jpg",
+        "2016/Oconaluftee/tourdata/flat_22/1/1_11.jpg",
+        "2016/Oconaluftee/tourdata/sphere_24/html5/0.jpg",
+        "2016/Oconaluftee/tourdata/sphere_24/html5/1.jpg",
+        "2016/Oconaluftee/tourdata/sphere_24/html5/2.jpg",
+        "2016/Oconaluftee/tourdata/sphere_24/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "2016/bluefarm1/tour.html",
+      "dataDir": "2016/bluefarm1/tourdata",
+      "category": "2016",
+      "categoryLabel": "2016 Tours",
+      "categoryDesc": "Oconaluftee, Blue Farm & Stecoah Valley",
+      "pattern": "tour",
+      "title": "Blue Farm #1",
+      "subtitle": "2016 Tour",
+      "scenes": 1,
+      "outerThumb": null,
+      "dataThumb": "2016/bluefarm1/tourdata/thumbnail.jpg",
+      "previews": [
+        "2016/bluefarm1/tourdata/blue_farm__1_22/preview.jpg"
+      ],
+      "tiles": [
+        "2016/bluefarm1/tourdata/blue_farm__1_22/1/1_4.jpg",
+        "2016/bluefarm1/tourdata/blue_farm__1_22/1/1_3.jpg",
+        "2016/bluefarm1/tourdata/blue_farm__1_22/1/1_5.jpg",
+        "2016/bluefarm1/tourdata/blue_farm__1_22/1/1_2.jpg"
+      ]
+    },
+    {
+      "href": "2016/bluefarm2/tour.html",
+      "dataDir": "2016/bluefarm2/tourdata",
+      "category": "2016",
+      "categoryLabel": "2016 Tours",
+      "categoryDesc": "Oconaluftee, Blue Farm & Stecoah Valley",
+      "pattern": "tour",
+      "title": "Blue Farm #2",
+      "subtitle": "2016 Tour",
+      "scenes": 1,
+      "outerThumb": null,
+      "dataThumb": "2016/bluefarm2/tourdata/thumbnail.jpg",
+      "previews": [
+        "2016/bluefarm2/tourdata/_2016_10_22_3nd_flat_22/preview.jpg"
+      ],
+      "tiles": [
+        "2016/bluefarm2/tourdata/_2016_10_22_3nd_flat_22/1/1_8.jpg",
+        "2016/bluefarm2/tourdata/_2016_10_22_3nd_flat_22/1/1_9.jpg",
+        "2016/bluefarm2/tourdata/_2016_10_22_3nd_flat_22/1/1_7.jpg",
+        "2016/bluefarm2/tourdata/_2016_10_22_3nd_flat_22/1/1_10.jpg"
+      ]
+    },
+    {
+      "href": "2016/bluefarm3/tour.html",
+      "dataDir": "2016/bluefarm3/tourdata",
+      "category": "2016",
+      "categoryLabel": "2016 Tours",
+      "categoryDesc": "Oconaluftee, Blue Farm & Stecoah Valley",
+      "pattern": "tour",
+      "title": "Blue Farm #3",
+      "subtitle": "Blue Farm House #3",
+      "scenes": 1,
+      "outerThumb": null,
+      "dataThumb": "2016/bluefarm3/tourdata/thumbnail.jpg",
+      "previews": [
+        "2016/bluefarm3/tourdata/blue_farm_house__3_22/preview.jpg"
+      ],
+      "tiles": [
+        "2016/bluefarm3/tourdata/blue_farm_house__3_22/1/1_3.jpg",
+        "2016/bluefarm3/tourdata/blue_farm_house__3_22/1/1_2.jpg",
+        "2016/bluefarm3/tourdata/blue_farm_house__3_22/1/1_4.jpg",
+        "2016/bluefarm3/tourdata/blue_farm_house__3_22/1/1_1.jpg"
+      ]
+    },
+    {
+      "href": "2016/stecoah/tour.html",
+      "dataDir": "2016/stecoah/tourdata",
+      "category": "2016",
+      "categoryLabel": "2016 Tours",
+      "categoryDesc": "Oconaluftee, Blue Farm & Stecoah Valley",
+      "pattern": "tour",
+      "title": "Stecoah Valley",
+      "subtitle": "2016 Tour",
+      "scenes": 1,
+      "outerThumb": null,
+      "dataThumb": "2016/stecoah/tourdata/thumbnail.jpg",
+      "previews": [
+        "2016/stecoah/tourdata/stecoah_22/preview.jpg"
+      ],
+      "tiles": [
+        "2016/stecoah/tourdata/stecoah_22/1/1_6.jpg",
+        "2016/stecoah/tourdata/stecoah_22/1/1_5.jpg",
+        "2016/stecoah/tourdata/stecoah_22/1/1_7.jpg",
+        "2016/stecoah/tourdata/stecoah_22/1/1_8.jpg"
+      ]
+    },
+    {
+      "href": "2016.fall.spoting/2016.10.html",
+      "dataDir": "2016.fall.spoting/2016.10data",
+      "category": "2016.fall.spoting",
+      "categoryLabel": "Fall 2016 Spotting",
+      "categoryDesc": "Multi-scene autumn spotting tours",
+      "pattern": "root",
+      "title": "2016.10 Spotting (8 Scenes)",
+      "subtitle": "Multi-Scene Fall Spotting Tour",
+      "scenes": 8,
+      "outerThumb": null,
+      "dataThumb": "2016.fall.spoting/2016.10data/thumbnail.jpg",
+      "previews": [
+        "2016.fall.spoting/2016.10data/_2016_10_04_04_s01_25/preview.jpg",
+        "2016.fall.spoting/2016.10data/_2016_10_04_06_s01_27/preview.jpg",
+        "2016.fall.spoting/2016.10data/_2016_10_04_09_s01_31/preview.jpg",
+        "2016.fall.spoting/2016.10data/_2016_10_04_10_s01_32/preview.jpg",
+        "2016.fall.spoting/2016.10data/_2016_10_04_11_s01_33/preview.jpg",
+        "2016.fall.spoting/2016.10data/_2016_10_04_12_s01_34/preview.jpg"
+      ],
+      "tiles": [
+        "2016.fall.spoting/2016.10data/_2016_10_04_04_s01_25/1/1_5.jpg",
+        "2016.fall.spoting/2016.10data/_2016_10_04_04_s01_25/1/1_4.jpg",
+        "2016.fall.spoting/2016.10data/_2016_10_04_04_s01_25/1/1_6.jpg",
+        "2016.fall.spoting/2016.10data/_2016_10_04_04_s01_25/1/1_3.jpg",
+        "2016.fall.spoting/2016.10data/_2016_10_04_06_s01_27/1/1_4.jpg",
+        "2016.fall.spoting/2016.10data/_2016_10_04_06_s01_27/1/1_3.jpg",
+        "2016.fall.spoting/2016.10data/_2016_10_04_06_s01_27/1/1_5.jpg",
+        "2016.fall.spoting/2016.10data/_2016_10_04_06_s01_27/1/1_2.jpg"
+      ]
+    },
+    {
+      "href": "2016.fall.spoting/2016.html",
+      "dataDir": "2016.fall.spoting/2016data",
+      "category": "2016.fall.spoting",
+      "categoryLabel": "Fall 2016 Spotting",
+      "categoryDesc": "Multi-scene autumn spotting tours",
+      "pattern": "root",
+      "title": "2016 Spotting (7 Scenes)",
+      "subtitle": "Multi-Scene Fall Spotting Tour",
+      "scenes": 7,
+      "outerThumb": null,
+      "dataThumb": "2016.fall.spoting/2016data/thumbnail.jpg",
+      "previews": [
+        "2016.fall.spoting/2016data/_2016_10_04_04_s01_25/preview.jpg",
+        "2016.fall.spoting/2016data/_2016_10_04_06_s01_27/preview.jpg",
+        "2016.fall.spoting/2016data/_2016_10_04_09_s01_31/preview.jpg",
+        "2016.fall.spoting/2016data/_2016_10_04_10_s01_32/preview.jpg",
+        "2016.fall.spoting/2016data/_2016_10_04_11_s01_33/preview.jpg",
+        "2016.fall.spoting/2016data/_2016_10_04_12_s01_34/preview.jpg"
+      ],
+      "tiles": [
+        "2016.fall.spoting/2016data/_2016_10_04_04_s01_25/1/1_5.jpg",
+        "2016.fall.spoting/2016data/_2016_10_04_04_s01_25/1/1_4.jpg",
+        "2016.fall.spoting/2016data/_2016_10_04_04_s01_25/1/1_6.jpg",
+        "2016.fall.spoting/2016data/_2016_10_04_04_s01_25/1/1_3.jpg",
+        "2016.fall.spoting/2016data/_2016_10_04_06_s01_27/1/1_4.jpg",
+        "2016.fall.spoting/2016data/_2016_10_04_06_s01_27/1/1_3.jpg",
+        "2016.fall.spoting/2016data/_2016_10_04_06_s01_27/1/1_5.jpg",
+        "2016.fall.spoting/2016data/_2016_10_04_06_s01_27/1/1_2.jpg"
+      ]
+    },
+    {
+      "href": "2017/Beauties/tour.html",
+      "dataDir": "2017/Beauties/tourdata",
+      "category": "2017",
+      "categoryLabel": "2017 Collection",
+      "categoryDesc": "Solar Eclipse, Mountain Beauties & Brothers",
+      "pattern": "tour",
+      "title": "Mountain Beauties",
+      "subtitle": "Deep Creek Valley & B&W Series",
+      "scenes": 4,
+      "outerThumb": null,
+      "dataThumb": "2017/Beauties/tourdata/thumbnail.jpg",
+      "previews": [
+        "2017/Beauties/tourdata/bw1_24/preview.jpg",
+        "2017/Beauties/tourdata/bw2_26/preview.jpg",
+        "2017/Beauties/tourdata/bw3_28/preview.jpg",
+        "2017/Beauties/tourdata/deep_creek_valley_22/preview.jpg"
+      ],
+      "tiles": [
+        "2017/Beauties/tourdata/bw1_24/1/1_6.jpg",
+        "2017/Beauties/tourdata/bw1_24/1/1_5.jpg",
+        "2017/Beauties/tourdata/bw1_24/1/1_7.jpg",
+        "2017/Beauties/tourdata/bw1_24/1/1_8.jpg",
+        "2017/Beauties/tourdata/bw2_26/1/1_3.jpg",
+        "2017/Beauties/tourdata/bw2_26/1/1_2.jpg",
+        "2017/Beauties/tourdata/bw2_26/1/1_4.jpg",
+        "2017/Beauties/tourdata/bw2_26/1/1_1.jpg"
+      ]
+    },
+    {
+      "href": "2017/Brothers/Brothers.html",
+      "dataDir": "2017/Brothers/Brothersdata",
+      "category": "2017",
+      "categoryLabel": "2017 Collection",
+      "categoryDesc": "Solar Eclipse, Mountain Beauties & Brothers",
+      "pattern": "tour",
+      "title": "Brothers",
+      "subtitle": "2017 Gigapixel Panorama",
+      "scenes": 1,
+      "outerThumb": "2017/Brothers/Brothers.fb.jpg",
+      "dataThumb": "2017/Brothers/Brothersdata/thumbnail.jpg",
+      "previews": [
+        "2017/Brothers/Brothersdata/brothers_22/preview.jpg"
+      ],
+      "tiles": [
+        "2017/Brothers/Brothersdata/brothers_22/1/1_12.jpg",
+        "2017/Brothers/Brothersdata/brothers_22/1/1_13.jpg",
+        "2017/Brothers/Brothersdata/brothers_22/1/1_11.jpg",
+        "2017/Brothers/Brothersdata/brothers_22/1/1_10.jpg"
+      ]
+    },
+    {
+      "href": "2017/eclipse/tour.html",
+      "dataDir": "2017/eclipse/tourdata",
+      "category": "2017",
+      "categoryLabel": "2017 Collection",
+      "categoryDesc": "Solar Eclipse, Mountain Beauties & Brothers",
+      "pattern": "tour",
+      "title": "2017 Solar Eclipse",
+      "subtitle": "Rattlers Ford & Campsite Tour",
+      "scenes": 3,
+      "outerThumb": null,
+      "dataThumb": "2017/eclipse/tourdata/thumbnail.jpg",
+      "previews": [
+        "2017/eclipse/tourdata/_2016_10_12_7a_flat_54/preview.jpg",
+        "2017/eclipse/tourdata/_2016_10_12_7b_flat_56/preview.jpg",
+        "2017/eclipse/tourdata/rattelers_ford_22/preview.jpg"
+      ],
+      "tiles": [
+        "2017/eclipse/tourdata/_2016_10_12_7a_flat_54/html5/0.jpg",
+        "2017/eclipse/tourdata/_2016_10_12_7a_flat_54/html5/1.jpg",
+        "2017/eclipse/tourdata/_2016_10_12_7a_flat_54/html5/2.jpg",
+        "2017/eclipse/tourdata/_2016_10_12_7a_flat_54/html5/3.jpg",
+        "2017/eclipse/tourdata/_2016_10_12_7b_flat_56/html5/0.jpg",
+        "2017/eclipse/tourdata/_2016_10_12_7b_flat_56/html5/1.jpg",
+        "2017/eclipse/tourdata/_2016_10_12_7b_flat_56/html5/2.jpg",
+        "2017/eclipse/tourdata/_2016_10_12_7b_flat_56/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "NYC/ern.html",
+      "dataDir": "NYC/erndata",
+      "category": "NYC",
+      "categoryLabel": "New York City",
+      "categoryDesc": "Manhattan & East River sunsets",
+      "pattern": "root",
+      "title": "NYC East River Sunset",
+      "subtitle": "2-Scene Manhattan Skyline",
+      "scenes": 2,
+      "outerThumb": "NYC/ern.thumb1.jpg",
+      "dataThumb": "NYC/erndata/thumbnail.jpg",
+      "previews": [
+        "NYC/erndata/east_river_sunset_11/preview.jpg",
+        "NYC/erndata/east_river_sunset_9/preview.jpg"
+      ],
+      "tiles": [
+        "NYC/erndata/east_river_sunset_11/1/1_10.jpg",
+        "NYC/erndata/east_river_sunset_11/1/1_9.jpg",
+        "NYC/erndata/east_river_sunset_11/1/1_11.jpg",
+        "NYC/erndata/east_river_sunset_11/1/1_12.jpg",
+        "NYC/erndata/east_river_sunset_9/1/1_10.jpg",
+        "NYC/erndata/east_river_sunset_9/1/1_9.jpg",
+        "NYC/erndata/east_river_sunset_9/1/1_11.jpg",
+        "NYC/erndata/east_river_sunset_9/1/1_12.jpg"
+      ]
+    },
+    {
+      "href": "NYC/les.html",
+      "dataDir": "NYC/lesdata",
+      "category": "NYC",
+      "categoryLabel": "New York City",
+      "categoryDesc": "Manhattan & East River sunsets",
+      "pattern": "root",
+      "title": "NYC Lower East Side Sunset",
+      "subtitle": "Jeanine's Manhattan",
+      "scenes": 1,
+      "outerThumb": "NYC/les.thumb1.jpg",
+      "dataThumb": "NYC/lesdata/thumbnail.jpg",
+      "previews": [
+        "NYC/lesdata/lower_east_side_11/preview.jpg"
+      ],
+      "tiles": [
+        "NYC/lesdata/lower_east_side_11/html5/0.jpg",
+        "NYC/lesdata/lower_east_side_11/html5/1.jpg",
+        "NYC/lesdata/lower_east_side_11/html5/2.jpg",
+        "NYC/lesdata/lower_east_side_11/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "CostaRica/CostaRica.html",
+      "dataDir": "CostaRica/CostaRicadata",
+      "category": "CostaRica",
+      "categoryLabel": "Costa Rica",
+      "categoryDesc": "Dominical beach, coastal overlook & villa tour",
+      "pattern": "root",
+      "title": "Dominical, Costa Rica",
+      "subtitle": "5-Scene Beach, Overlook & Villa Tour",
+      "scenes": 5,
+      "outerThumb": "CostaRica/DominicalTumb.jpg",
+      "dataThumb": "CostaRica/CostaRicadata/thumbnail.jpg",
+      "previews": [
+        "CostaRica/CostaRicadata/back_poarch_68/preview.jpg",
+        "CostaRica/CostaRicadata/dominical_beach_24/preview.jpg",
+        "CostaRica/CostaRicadata/dominical_overlook_22/preview.jpg",
+        "CostaRica/CostaRicadata/front_poarch_71/preview.jpg",
+        "CostaRica/CostaRicadata/pool_deck_20/preview.jpg"
+      ],
+      "tiles": [
+        "CostaRica/CostaRicadata/back_poarch_68/html5/0.jpg",
+        "CostaRica/CostaRicadata/back_poarch_68/html5/1.jpg",
+        "CostaRica/CostaRicadata/back_poarch_68/html5/2.jpg",
+        "CostaRica/CostaRicadata/back_poarch_68/html5/3.jpg",
+        "CostaRica/CostaRicadata/dominical_beach_24/html5/0.jpg",
+        "CostaRica/CostaRicadata/dominical_beach_24/html5/1.jpg",
+        "CostaRica/CostaRicadata/dominical_beach_24/html5/2.jpg",
+        "CostaRica/CostaRicadata/dominical_beach_24/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "Valparaiso/valparaiso.html",
+      "dataDir": "Valparaiso/valparaisodata",
+      "category": "Valparaiso",
+      "categoryLabel": "Valpara\u00edso, Chile",
+      "categoryDesc": "Harbor & hillside gigapixel panorama",
+      "pattern": "root",
+      "title": "Valpara\u00edso, Chile",
+      "subtitle": "Hillside & Harbor Gigapixel",
+      "scenes": 1,
+      "outerThumb": "Valparaiso/vlp.thumb1.jpg",
+      "dataThumb": "Valparaiso/valparaisodata/thumbnail.jpg",
+      "previews": [
+        "Valparaiso/valparaisodata/valparaiso_chili_9/preview.jpg"
+      ],
+      "tiles": [
+        "Valparaiso/valparaisodata/valparaiso_chili_9/1/1_7.jpg",
+        "Valparaiso/valparaisodata/valparaiso_chili_9/1/1_8.jpg",
+        "Valparaiso/valparaisodata/valparaiso_chili_9/1/1_6.jpg",
+        "Valparaiso/valparaisodata/valparaiso_chili_9/1/1_9.jpg"
+      ]
+    },
+    {
+      "href": "2012/Valparaiso2/tour.html",
+      "dataDir": "2012/Valparaiso2/tourdata",
+      "category": "2012",
+      "categoryLabel": "2012 \u00b7 Valpara\u00edso Sunset",
+      "categoryDesc": "Valpara\u00edso at sunset",
+      "pattern": "tour",
+      "title": "Valpara\u00edso at Sunset",
+      "subtitle": "2012 Sunset Tour",
+      "scenes": 1,
+      "outerThumb": "2012/Valparaiso2/2012.07.21.04B.fb.pannel2.jpg",
+      "dataThumb": "2012/Valparaiso2/tourdata/thumbnail.jpg",
+      "previews": [
+        "2012/Valparaiso2/tourdata/_2012_07_21_04b_flat_22/preview.jpg"
+      ],
+      "tiles": [
+        "2012/Valparaiso2/tourdata/_2012_07_21_04b_flat_22/1/1_7.jpg",
+        "2012/Valparaiso2/tourdata/_2012_07_21_04b_flat_22/1/1_8.jpg",
+        "2012/Valparaiso2/tourdata/_2012_07_21_04b_flat_22/1/1_6.jpg",
+        "2012/Valparaiso2/tourdata/_2012_07_21_04b_flat_22/1/1_9.jpg"
+      ]
+    },
+    {
+      "href": "2014.Spring/fourcorners.html",
+      "dataDir": "2014.Spring/fourcornersdata",
+      "category": "2014.Spring",
+      "categoryLabel": "Spring 2014 \u00b7 Southwest",
+      "categoryDesc": "Mesa Verde Cliff Palace & Arizona roadside",
+      "pattern": "root",
+      "title": "Cliff Palace Overlook",
+      "subtitle": "Mesa Verde \u00b7 Four Corners",
+      "scenes": 1,
+      "outerThumb": "2014.Spring/fourcorners.thumb1.jpg",
+      "dataThumb": "2014.Spring/fourcornersdata/thumbnail.jpg",
+      "previews": [
+        "2014.Spring/fourcornersdata/mesa_vrede_overlook__20/preview.jpg"
+      ],
+      "tiles": [
+        "2014.Spring/fourcornersdata/mesa_vrede_overlook__20/1/1_5.jpg",
+        "2014.Spring/fourcornersdata/mesa_vrede_overlook__20/1/1_4.jpg",
+        "2014.Spring/fourcornersdata/mesa_vrede_overlook__20/1/1_6.jpg",
+        "2014.Spring/fourcornersdata/mesa_vrede_overlook__20/1/1_3.jpg"
+      ]
+    },
+    {
+      "href": "2014.Spring/roadside1.html",
+      "dataDir": "2014.Spring/roadside1data",
+      "category": "2014.Spring",
+      "categoryLabel": "Spring 2014 \u00b7 Southwest",
+      "categoryDesc": "Mesa Verde Cliff Palace & Arizona roadside",
+      "pattern": "root",
+      "title": "Arizona Roadside",
+      "subtitle": "Spring 2014",
+      "scenes": 1,
+      "outerThumb": "2014.Spring/roadside1.link.jpg",
+      "dataThumb": "2014.Spring/roadside1data/thumbnail.jpg",
+      "previews": [
+        "2014.Spring/roadside1data/_2014_05_26_6a_20/preview.jpg"
+      ],
+      "tiles": [
+        "2014.Spring/roadside1data/_2014_05_26_6a_20/1/1_12.jpg",
+        "2014.Spring/roadside1data/_2014_05_26_6a_20/1/1_13.jpg",
+        "2014.Spring/roadside1data/_2014_05_26_6a_20/1/1_11.jpg",
+        "2014.Spring/roadside1data/_2014_05_26_6a_20/1/1_10.jpg"
+      ]
+    },
+    {
+      "href": "TampaBay/Dali.html",
+      "dataDir": "TampaBay/Dalidata",
+      "category": "TampaBay",
+      "categoryLabel": "Tampa Bay, FL",
+      "categoryDesc": "Salvador Dal\u00ed Museum",
+      "pattern": "root",
+      "title": "Salvador Dal\u00ed Museum",
+      "subtitle": "St. Petersburg / Tampa Bay, FL",
+      "scenes": 1,
+      "outerThumb": "TampaBay/Dali.thumb1.jpg",
+      "dataThumb": "TampaBay/Dalidata/thumbnail.jpg",
+      "previews": [
+        "TampaBay/Dalidata/dali_musem_20/preview.jpg"
+      ],
+      "tiles": [
+        "TampaBay/Dalidata/dali_musem_20/1/1_2.jpg",
+        "TampaBay/Dalidata/dali_musem_20/1/1_3.jpg",
+        "TampaBay/Dalidata/dali_musem_20/1/1_1.jpg",
+        "TampaBay/Dalidata/dali_musem_20/1/1_0.jpg"
+      ]
+    },
+    {
+      "href": "gcw/2011.09.01.01.html",
+      "dataDir": "gcw/2011.09.01.01data",
+      "category": "gcw",
+      "categoryLabel": "Grand Canyon West",
+      "categoryDesc": "2011 canyon rim gigapixel panorama",
+      "pattern": "root",
+      "title": "Grand Canyon West",
+      "subtitle": "Sept 2011 Rim Panorama",
+      "scenes": 1,
+      "outerThumb": "gcw/gcw.thumb1.jpg",
+      "dataThumb": "gcw/2011.09.01.01data/thumbnail.jpg",
+      "previews": [
+        "gcw/2011.09.01.01data/_2011_09_01_01_s2_fla_20/preview.jpg"
+      ],
+      "tiles": [
+        "gcw/2011.09.01.01data/_2011_09_01_01_s2_fla_20/1/1_5.jpg",
+        "gcw/2011.09.01.01data/_2011_09_01_01_s2_fla_20/1/1_4.jpg",
+        "gcw/2011.09.01.01data/_2011_09_01_01_s2_fla_20/1/1_6.jpg",
+        "gcw/2011.09.01.01data/_2011_09_01_01_s2_fla_20/1/1_3.jpg"
+      ]
+    },
+    {
+      "href": "Family/2014.10.13.02.html",
+      "dataDir": "Family/2014.10.13.02data",
+      "category": "Family",
+      "categoryLabel": "Family & Alabama",
+      "categoryDesc": "Orange Beach & McDougle Vista",
+      "pattern": "root",
+      "title": "Family Panorama (Oct 2014)",
+      "subtitle": "2014.10.13.02 Flat Panorama",
+      "scenes": 1,
+      "outerThumb": null,
+      "dataThumb": "Family/2014.10.13.02data/thumbnail.jpg",
+      "previews": [
+        "Family/2014.10.13.02data/_2014_10_13_02_s1_fla_20/preview.jpg"
+      ],
+      "tiles": [
+        "Family/2014.10.13.02data/_2014_10_13_02_s1_fla_20/html5/0.jpg",
+        "Family/2014.10.13.02data/_2014_10_13_02_s1_fla_20/html5/1.jpg",
+        "Family/2014.10.13.02data/_2014_10_13_02_s1_fla_20/html5/2.jpg",
+        "Family/2014.10.13.02data/_2014_10_13_02_s1_fla_20/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "Family/2014101801f.html",
+      "dataDir": "Family/2014101801fdata",
+      "category": "Family",
+      "categoryLabel": "Family & Alabama",
+      "categoryDesc": "Orange Beach & McDougle Vista",
+      "pattern": "root",
+      "title": "Orange Beach, AL",
+      "subtitle": "Dad's Birthday at the Beach",
+      "scenes": 1,
+      "outerThumb": "Family/2014101801f.thumb1.jpg",
+      "dataThumb": "Family/2014101801fdata/thumbnail.jpg",
+      "previews": [
+        "Family/2014101801fdata/orange_beach_al_20/preview.jpg"
+      ],
+      "tiles": [
+        "Family/2014101801fdata/orange_beach_al_20/html5/0.jpg",
+        "Family/2014101801fdata/orange_beach_al_20/html5/1.jpg",
+        "Family/2014101801fdata/orange_beach_al_20/html5/2.jpg",
+        "Family/2014101801fdata/orange_beach_al_20/html5/3.jpg"
+      ]
+    },
+    {
+      "href": "Family/2014101801s2flat.html",
+      "dataDir": "Family/2014101801s2flatdata",
+      "category": "Family",
+      "categoryLabel": "Family & Alabama",
+      "categoryDesc": "Orange Beach & McDougle Vista",
+      "pattern": "root",
+      "title": "Orange Beach, AL (Flat)",
+      "subtitle": "Scene 2 Flat Projection",
+      "scenes": 1,
+      "outerThumb": null,
+      "dataThumb": "Family/2014101801s2flatdata/thumbnail.jpg",
+      "previews": [
+        "Family/2014101801s2flatdata/_2014101801s2flat_20/preview.jpg"
+      ],
+      "tiles": [
+        "Family/2014101801s2flatdata/_2014101801s2flat_20/1/1_5.jpg",
+        "Family/2014101801s2flatdata/_2014101801s2flat_20/1/1_4.jpg",
+        "Family/2014101801s2flatdata/_2014101801s2flat_20/1/1_6.jpg",
+        "Family/2014101801s2flatdata/_2014101801s2flat_20/1/1_3.jpg"
+      ]
+    },
+    {
+      "href": "Family/2014101801s2n0.html",
+      "dataDir": "Family/2014101801s2n0data",
+      "category": "Family",
+      "categoryLabel": "Family & Alabama",
+      "categoryDesc": "Orange Beach & McDougle Vista",
+      "pattern": "root",
+      "title": "Orange Beach, AL (View N0)",
+      "subtitle": "Scene 2 \u00b7 N0",
+      "scenes": 1,
+      "outerThumb": null,
+      "dataThumb": "Family/2014101801s2n0data/thumbnail.jpg",
+      "previews": [
+        "Family/2014101801s2n0data/_2014_10_18_01_s2_n0_20/preview.jpg"
+      ],
+      "tiles": [
+        "Family/2014101801s2n0data/_2014_10_18_01_s2_n0_20/1/1_5.jpg",
+        "Family/2014101801s2n0data/_2014_10_18_01_s2_n0_20/1/1_4.jpg",
+        "Family/2014101801s2n0data/_2014_10_18_01_s2_n0_20/1/1_6.jpg",
+        "Family/2014101801s2n0data/_2014_10_18_01_s2_n0_20/1/1_3.jpg"
+      ]
+    },
+    {
+      "href": "Family/2014101801s2n3.html",
+      "dataDir": "Family/2014101801s2n3data",
+      "category": "Family",
+      "categoryLabel": "Family & Alabama",
+      "categoryDesc": "Orange Beach & McDougle Vista",
+      "pattern": "root",
+      "title": "Orange Beach, AL (View N3)",
+      "subtitle": "Scene 2 \u00b7 N3",
+      "scenes": 1,
+      "outerThumb": null,
+      "dataThumb": "Family/2014101801s2n3data/thumbnail.jpg",
+      "previews": [
+        "Family/2014101801s2n3data/_2014101801s2n3_20/preview.jpg"
+      ],
+      "tiles": [
+        "Family/2014101801s2n3data/_2014101801s2n3_20/1/1_5.jpg",
+        "Family/2014101801s2n3data/_2014101801s2n3_20/1/1_4.jpg",
+        "Family/2014101801s2n3data/_2014101801s2n3_20/1/1_6.jpg",
+        "Family/2014101801s2n3data/_2014101801s2n3_20/1/1_3.jpg"
+      ]
+    },
+    {
+      "href": "Family/2014101801s2n4.html",
+      "dataDir": "Family/2014101801s2n4data",
+      "category": "Family",
+      "categoryLabel": "Family & Alabama",
+      "categoryDesc": "Orange Beach & McDougle Vista",
+      "pattern": "root",
+      "title": "Orange Beach, AL (View N4)",
+      "subtitle": "Scene 2 \u00b7 N4",
+      "scenes": 1,
+      "outerThumb": null,
+      "dataThumb": "Family/2014101801s2n4data/thumbnail.jpg",
+      "previews": [
+        "Family/2014101801s2n4data/_2014101801s2n4_20/preview.jpg"
+      ],
+      "tiles": [
+        "Family/2014101801s2n4data/_2014101801s2n4_20/1/1_5.jpg",
+        "Family/2014101801s2n4data/_2014101801s2n4_20/1/1_4.jpg",
+        "Family/2014101801s2n4data/_2014101801s2n4_20/1/1_6.jpg",
+        "Family/2014101801s2n4data/_2014101801s2n4_20/1/1_3.jpg"
+      ]
+    },
+    {
+      "href": "Family/McDougle.html",
+      "dataDir": "Family/McDougledata",
+      "category": "Family",
+      "categoryLabel": "Family & Alabama",
+      "categoryDesc": "Orange Beach & McDougle Vista",
+      "pattern": "root",
+      "title": "McDougle Vista, AL",
+      "subtitle": "For Daphnie",
+      "scenes": 1,
+      "outerThumb": "Family/McDougle.thumb1.jpg",
+      "dataThumb": "Family/McDougledata/thumbnail.jpg",
+      "previews": [
+        "Family/McDougledata/mcdougle_vista_20/preview.jpg"
+      ],
+      "tiles": [
+        "Family/McDougledata/mcdougle_vista_20/html5/0.jpg",
+        "Family/McDougledata/mcdougle_vista_20/html5/1.jpg",
+        "Family/McDougledata/mcdougle_vista_20/html5/2.jpg",
+        "Family/McDougledata/mcdougle_vista_20/html5/3.jpg"
+      ]
+    }
+  ]
+};
+
+    let activeCategory = "ALL";
+    let activePattern = "ALL"; // ALL, root, tour
+    let searchQuery = "";
+    let tileSeed = Math.floor(Math.random() * 10000);
+
+    function pickRandom(arr, offset = 0) {
+      if (!arr || arr.length === 0) return null;
+      const idx = Math.floor(Math.random() * arr.length);
+      return arr[idx];
+    }
+
+    function renderPills() {
+      const container = document.getElementById("categoryPills");
+      const total = CATALOG.items.length;
+      let html = `<button class="pill ${activeCategory === "ALL" ? "active" : ""}" data-cat="ALL">All Collections (${total})</button>`;
+      for (const cat of CATALOG.categories) {
+        const count = CATALOG.items.filter(i => i.category === cat.id).length;
+        if (!count) continue;
+        html += `<button class="pill ${activeCategory === cat.id ? "active" : ""}" data-cat="${cat.id}">${cat.label} (${count})</button>`;
+      }
+      container.innerHTML = html;
+      container.querySelectorAll(".pill").forEach(btn => {
+        btn.addEventListener("click", () => {
+          activeCategory = btn.getAttribute("data-cat");
+          renderPills();
+          renderGallery();
+        });
+      });
+    }
+
+    function renderGallery() {
+      const root = document.getElementById("galleryRoot");
+      const emptyState = document.getElementById("emptyState");
+      const q = searchQuery.trim().toLowerCase();
+
+      const filtered = CATALOG.items.filter(item => {
+        if (activeCategory !== "ALL" && item.category !== activeCategory) return false;
+        if (activePattern !== "ALL" && item.pattern !== activePattern) return false;
+        if (q) {
+          const hay = `${item.title} ${item.subtitle} ${item.categoryLabel} ${item.href}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      document.getElementById("visibleCount").textContent =
+        `Showing ${filtered.length} of ${CATALOG.items.length} panoramas`;
+
+      if (filtered.length === 0) {
+        root.innerHTML = "";
+        emptyState.style.display = "block";
+        return;
+      }
+      emptyState.style.display = "none";
+
+      let sectionsHtml = "";
+      for (const cat of CATALOG.categories) {
+        const catItems = filtered.filter(i => i.category === cat.id);
+        if (catItems.length === 0) continue;
+
+        let cardsHtml = "";
+        for (const item of catItems) {
+          const hasOuter = Boolean(item.outerThumb);
+          // For items with a dedicated outer thumbnail, use it directly.
+          // For items without a dedicated outer thumbnail, pick a random scene preview or data thumbnail + random high-res tile inset from <root>data / tourdata!
+          const randomPreview = pickRandom(item.previews) || item.dataThumb;
+          const randomTile = pickRandom(item.tiles);
+          const primarySrc = hasOuter ? item.outerThumb : (randomPreview || randomTile || item.dataThumb);
+          const fallbackSrc = item.dataThumb || randomTile || "";
+
+          const parts = item.href.split("/");
+          const fileName = parts[parts.length - 1];
+          const picLabel = (fileName === "tour.html" && parts.length >= 2)
+            ? `${parts[parts.length - 2]}/tour.html`
+            : fileName;
+
+          const patternBadge = item.pattern === "tour"
+            ? `<span class="badge badge-tour">${picLabel}</span>`
+            : `<span class="badge badge-root">${picLabel}</span>`;
+
+          const scenesBadge = item.scenes > 1
+            ? `<span class="badge badge-scenes">${item.scenes} Scenes</span>`
+            : "";
+
+          const pipHtml = (!hasOuter && randomTile)
+            ? `<div class="tile-pip" title="Random tile sampled from ${item.dataDir}: ${randomTile}">
+                 <img src="./${randomTile}" loading="lazy" alt="Sample tile" />
+                 <div class="tile-pip-label">tile sample</div>
+               </div>`
+            : (hasOuter && randomTile)
+            ? `<div class="tile-pip" title="Detail tile from ${item.dataDir}: ${randomTile}">
+                 <img src="./${randomTile}" loading="lazy" alt="Detail tile" />
+                 <div class="tile-pip-label">zoom tile</div>
+               </div>`
+            : "";
+
+          const thumbNote = hasOuter
+            ? item.outerThumb.split("/").pop()
+            : `🎲 ${ (randomPreview || randomTile || "").split("/").slice(-2).join("/") }`;
+
+          cardsHtml += `
+            <a class="card" href="./${item.href}">
+              <div class="card-media ${hasOuter ? "" : "creative-pano"}">
+                <img
+                  class="primary-img"
+                  src="./${primarySrc}"
+                  loading="lazy"
+                  alt="${item.title}"
+                  onerror="if (this.dataset.fallback && this.src !== this.dataset.fallback) this.src = this.dataset.fallback;"
+                  data-fallback="./${fallbackSrc}"
+                />
+                <div class="media-badges">
+                  ${patternBadge}
+                  ${scenesBadge}
+                </div>
+                ${pipHtml}
+              </div>
+              <div class="card-body">
+                <div class="card-title">${item.title}</div>
+                <div class="card-sub">${item.subtitle}</div>
+                <div class="card-meta">
+                  <span>${item.href}</span>
+                  <span class="thumb-source" title="Thumbnail source">${thumbNote}</span>
+                </div>
+              </div>
+            </a>
+          `;
+        }
+
+        sectionsHtml += `
+          <section class="category-section" id="cat-${cat.id}">
+            <div class="category-header">
+              <div class="category-title-wrap">
+                <h2>${cat.label}</h2>
+                <span class="cat-desc">${cat.desc}</span>
+              </div>
+              <span class="category-count">${catItems.length} ${catItems.length === 1 ? "panorama" : "panoramas"}</span>
+            </div>
+            <div class="grid">
+              ${cardsHtml}
+            </div>
+          </section>
+        `;
+      }
+
+      root.innerHTML = sectionsHtml;
+    }
+
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      searchQuery = e.target.value;
+      renderGallery();
+    });
+
+    document.getElementById("patternFilterBtn").addEventListener("click", () => {
+      const order = ["ALL", "root", "tour"];
+      activePattern = order[(order.indexOf(activePattern) + 1) % order.length];
+      const counts = {
+        ALL: `All (${CATALOG.items.length})`,
+        root: `Pictures (${CATALOG.items.filter(i => i.pattern === "root").length})`,
+        tour: `Tours (${CATALOG.items.filter(i => i.pattern === "tour").length})`,
+      };
+      document.getElementById("patternLabel").textContent = counts[activePattern];
+      renderGallery();
+    });
+
+    document.getElementById("shuffleTilesBtn").addEventListener("click", () => {
+      tileSeed++;
+      renderGallery();
+    });
+
+    renderPills();
+    renderGallery();
+  </script>
+</body>
+</html>

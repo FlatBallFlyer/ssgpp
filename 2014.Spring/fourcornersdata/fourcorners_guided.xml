@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano>
+<!-- Guided Toure Stops -->
+<data name="guide_stopcount" value="13"/>
+<data name="guide_1"  toH="+0.00" toV="+0.00" fov="0.53" tween="easeInQuad"     time="1" pause="1" desc="Full Picture"   />
+<data name="guide_2"  toH="-0.20" toV="-0.00" fov="0.30" tween="easeInQuad"    time="3" pause="0" desc="Start Left"   />
+<data name="guide_3"  toH="-0.38" toV="-0.09" fov="0.02" tween="easeOutQuad"   time="9" pause="1" desc="Left Ruins"      />
+<data name="guide_4"  toH="-0.36" toV="-0.08" fov="0.02" tween="easeInQuad"   time="6" pause="0" desc="Pan Right"      />
+<data name="guide_5"  toH="-0.34" toV="-0.08" fov="0.02" tween="linear"         time="9" pause="2" desc="Center Left Ruins"   />
+<data name="guide_6"  toH="-0.25" toV="-0.08" fov="0.08" tween="easeOutQuad"         time="8" pause="0" desc="Pan over out"   />
+<data name="guide_7"  toH="-0.18" toV="-0.08" fov="0.03" tween="easeInQuad"         time="8" pause="0" desc="Center Ruins (Left)"   />
+<data name="guide_8"  toH="-0.16" toV="-0.08" fov="0.03" tween="easeOutQuad"         time="8" pause="0" desc="Center Ruins (Right)"   />
+<data name="guide_9"  toH="-0.08" toV="-0.09" fov="0.15" tween="easeInQuint"    time="6" pause="0" desc="Center Frame"   />
+<data name="guide_10" toH="-0.04" toV="-0.09" fov="0.03" tween="easeOutQuad"   time="5" pause="2" desc="Cliff Palace"   />
+<data name="guide_11" toH="+0.11" toV="-0.00" fov="0.10" tween="easeInQuint"    time="6" pause="0" desc="Pan Out Over"   />
+<data name="guide_12" toH="+0.26" toV="-0.08" fov="0.05" tween="easeOutQuad"    time="6" pause="2" desc="Right Ruins"   />
+<data name="guide_13" toH="+0.70" toV="-0.09" fov="0.04" tween="easeInQuint"         time="3" pause="1" desc="Seflie"         />
+<data name="guide_14" toH="+0.00" toV="+0.00" fov="0.27" tween="easeOutQuad"    time="8" pause="0" desc="Center Frame"   />
+
+<!-- Global variables used by guidedTour -->
+  <krpano guide_stop="1"/>
+  <krpano stopname=""/>
+
+<!-- Overide the AutoRotation Event Handlers -->
+    <events name="guideOwnRotation" onstartautorotation="guideStartRotationAction" onstopautorotation="guideStopRotationAction" onpauseautorotation="guidePauseRotationAction" onresumeautorotation="guideResumeRotationAction" keep="true" />
+
+    <krpano foo="4"/>
+    <action name="guideStartRotationAction">
+        set(autorotate.enabled, false);
+        stoplookto();
+        gotostop();
+    </action>
+
+    <action name="guideStopRotationAction">
+        stoplookto();
+    </action>
+
+    <action name="guidePauseRotationAction">
+        stoplookto();
+    </action>
+
+    <action name="guideResumeRotationAction">
+        set(autorotate.enabled, false);
+        gotostop();
+    </action>
+
+<!-- Guided Tour Implementation Methods -->
+    <action name="nextstop">
+        if (guide_stop = data["guide_stopcound"].value,
+            loadNextScene();
+        ,
+            inc(guide_stop,1,get(data["guide_stopcount"].value),1);
+            gotostop(get(guide_stop));
+        );
+    </action>
+
+    <action name="prevousstop">
+        dec(guide_stop,1,1,get(data["guide_stopcount"].value));
+        gotostop(get(guide_stop));
+    </action>
+    
+    <action name="mylookto"></action>
+    
+    <action name="gotostop">
+        txtadd(stopname,"guide_",get(guide_stop));
+        txtadd(action[mylookto].content,
+        'lookto(',
+            get(data[get(stopname)].toH),',',
+            get(data[get(stopname)].toV),',',
+            get(data[get(stopname)].fov),',',
+            'tween(',get(data[get(stopname)].tween),',',
+                     get(data[get(stopname)].time),'),true, true,',
+                     'delayedcall(',get(data[get(stopname)].pause),',nextstop()));');
+        
+        mylookto();
+         <!--
+        lookto(
+            get(data[get(stopname)].toH),
+            get(data[get(stopname)].toV),
+            get(data[get(stopname)].fov),
+            tween(get(data[get(stopname)].tween),
+                  get(data[get(stopname)].time),
+            false,
+            true,
+            delayedcall(get(data[get(stopname)].pause),nextstop())
+        );
+        -->
+    </action>
+
+</krpano>
