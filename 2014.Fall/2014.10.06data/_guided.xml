@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano>
+  <!-- Global variables used by actions and plugins -->
+  <krpano guide_stop="1"/>
+  <data name="stop_count" value="5"/>
+  <data name="stop1" next="stop2" toH="1.0" toV="1.0" fov="1.0" tween="type" time="2" pause="0"/>
+  <data name="stop2" next="stop3" toH="1.0" toV="1.0" fov="1.0" tween="type" time="2" pause="0"/>
+  <data name="stop3" next="stop4" toH="1.0" toV="1.0" fov="1.0" tween="type" time="2" pause="0"/>
+  <data name="stop4" next="stop5" toH="1.0" toV="1.0" fov="1.0" tween="type" time="2" pause="0"/>
+  <data name="stop5" next="tour"  toH="1.0" toV="1.0" fov="1.0" tween="type" time="2" pause="0"/>
+
+  <action name="nextstop">
+    if guilde_stop >= guide.stopcount
+        gotostop(1);
+    else
+        gotostop(++guide_stop);
+  </action>
+  
+  <action name="prevousstop">
+    if guilde_stop > 0
+        gotostop(--guide_stop);
+    else
+        gotostop(guide.stopcount);
+  </action>
+  
+  <action name="gotostop">
+    set(guide_stop = %1);
+    stop = stops(guideStop);
+    lookto(data[stop].toH, data[stop].toV, data[stop].fov, tween(data[stop].type,data[stop].time), ,true, nextstop() );
+  </action>
+
+  <action name="startautorotation">
+    set(tour_autorotateenabled, true );
+    gotoStop(1);
+  </action>
+  <action name="stopautorotation">
+    set(tour_autorotateenabled, false);
+    stoplookto();
+    events.dispatch(onstopautorotation);
+  </action>
+  <action name="pauseautorotation">
+    stoplookto()
+    events.dispatch(onpauseautorotation);
+  </action>
+  <action name="resumeautorotation">
+    gotostop(guide_stop);
+    events.dispatch(onresumeautorotation);
+  </action>
+  <events name="autorotation_events" onnewpano="startautorotation;" keep="true"/>
+
+</krpano>
