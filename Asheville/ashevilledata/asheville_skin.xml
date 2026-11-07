@@ -1,0 +1,2120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano version="1.17">
+
+    
+  <!-- Spot Style - Load panorama -->
+  <style name="IconLoadpanorama"
+         url="%FIRSTXML%/spots/pin_thin_3d_user_defaultpoint5.png"
+         visible="false"
+
+
+         edge="bottom" ox="0" oy="0"
+         alpha="0.8"
+         onhover="onhoverIconLoadpanorama"
+         onover="onoverIconLoadpanorama"
+         onout="onoutIconLoadpanorama"
+         />
+  <action name="onhoverIconLoadpanorama">
+    showtooltip(hotspot);
+  </action>
+  <action name="onoverIconLoadpanorama">
+
+tween(alpha, 1);
+
+  </action>
+  <action name="onoutIconLoadpanorama">
+    hideTooltip();
+
+tween(alpha, 0.8);
+
+  </action>
+
+<!-- ************ -->
+<!-- Double click -->
+<!-- ************ -->
+  <plugin name="doubleclick" url="%FIRSTXML%/graphics/doubleclick/fieldofview_dc.swf" alturl="%FIRSTXML%/graphics/doubleclick/fieldofview_dc.js" keep="true" ondblclick="ondoubleclick();"/>
+  <action name="ondoubleclick">switchFullscreen();
+
+  </action>
+<!-- ********* -->
+<!-- Gyroscope -->
+<!-- ********* -->
+<plugin name="gyroscope"
+        url="graphics/gyro.js"
+        keep="true"
+        devices="tablet|mobile"
+        onavailable="delayedcall(1, checkGyroAvailability(););"
+        enabled="false"
+        />
+
+<action name="changeGyroscopeState">
+  ifnot (plugin[gyroscope].available === undefined,
+    if (plugin[gyroscope].available,
+      if (%1 !=  plugin[gyroscope].enabled,
+	    switch(plugin[gyroscope].enabled);
+	    if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
+      );
+    );
+  );
+</action>
+
+<action name="checkGyroAvailability">
+	ifnot (plugin[gyroscope].available === undefined, 
+		if (plugin[gyroscope].available,
+			set(tour_gyroscopedevices, true);
+			events.dispatch(ongyroscopeavailable);
+			if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
+		,
+			set(tour_gyroscopedevices, false);
+			set(plugin[gyroscope].enabled, false);
+		);
+	,
+		set(tour_gyroscopedevices, false);
+		set(plugin[gyroscope].enabled, false);
+	);
+</action>
+<!-- ************ -->
+<!-- Context Menu -->
+<!-- ************ -->
+  <contextmenu fullscreen="false">
+    <item name="author" onclick="getmessage(urltoopen,project_author_url);openurl(get(urltoopen),_blank);" />
+    <item name="normal"        onclick="setViewNormal();" separator="true"/>
+    <item name="fisheye"       onclick="setViewFisheye();"/>
+    <item name="architectural" onclick="setViewArchitectural();"/>
+    <item name="littleplanet"  onclick="setViewLittlePlanet();"/>
+    <item name="fullscreenentry" onclick="enterFullscreen();" separator="true"/>
+  </contextmenu>
+
+  <events name="contextmenuevents" keep="true" onenterfullscreen="updateContextMenu" onexitfullscreen="updateContextMenu" onxmlcomplete="updateContextMenu"/>
+  <action name="updateContextMenu">
+    getmessage(contextmenu.item[author].caption, project_author_name);
+    getmessage(contextmenu.item[normal].caption, contextmenunormallabel);
+    getmessage(contextmenu.item[architectural].caption, contextmenuarchitecturallabel);
+    
+    set(sceneisfull360, false);
+    if(scene[get(xml.scene)].full360,
+      sub(viewhfov, view.hlookatmax, view.hlookatmin);
+      if (viewhfov == 360,
+        sub(viewvfov, view.vlookatmax, view.vlookatmin);
+        if (viewvfov == 180,
+          set(sceneisfull360, true);
+        );
+      );
+    );
+    if (sceneisfull360,
+      set(contextmenu.item[fisheye].visible, true);
+      getmessage(contextmenu.item[fisheye].caption, contextmenufisheyelabel);
+      set(contextmenu.item[littleplanet].visible, true);
+      getmessage(contextmenu.item[littleplanet].caption, contextmenulittleplanetlabel);
+    ,
+      set(contextmenu.item[fisheye].visible, false);
+      set(contextmenu.item[littleplanet].visible, false);
+    );
+    if(tour_fullscreen,
+      getmessage(contextmenu.item[fullscreenentry].caption, contextmenucloseFsLabel);
+      set(contextmenu.item[fullscreenentry].onclick, exitFullscreen(););
+     ,
+      getmessage(contextmenu.item[fullscreenentry].caption, contextmenuopenFsLabel);
+      set(contextmenu.item[fullscreenentry].onclick, enterFullscreen(););
+    );
+  </action>
+  <!-- ************************* -->
+  <!-- Progress Bar and Loopings -->
+  <!-- ************************* -->
+  <progress showload="bar(
+                midbottom
+                ,
+				100%,
+                5,
+				0,
+                0,
+				solid,
+				0xffffff,0x555555,0x555555,
+				0x111111,0,
+				0xffffff,0
+				)"
+			showwait="loopings(
+				0xffffff,
+				15,15,
+				0,0,
+				0xffffff,0,
+				0,0,center
+				)"
+			showreloads="false"
+			parent=""
+			/>
+	<!-- ***************************** -->
+	<!-- Docked Thumbnails Control Bar -->
+	<!-- ***************************** -->
+
+
+
+<krpano themeunanimebarbuilt="false" themeunanimeIsOpened="false" themeunanimeThumbnailsPos="0" />
+
+<events name="themeunanimebarevents" 
+	onxmlcomplete="themeunanimebuildMenuBar();"
+	onresize="themeunanimeOnResize();"
+	keep="true"/>
+
+<action name="themeunanimebuildMenuBar">
+	ifnot (themeunanimebarbuilt, themeunanimebuildMenu(); set(themeunanimebarbuilt, true););
+</action>
+
+
+	<!-- ********************* -->
+	<!-- Docked Thumbnails Bar -->
+	<!-- ********************* -->
+
+
+
+
+
+
+<layer name="thumbnailsBar-controlBar_dockedThumbnails" 
+	keep="true" 
+	type="container" 
+	visible="false"
+	parent="themeunanime_bg" 
+	align="bottomleft"
+	
+	width="100%"
+	height="50" 
+	
+	x="0"
+	y="0"
+	zorder="1"
+/>
+
+
+<layer name="thumbnailBorderSource-controlBar_dockedThumbnails"
+	keep="true"
+	visible="false"
+	onloaded="loadedImages-controlBar_dockedThumbnails(border);"
+	url="%FIRSTXML%/graphics/dockedthumbscontrolbar/thumbnails_states.png" 
+	offsetX="5"
+	offsetY="5"
+	quarterHeight="0"
+/>
+
+
+	
+	<style name="scrollButtonsBgStyle-controlBar_dockedThumbnails"
+		keep="true"
+		parent="thumbnailsBar-controlBar_dockedThumbnails"
+		alpha="0.3"
+		zorder="1"
+	/>
+	<layer name="scrollPrevArrowBg-controlBar_dockedThumbnails" 
+		style="scrollButtonsBgStyle-controlBar_dockedThumbnails" 
+		url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_scroll_left_bg.png" 
+		visible="false" 
+			align="left" 
+	/>
+	<layer name="scrollNextArrowBg-controlBar_dockedThumbnails" 
+		style="scrollButtonsBgStyle-controlBar_dockedThumbnails" 
+		url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_scroll_right_bg.png" 
+		visible="false" 
+			align="right" 
+	/>
+
+	<krpano arrow1Loaded-controlBar_dockedThumbnails="false" arrow2Loaded-controlBar_dockedThumbnails="false" borderLoaded-controlBar_dockedThumbnails="false" thumbnailsLoadedCounter-controlBar_dockedThumbnails="0" thumbsCount-controlBar_dockedThumbnails="0" thumbsCounter-controlBar_dockedThumbnails="0" firstInit-controlBar_dockedThumbnails="false" />
+	
+	
+	<events name="thumbnailsScrollEvents-controlBar_dockedThumbnails" 
+		keep="true" 
+		
+		onxmlcomplete="ifnot(startResize-controlBar_dockedThumbnails,set(isLoaded-controlBar_dockedThumbnails, true);if(isStarted-controlBar_dockedThumbnails,onLoadCompleteHandler-controlBar_dockedThumbnails();););"
+		onTourStart="set(isStarted-controlBar_dockedThumbnails, true);if(isLoaded-controlBar_dockedThumbnails,onLoadCompleteHandler-controlBar_dockedThumbnails(););"
+		onnewpano="if(startResize-controlBar_dockedThumbnails,if(firstInit-controlBar_dockedThumbnails,onLoadCompleteHandler-controlBar_dockedThumbnails();););"
+		onresize="onResizeHandler-controlBar_dockedThumbnails();"
+		onenterfullscreen="delayedcall(0.2,scrollToCurrentThumb-controlBar_dockedThumbnails(););"
+		onexitfullscreen="delayedcall(0.2,scrollToCurrentThumb-controlBar_dockedThumbnails(););"
+	/>
+	
+	
+	<layer name="scrollAreaContainer-controlBar_dockedThumbnails" 
+		keep="true"
+		type="container" 
+		align="topleft"
+		x="10"
+		y="5"
+		
+		marginX="10"
+		marginY="5"
+		
+		width="0" 
+		height="0"
+		
+		scrollSpeedInit="10"
+		scrollSpeed="10"
+		scrollSpeedMax="70"
+		scrollSpeedAcceleration="20"
+		
+		parent="thumbnailsBar-controlBar_dockedThumbnails"
+		
+		thumbWidth="0"
+		thumbHeight="0"
+		
+		itemWidth="80"
+		itemHeight="40"
+		
+		offsetX="0"
+		offsetY="0"
+		
+		thumbSpacer="10"
+		currentThumbsCount="0"
+		
+		adjustToContent="0"
+		
+		zorder="1"
+		visible="false"
+		ready="false"
+	>
+	
+		
+		<layer name="thumbsScrollArea-controlBar_dockedThumbnails" 
+			url="%FIRSTXML%/graphics/scrollarea.swf" 
+			alturl="%FIRSTXML%/graphics/scrollarea.js" 
+			align="bottomleft"
+			onhover_autoscrolling="false"
+			
+			x="0"
+			y="0"
+			 
+				direction="h" 
+		/>
+	
+	</layer>
+	
+	
+	
+	<layer name="scrollPrevArrow-controlBar_dockedThumbnails" 
+		keep="true"
+		type="image"
+		visible="false"
+		parent="thumbnailsBar-controlBar_dockedThumbnails"
+		targetHeight="0"
+		tagertWidth="0"
+		zorder="2"
+		onloaded="loadedImages-controlBar_dockedThumbnails(arrow1);"
+			url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_scroll_left.png"
+			align="left"
+	/>
+	
+	
+	
+	<layer name="scrollNextArrow-controlBar_dockedThumbnails" 
+		keep="true"
+		type="image"
+		visible="false"
+		parent="thumbnailsBar-controlBar_dockedThumbnails"
+		targetHeight="0"
+		targetWidth="0"
+		zorder="2"
+		onloaded="loadedImages-controlBar_dockedThumbnails(arrow2);"
+			url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_scroll_right.png"
+			align="right"
+	/>
+	
+	<action name="loadedImages-controlBar_dockedThumbnails">
+		if(%1 == "arrow1",
+			set(arrow1Loaded-controlBar_dockedThumbnails, true);
+		);
+		if(%1 == "arrow2",
+			set(arrow2Loaded-controlBar_dockedThumbnails, true);
+		);
+		if(%1 == "border",
+			if(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url,
+				set(borderLoaded-controlBar_dockedThumbnails, true);
+			);
+		);
+		if(%1 == "thumbnail",
+			inc(thumbnailsLoadedCounter-controlBar_dockedThumbnails);
+		);
+	</action>
+	
+	<action name="onLoadCompleteHandler-controlBar_dockedThumbnails">
+		
+		set(thumbsCount-controlBar_dockedThumbnails, 0);
+		
+		
+		set(thumbsCount-controlBar_dockedThumbnails, get(scene.count));
+		
+		
+		
+		
+		
+		
+		
+		loadThumbs-controlBar_dockedThumbnails();
+		
+		if(firstInit-controlBar_dockedThumbnails,
+			onLoadCompleteHandlerPartThree-controlBar_dockedThumbnails();
+		,
+			onLoadCompleteHandlerPartTwo-controlBar_dockedThumbnails();
+		);
+	</action>
+	
+	<action name="onLoadCompleteHandlerPartTwo-controlBar_dockedThumbnails">
+		set(imgCounter-controlBar_dockedThumbnails, 3);
+		
+		if(arrow1Loaded-controlBar_dockedThumbnails,
+			dec(imgCounter-controlBar_dockedThumbnails);
+		);
+		if(arrow2Loaded-controlBar_dockedThumbnails,
+			dec(imgCounter-controlBar_dockedThumbnails);
+		);
+		if(thumbsCount-controlBar_dockedThumbnails == thumbnailsLoadedCounter-controlBar_dockedThumbnails,
+			dec(imgCounter-controlBar_dockedThumbnails);
+		);
+		
+		if(imgCounter-controlBar_dockedThumbnails LE 0,
+			stopdelayedcall(delayedCallOnLoadComplete-controlBar_dockedThumbnails);
+			onLoadCompleteHandlerPartThree-controlBar_dockedThumbnails();
+		,
+			delayedcall(delayedCallOnLoadComplete-controlBar_dockedThumbnails, 0.2, onLoadCompleteHandlerPartTwo-controlBar_dockedThumbnails());
+		);
+	</action>
+	
+	<action name="onLoadCompleteHandlerPartThree-controlBar_dockedThumbnails">
+		resetMouseBehavior-controlBar_dockedThumbnails();
+		highlightCurrentThumb-controlBar_dockedThumbnails();
+		
+		
+		if(layer[scrollAreaContainer-controlBar_dockedThumbnails].adjustToContent,
+			mul(adjustWidth-controlBar_dockedThumbnails, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].marginX), 2);
+			add(adjustWidth-controlBar_dockedThumbnails, get(layer[thumbsScrollArea-controlBar_dockedThumbnails].width));
+			mul(adjustHeight-controlBar_dockedThumbnails, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].marginY), 2);
+			add(adjustHeight-controlBar_dockedThumbnails, get(layer[thumbsScrollArea-controlBar_dockedThumbnails].height));
+			
+			
+			if(adjustWidth-controlBar_dockedThumbnails GT stagewidth,
+				set(adjustWidth-controlBar_dockedThumbnails, get(stagewidth));
+				set(layer[scrollAreaContainer-controlBar_dockedThumbnails].adjustToContent, false);
+			,
+				if(adjustHeight-controlBar_dockedThumbnails GT stageheight,
+					set(adjustHeight-controlBar_dockedThumbnails, get(stageheight));
+					set(layer[scrollAreaContainer-controlBar_dockedThumbnails].adjustToContent, false);
+				);
+			);
+			
+			setSize-controlBar_dockedThumbnails(get(adjustWidth-controlBar_dockedThumbnails), get(adjustHeight-controlBar_dockedThumbnails));
+		);
+		
+			initArrows-controlBar_dockedThumbnails();
+		setupArrows-controlBar_dockedThumbnails(true);
+		
+		
+		if (thumbsCounter-controlBar_dockedThumbnails LE 0,
+			set(layer[thumbnailsBar-controlBar_dockedThumbnails].visible, false);
+		);
+		
+		
+		set(startResize-controlBar_dockedThumbnails, true);
+		set(firstInit-controlBar_dockedThumbnails, true);
+	</action>
+	
+	
+	<action name="onResizeHandler-controlBar_dockedThumbnails">
+		
+		delayedcall(0.1, onResizeCallback-controlBar_dockedThumbnails(false); );
+	</action>
+	
+	
+	<action name="onResizeCallback-controlBar_dockedThumbnails">
+		if(startResize-controlBar_dockedThumbnails,
+			setSize-controlBar_dockedThumbnails(get(layer[scrollAreaContainer-controlBar_dockedThumbnails].targetWidth), get(layer[scrollAreaContainer-controlBar_dockedThumbnails].targetHeight));
+			setupArrows-controlBar_dockedThumbnails(%1);
+			
+			
+			if (thumbsCounter-controlBar_dockedThumbnails LE 0,
+				set(layer[thumbnailsBar-controlBar_dockedThumbnails].visible, false);
+			);
+		);
+	</action>
+	
+	
+	
+	
+	
+	
+	<action name="thumbnailBorderDrawInit-controlBar_dockedThumbnails">
+		
+		set(layer[scrollAreaContainer-controlBar_dockedThumbnails].offsetX, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderWidth));
+		set(layer[scrollAreaContainer-controlBar_dockedThumbnails].offsetY, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderWidth));
+		
+		
+		mul(totalOffsetX-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderWidth), 2);
+		mul(totalOffsetY-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderWidth), 2);
+		
+		
+		if(startResize-controlBar_dockedThumbnails,
+			sub(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemWidth, get(totalOffsetX-controlBar_dockedThumbnails));
+			sub(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemHeight, get(totalOffsetY-controlBar_dockedThumbnails));
+		);
+		
+		
+		set(layer[scrollAreaContainer-controlBar_dockedThumbnails].thumbWidth, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemWidth));
+		set(layer[scrollAreaContainer-controlBar_dockedThumbnails].thumbHeight, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemHeight));
+		
+		add(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemWidth, get(totalOffsetX-controlBar_dockedThumbnails));
+		add(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemHeight, get(totalOffsetY-controlBar_dockedThumbnails));
+	</action>
+		
+	
+	<action name="thumbnailBorderImageInit-controlBar_dockedThumbnails">
+		
+		set(layer[scrollAreaContainer-controlBar_dockedThumbnails].offsetX, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].offsetX));
+		set(layer[scrollAreaContainer-controlBar_dockedThumbnails].offsetY, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].offsetY));
+		
+		
+		mul(totalOffsetX-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].offsetX), 2);
+		mul(totalOffsetY-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].offsetY), 2);
+		
+		
+		if(startResize-controlBar_dockedThumbnails,
+			sub(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemWidth, get(totalOffsetX-controlBar_dockedThumbnails));
+			sub(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemHeight, get(totalOffsetY-controlBar_dockedThumbnails));
+		);
+		
+		
+		set(layer[scrollAreaContainer-controlBar_dockedThumbnails].thumbWidth, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemWidth));
+		set(layer[scrollAreaContainer-controlBar_dockedThumbnails].thumbHeight, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemHeight));
+		
+		add(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemWidth, get(totalOffsetX-controlBar_dockedThumbnails));
+		add(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemHeight, get(totalOffsetY-controlBar_dockedThumbnails));
+		
+		
+		div(layer[thumbnailBorderSource-controlBar_dockedThumbnails].quarterHeight, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].height), 4);
+		
+		
+		set(cropX-controlBar_dockedThumbnails, 0);
+		set(cropY-controlBar_dockedThumbnails, 0);
+		set(cropW-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].width));
+		set(cropH-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].quarterHeight));
+		txtadd(layer[thumbnailBorderSource-controlBar_dockedThumbnails].cropDefault, get(cropX-controlBar_dockedThumbnails), '|', get(cropY-controlBar_dockedThumbnails), '|', get(cropW-controlBar_dockedThumbnails), '|', get(cropH-controlBar_dockedThumbnails));
+
+		
+		add(cropY-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].quarterHeight));
+		txtadd(layer[thumbnailBorderSource-controlBar_dockedThumbnails].cropHover, get(cropX-controlBar_dockedThumbnails), '|', get(cropY-controlBar_dockedThumbnails), '|', get(cropW-controlBar_dockedThumbnails), '|', get(cropH-controlBar_dockedThumbnails));
+		
+		
+		add(cropY-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].quarterHeight));
+		txtadd(layer[thumbnailBorderSource-controlBar_dockedThumbnails].cropSelected, get(cropX-controlBar_dockedThumbnails), '|', get(cropY-controlBar_dockedThumbnails), '|', get(cropW-controlBar_dockedThumbnails), '|', get(cropH-controlBar_dockedThumbnails));
+		
+		
+		add(cropY-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].quarterHeight));
+		txtadd(layer[thumbnailBorderSource-controlBar_dockedThumbnails].cropVisited, get(cropX-controlBar_dockedThumbnails), '|', get(cropY-controlBar_dockedThumbnails), '|', get(cropW-controlBar_dockedThumbnails), '|', get(cropH-controlBar_dockedThumbnails));
+		
+		
+		set(scaleX-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].offsetX));
+		set(scaleY-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].offsetY));
+		sub(scaleW-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].width), get(totalOffsetX-controlBar_dockedThumbnails));
+		sub(scaleH-controlBar_dockedThumbnails, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].quarterHeight), get(totalOffsetY-controlBar_dockedThumbnails));
+		txtadd(layer[thumbnailBorderSource-controlBar_dockedThumbnails].scale9grid, get(scaleX-controlBar_dockedThumbnails), '|', get(scaleY-controlBar_dockedThumbnails), '|', get(scaleW-controlBar_dockedThumbnails), '|', get(scaleH-controlBar_dockedThumbnails));
+	</action>
+	
+	
+	<action name="loadThumbs-controlBar_dockedThumbnails">
+		if(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url,
+			set(imgCounter-controlBar_dockedThumbnails, 1);
+		,
+			set(imgCounter-controlBar_dockedThumbnails, 0);
+		);
+		
+		if(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url,
+			if(borderLoaded-controlBar_dockedThumbnails,
+				dec(imgCounter-controlBar_dockedThumbnails);
+			);
+		);
+		
+		if(imgCounter-controlBar_dockedThumbnails LE 0,
+			stopdelayedcall(delayedCallOnLoadCompleteBorder-controlBar_dockedThumbnails);
+			loadThumbsPartTwo-controlBar_dockedThumbnails();
+		,
+			delayedcall(delayedCallOnLoadCompleteBorder-controlBar_dockedThumbnails, 0.2, loadThumbs-controlBar_dockedThumbnails());
+		);
+	</action>
+	
+	<action name="loadThumbsPartTwo-controlBar_dockedThumbnails">
+		ifnot(layer[scrollAreaContainer-controlBar_dockedThumbnails].ready,
+			
+			
+			if(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url,
+				thumbnailBorderImageInit-controlBar_dockedThumbnails();
+			,
+				thumbnailBorderDrawInit-controlBar_dockedThumbnails();
+			);
+			
+			
+			set(thumbsCounter-controlBar_dockedThumbnails, 0);
+			
+			
+			set(i-controlBar_dockedThumbnails-wait,30);
+			
+			
+				for( set(i-controlBar_dockedThumbnails, 0), i-controlBar_dockedThumbnails LT scene.count, inc(i-controlBar_dockedThumbnails),
+					if(i-controlBar_dockedThumbnails-wait == i-controlBar_dockedThumbnails,
+						add(i-controlBar_dockedThumbnails-wait,30);
+						wait(0);
+					);
+					createThumb-controlBar_dockedThumbnails(get(scene[get(i-controlBar_dockedThumbnails)].name), get(scene[get(i-controlBar_dockedThumbnails)].thumburl), get(i-controlBar_dockedThumbnails), get(scene[get(i-controlBar_dockedThumbnails)].titleid));
+					inc(thumbsCounter-controlBar_dockedThumbnails);
+				);
+			
+			
+			
+			
+			
+			
+			set(layer[scrollAreaContainer-controlBar_dockedThumbnails].currentThumbsCount, get(thumbsCounter-controlBar_dockedThumbnails));
+			
+			
+			setSize-controlBar_dockedThumbnails(get(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].width), get(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].height));
+			
+			
+			set(layer[scrollAreaContainer-controlBar_dockedThumbnails].visible, true);
+			
+			
+					set(layer[thumbnailsBar-controlBar_dockedThumbnails].visible, true);
+			
+			
+			set(layer[scrollAreaContainer-controlBar_dockedThumbnails].ready, true);
+		);
+	</action>
+	
+	
+	<action name="setSize-controlBar_dockedThumbnails">
+		
+		
+		set(layer[scrollAreaContainer-controlBar_dockedThumbnails].targetWidth, %1);
+		set(layer[scrollAreaContainer-controlBar_dockedThumbnails].targetHeight, %2);
+		
+		
+		set(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].width, %1);
+		set(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].height, %2);
+		layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].updatepos();
+		
+		
+		mul(totalMarginX-controlBar_dockedThumbnails, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].x), 2);
+		mul(totalMarginY-controlBar_dockedThumbnails, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].y), 2);
+		
+			add(totalPluginHeight-controlBar_dockedThumbnails, get(totalMarginY-controlBar_dockedThumbnails), get(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemHeight));
+			
+			
+			
+			if(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].pixelheight LT totalPluginHeight-controlBar_dockedThumbnails,
+				set(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].height, get(totalPluginHeight-controlBar_dockedThumbnails));
+			);
+		
+		layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].updatepos();
+		
+		
+		sub(containerWidth-controlBar_dockedThumbnails, get(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].pixelwidth), get(totalMarginX-controlBar_dockedThumbnails));
+		sub(containerHeight-controlBar_dockedThumbnails, get(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].pixelheight), get(totalMarginY-controlBar_dockedThumbnails));
+
+		
+		set(layer[scrollAreaContainer-controlBar_dockedThumbnails].width, get(containerWidth-controlBar_dockedThumbnails));
+		set(layer[scrollAreaContainer-controlBar_dockedThumbnails].height, get(containerHeight-controlBar_dockedThumbnails));
+		
+		set(scrollAreaSize-controlBar_dockedThumbnails, 0);
+		
+		
+		mul(totalThumbsSpacer-controlBar_dockedThumbnails, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].currentThumbsCount), get(layer[scrollAreaContainer-controlBar_dockedThumbnails].thumbSpacer));
+		sub(totalThumbsSpacer-controlBar_dockedThumbnails, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].thumbSpacer));
+		
+		set(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].visible, true);
+		
+
+			mul(scrollAreaSize-controlBar_dockedThumbnails, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemWidth), get(layer[scrollAreaContainer-controlBar_dockedThumbnails].currentThumbsCount));
+			add(scrollAreaSize-controlBar_dockedThumbnails, get(totalThumbsSpacer-controlBar_dockedThumbnails));
+			
+			set(layer[thumbsScrollArea-controlBar_dockedThumbnails].width, get(scrollAreaSize-controlBar_dockedThumbnails));
+			set(layer[thumbsScrollArea-controlBar_dockedThumbnails].height, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemHeight));
+			
+			
+			if(layer[scrollAreaContainer-controlBar_dockedThumbnails].width LT layer[scrollAreaContainer-controlBar_dockedThumbnails].itemWidth,
+				set(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].visible, false);
+			,
+				verifyThumbnailsBarVisibility-controlBar_dockedThumbnails();
+			);
+			
+		
+		
+		if(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].width LT 0,
+			set(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].visible, false);
+		);
+		
+	</action>
+	
+	
+	<action name="verifyThumbnailsBarVisibility-controlBar_dockedThumbnails">
+		if(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].visible,
+			set(boolValue-controlBar_dockedThumbnails, false);
+			
+					set(boolValue-controlBar_dockedThumbnails, true);
+			
+			set(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].visible, get(boolValue-controlBar_dockedThumbnails));
+		);
+	</action>
+	
+	
+	<action name="createThumb-controlBar_dockedThumbnails">
+
+			add(offsetFactor-controlBar_dockedThumbnails, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemWidth), get(layer[scrollAreaContainer-controlBar_dockedThumbnails].thumbSpacer));
+	
+			mul(thumbIncPos-controlBar_dockedThumbnails, %3, get(offsetFactor-controlBar_dockedThumbnails));
+			
+			
+			if(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url,
+				add(thumbIncPos-controlBar_dockedThumbnails, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].offsetX));
+			);
+			
+		
+		mul(negativeOffsetX-controlBar_dockedThumbnails, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].offsetX), -1);
+		mul(negativeOffsetY-controlBar_dockedThumbnails, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].offsetY), -1);
+		
+		set(thumbName, 'thumb_');
+		txtadd(thumbName, %1);
+		txtadd(thumbName, '-controlBar_dockedThumbnails');
+		addlayer(get(thumbName));
+		
+		set(thumbBorderName, 'thumbBorder_');
+		txtadd(thumbBorderName, %1);
+		txtadd(thumbBorderName, '-controlBar_dockedThumbnails');
+		addlayer(get(thumbBorderName));
+		
+		
+		ifnot(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url,
+			set(layer[get(thumbBorderName)].type, container);
+			set(layer[get(thumbBorderName)].parent, thumbsScrollArea-controlBar_dockedThumbnails);
+		);
+		
+		
+		set(layer[get(thumbName)].onloaded, loadedImages-controlBar_dockedThumbnails("thumbnail"););
+		set(layer[get(thumbName)].url, %2);
+		set(layer[get(thumbName)].keep, true);
+		set(layer[get(thumbName)].width, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].thumbWidth));
+		set(layer[get(thumbName)].height, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].thumbHeight));
+		set(layer[get(thumbName)].align, topleft);
+		
+		
+			set(layer[get(thumbName)].y, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].offsetY));
+		
+			if(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url,
+				set(layer[get(thumbName)].parent, thumbsScrollArea-controlBar_dockedThumbnails);
+				set(layer[get(thumbName)].x, get(thumbIncPos-controlBar_dockedThumbnails));
+			,
+				set(layer[get(thumbName)].parent, get(thumbBorderName));
+				set(layer[get(thumbName)].x, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].offsetX));
+				set(layer[get(thumbName)].onclick, mainloadscene(%1); resetMouseBehavior-controlBar_dockedThumbnails(); highlightThumb-controlBar_dockedThumbnails(%1));
+			);	
+			
+		
+		
+		set(layer[get(thumbBorderName)].keep, true);
+		set(layer[get(thumbBorderName)].width, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemWidth));
+		set(layer[get(thumbBorderName)].height, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].itemHeight));
+		set(layer[get(thumbBorderName)].align, topleft);
+		
+		if(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url,
+			set(layer[get(thumbBorderName)].url, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url));
+			set(layer[get(thumbBorderName)].scale9grid, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].scale9grid));
+			set(layer[get(thumbBorderName)].parent, get(thumbName));
+			set(layer[get(thumbBorderName)].x, get(negativeOffsetX-controlBar_dockedThumbnails));
+			set(layer[get(thumbBorderName)].y, get(negativeOffsetY-controlBar_dockedThumbnails));
+			set(layer[get(thumbBorderName)].onclick, mainloadscene(%1); resetMouseBehavior-controlBar_dockedThumbnails(); highlightThumb-controlBar_dockedThumbnails(%1));
+		,
+			
+				set(layer[get(thumbBorderName)].x, get(thumbIncPos-controlBar_dockedThumbnails)); 
+				
+		);
+		
+		
+		setupMouseBehavior-controlBar_dockedThumbnails(%1, %4);
+		
+	</action>
+	
+	
+	<action name="removeThumb-controlBar_dockedThumbnails">
+		set(thumbName, 'thumb_');
+		txtadd(thumbName, %1);
+		txtadd(thumbName, '-controlBar_dockedThumbnails');
+		removelayer(get(thumbName));
+		
+		set(thumbBorderName, 'thumbBorder_');
+		txtadd(thumbBorderName, %1);
+		txtadd(thumbBorderName, '-controlBar_dockedThumbnails');
+		removelayer(get(thumbBorderName));
+	</action>
+	
+	
+	<action name="initArrows-controlBar_dockedThumbnails">
+		ifnot(device.touchdevice,
+			
+			if(layer[scrollPrevArrow-controlBar_dockedThumbnails].targetHeight LE 0,
+				set(layer[scrollPrevArrow-controlBar_dockedThumbnails].targetHeight, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].height));
+				set(layer[scrollPrevArrow-controlBar_dockedThumbnails].targetWidth, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].width));
+			);
+			if(layer[scrollNextArrow-controlBar_dockedThumbnails].targetHeight LE 0,
+				set(layer[scrollNextArrow-controlBar_dockedThumbnails].targetHeight, get(layer[scrollNextArrow-controlBar_dockedThumbnails].height));
+				set(layer[scrollNextArrow-controlBar_dockedThumbnails].targetWidth, get(layer[scrollNextArrow-controlBar_dockedThumbnails].width));
+			);
+			
+			
+			set(layer[scrollPrevArrow-controlBar_dockedThumbnails].width, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].targetWidth));
+			set(layer[scrollNextArrow-controlBar_dockedThumbnails].width, get(layer[scrollNextArrow-controlBar_dockedThumbnails].targetWidth));
+			
+				set(layer[scrollPrevArrowBg-controlBar_dockedThumbnails].width, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].targetWidth));
+				set(layer[scrollNextArrowBg-controlBar_dockedThumbnails].width, get(layer[scrollNextArrow-controlBar_dockedThumbnails].targetWidth));
+			
+			div(btPrevQuarterHeight-controlBar_dockedThumbnails, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].targetHeight), 3);
+			div(btNextQuarterHeight-controlBar_dockedThumbnails, get(layer[scrollNextArrow-controlBar_dockedThumbnails].targetHeight), 3);
+			
+			set(cropBtPrevX-controlBar_dockedThumbnails, 0);
+			set(cropBtPrevY-controlBar_dockedThumbnails, 0);
+			set(cropBtPrevW-controlBar_dockedThumbnails, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].width));
+			set(cropBtPrevH-controlBar_dockedThumbnails, get(btPrevQuarterHeight-controlBar_dockedThumbnails));
+			
+			txtadd(layer[scrollPrevArrow-controlBar_dockedThumbnails].cropDefault, get(cropBtPrevX-controlBar_dockedThumbnails), '|', get(cropBtPrevY-controlBar_dockedThumbnails), '|', get(cropBtPrevW-controlBar_dockedThumbnails), '|', get(cropBtPrevH-controlBar_dockedThumbnails));
+			add(cropBtPrevY-controlBar_dockedThumbnails, get(btPrevQuarterHeight-controlBar_dockedThumbnails));
+			txtadd(layer[scrollPrevArrow-controlBar_dockedThumbnails].cropOver, get(cropBtPrevX-controlBar_dockedThumbnails), '|', get(cropBtPrevY-controlBar_dockedThumbnails), '|', get(cropBtPrevW-controlBar_dockedThumbnails), '|', get(cropBtPrevH-controlBar_dockedThumbnails));
+			add(cropBtPrevY-controlBar_dockedThumbnails, get(btPrevQuarterHeight-controlBar_dockedThumbnails));
+			txtadd(layer[scrollPrevArrow-controlBar_dockedThumbnails].cropDown, get(cropBtPrevX-controlBar_dockedThumbnails), '|', get(cropBtPrevY-controlBar_dockedThumbnails), '|', get(cropBtPrevW-controlBar_dockedThumbnails), '|', get(cropBtPrevH-controlBar_dockedThumbnails));
+			
+			set(cropBtNextX-controlBar_dockedThumbnails, 0);
+			set(cropBtNextY-controlBar_dockedThumbnails, 0);
+			set(cropBtNextW-controlBar_dockedThumbnails, get(layer[scrollNextArrow-controlBar_dockedThumbnails].width));
+			set(cropBtNextH-controlBar_dockedThumbnails, get(btNextQuarterHeight-controlBar_dockedThumbnails));
+			
+			txtadd(layer[scrollNextArrow-controlBar_dockedThumbnails].cropDefault, get(cropBtNextX-controlBar_dockedThumbnails), '|', get(cropBtNextY-controlBar_dockedThumbnails), '|', get(cropBtNextW-controlBar_dockedThumbnails), '|', get(cropBtNextH-controlBar_dockedThumbnails));
+			add(cropBtNextY-controlBar_dockedThumbnails, get(btNextQuarterHeight-controlBar_dockedThumbnails));
+			txtadd(layer[scrollNextArrow-controlBar_dockedThumbnails].cropOver, get(cropBtNextX-controlBar_dockedThumbnails), '|', get(cropBtNextY-controlBar_dockedThumbnails), '|', get(cropBtNextW-controlBar_dockedThumbnails), '|', get(cropBtNextH-controlBar_dockedThumbnails));
+			add(cropBtNextY-controlBar_dockedThumbnails, get(btNextQuarterHeight-controlBar_dockedThumbnails));
+			txtadd(layer[scrollNextArrow-controlBar_dockedThumbnails].cropDown, get(cropBtNextX-controlBar_dockedThumbnails), '|', get(cropBtNextY-controlBar_dockedThumbnails), '|', get(cropBtNextW-controlBar_dockedThumbnails), '|', get(cropBtNextH-controlBar_dockedThumbnails));
+		);
+	</action>
+	
+	<action name="setupArrows-controlBar_dockedThumbnails">
+		
+		if(layer[scrollAreaContainer-controlBar_dockedThumbnails].adjustToContent,
+			hideArrows-controlBar_dockedThumbnails();
+		,
+			ifnot(device.touchdevice,
+				
+					if(layer[scrollAreaContainer-controlBar_dockedThumbnails].width LT layer[thumbsScrollArea-controlBar_dockedThumbnails].width,
+				
+					showArrows-controlBar_dockedThumbnails();
+				,
+					hideArrows-controlBar_dockedThumbnails();
+				);
+			,
+				hideArrows-controlBar_dockedThumbnails();
+			);
+		);
+		
+		
+		if(%1,
+			scrollToCurrentThumb-controlBar_dockedThumbnails();
+		);
+		
+		
+			
+			if(layer[scrollAreaContainer-controlBar_dockedThumbnails].width LT layer[scrollAreaContainer-controlBar_dockedThumbnails].itemWidth,
+				set(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].visible, false);
+			);
+	</action>
+	
+	
+	<action name="showArrows-controlBar_dockedThumbnails">
+		
+		
+			set(layer[scrollPrevArrow-controlBar_dockedThumbnails].crop, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].cropDefault));
+			set(layer[scrollPrevArrow-controlBar_dockedThumbnails].onovercrop, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].cropOver));
+			set(layer[scrollPrevArrow-controlBar_dockedThumbnails].ondowncrop, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].cropDown));
+			
+			set(layer[scrollNextArrow-controlBar_dockedThumbnails].crop, get(layer[scrollNextArrow-controlBar_dockedThumbnails].cropDefault));
+			set(layer[scrollNextArrow-controlBar_dockedThumbnails].onovercrop, get(layer[scrollNextArrow-controlBar_dockedThumbnails].cropOver));
+			set(layer[scrollNextArrow-controlBar_dockedThumbnails].ondowncrop, get(layer[scrollNextArrow-controlBar_dockedThumbnails].cropDown));
+			
+				set(layer[scrollPrevArrow-controlBar_dockedThumbnails].height, 36);
+				set(layer[scrollPrevArrow-controlBar_dockedThumbnails].width, 36);
+				
+				set(layer[scrollNextArrow-controlBar_dockedThumbnails].height, 36);
+				set(layer[scrollNextArrow-controlBar_dockedThumbnails].width, 36);
+			
+					set(layer[scrollPrevArrowBg-controlBar_dockedThumbnails].height, 36);
+					set(layer[scrollPrevArrowBg-controlBar_dockedThumbnails].width, 36);
+					
+					set(layer[scrollNextArrowBg-controlBar_dockedThumbnails].height, 36);
+					set(layer[scrollNextArrowBg-controlBar_dockedThumbnails].width, 36);
+				set(layer[scrollPrevArrowBg-controlBar_dockedThumbnails].crop, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].cropDefault));
+				set(layer[scrollNextArrowBg-controlBar_dockedThumbnails].crop, get(layer[scrollNextArrow-controlBar_dockedThumbnails].cropDefault));
+			
+		
+		
+		set(layer[scrollPrevArrow-controlBar_dockedThumbnails].visible, true);
+		set(layer[scrollNextArrow-controlBar_dockedThumbnails].visible, true);
+		
+			set(layer[scrollPrevArrowBg-controlBar_dockedThumbnails].visible, true);
+			set(layer[scrollNextArrowBg-controlBar_dockedThumbnails].visible, true);
+		
+		
+			
+			add(totalArrowSize-controlBar_dockedThumbnails, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].width), get(layer[scrollNextArrow-controlBar_dockedThumbnails].width));
+		
+			
+			sub(scrollAreaContainerSize-controlBar_dockedThumbnails, get(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].pixelwidth), get(totalArrowSize-controlBar_dockedThumbnails));
+		
+			set(layer[scrollAreaContainer-controlBar_dockedThumbnails].width, get(scrollAreaContainerSize-controlBar_dockedThumbnails));
+			
+			set(layer[scrollAreaContainer-controlBar_dockedThumbnails].x, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].width));
+			
+		
+		
+		set(layer[scrollPrevArrow-controlBar_dockedThumbnails].onhover, scrollPrev-controlBar_dockedThumbnails();changeArrowsBgCrop-controlBar_dockedThumbnails('prev','over'););
+		set(layer[scrollNextArrow-controlBar_dockedThumbnails].onhover, scrollNext-controlBar_dockedThumbnails();changeArrowsBgCrop-controlBar_dockedThumbnails('next','over'););
+		
+		set(layer[scrollPrevArrow-controlBar_dockedThumbnails].onclick, scrollPrev-controlBar_dockedThumbnails(get(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeedAcceleration)););
+		set(layer[scrollNextArrow-controlBar_dockedThumbnails].onclick, scrollNext-controlBar_dockedThumbnails(get(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeedAcceleration)););
+		
+		
+		
+		
+		
+		set(layer[scrollPrevArrow-controlBar_dockedThumbnails].onout, set(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeed, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeedInit));changeArrowsBgCrop-controlBar_dockedThumbnails('prev','out'););
+		set(layer[scrollNextArrow-controlBar_dockedThumbnails].onout, set(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeed, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeedInit));changeArrowsBgCrop-controlBar_dockedThumbnails('next','out'););
+		
+	</action>
+	
+	
+	<action name="changeArrowsBgCrop-controlBar_dockedThumbnails">
+		if(%1 == "prev",
+			if(%2 == "over",
+				set(layer[scrollPrevArrowBg-controlBar_dockedThumbnails].crop, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].cropOver));
+			,
+				set(layer[scrollPrevArrowBg-controlBar_dockedThumbnails].crop, get(layer[scrollPrevArrow-controlBar_dockedThumbnails].cropDefault));
+			);
+		,
+			if(%2 == "over",
+				set(layer[scrollNextArrowBg-controlBar_dockedThumbnails].crop, get(layer[scrollNextArrow-controlBar_dockedThumbnails].cropOver));
+			,
+				set(layer[scrollNextArrowBg-controlBar_dockedThumbnails].crop, get(layer[scrollNextArrow-controlBar_dockedThumbnails].cropDefault));
+			);
+		);
+	</action>
+	
+	
+	<action name="hideArrows-controlBar_dockedThumbnails">
+		
+		set(layer[scrollPrevArrow-controlBar_dockedThumbnails].visible, false);
+		set(layer[scrollNextArrow-controlBar_dockedThumbnails].visible, false);
+		
+			set(layer[scrollPrevArrowBg-controlBar_dockedThumbnails].visible, false);
+			set(layer[scrollNextArrowBg-controlBar_dockedThumbnails].visible, false);
+		
+
+			mul(totalMargin-controlBar_dockedThumbnails, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].marginX), 2);
+			
+			sub(scrollAreaContainerSize-controlBar_dockedThumbnails, get(layer[get(layer[scrollAreaContainer-controlBar_dockedThumbnails].parent)].pixelwidth), get(totalMargin-controlBar_dockedThumbnails));
+
+			set(layer[scrollAreaContainer-controlBar_dockedThumbnails].width, get(scrollAreaContainerSize-controlBar_dockedThumbnails));
+			set(layer[scrollAreaContainer-controlBar_dockedThumbnails].x, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].marginX));
+			 
+			
+	</action>
+	
+	
+	<action name="scrollPrev-controlBar_dockedThumbnails">
+		
+		
+		if(%1,
+			inc(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeed, %1);
+		);
+		
+		layer[thumbsScrollArea-controlBar_dockedThumbnails].stopscrolling();
+		
+		set(scrollLimit-controlBar_dockedThumbnails, 0);
+		
+		
+			
+			
+			add(layer[thumbsScrollArea-controlBar_dockedThumbnails].x, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeed));
+			if(layer[thumbsScrollArea-controlBar_dockedThumbnails].x GE scrollLimit-controlBar_dockedThumbnails,
+				set(layer[thumbsScrollArea-controlBar_dockedThumbnails].x, get(scrollLimit-controlBar_dockedThumbnails));
+			);
+		
+		if(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeed LT layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeedMax,
+			inc(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeed);
+		);
+		
+	</action>
+	
+	
+	<action name="scrollNext-controlBar_dockedThumbnails">
+		
+		
+		if(%1,
+			inc(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeed, %1);
+		);
+		
+		layer[thumbsScrollArea-controlBar_dockedThumbnails].stopscrolling();
+		
+			
+			sub(scrollLimit-controlBar_dockedThumbnails, get(layer[thumbsScrollArea-controlBar_dockedThumbnails].width), get(layer[scrollAreaContainer-controlBar_dockedThumbnails].width));
+			
+			mul(scrollLimit-controlBar_dockedThumbnails, -1);
+			
+			sub(layer[thumbsScrollArea-controlBar_dockedThumbnails].x, get(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeed));
+			if(layer[thumbsScrollArea-controlBar_dockedThumbnails].x LE scrollLimit-controlBar_dockedThumbnails,
+				set(layer[thumbsScrollArea-controlBar_dockedThumbnails].x, get(scrollLimit-controlBar_dockedThumbnails));
+			);
+		
+		if(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeed LT layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeedMax,
+			inc(layer[scrollAreaContainer-controlBar_dockedThumbnails].scrollSpeed);
+		);
+		
+	</action>
+	
+	
+	<action name="resetMouseBehavior-controlBar_dockedThumbnails">
+	
+		
+		
+		
+		set(j-controlBar_dockedThumbnails-wait,30);
+		
+			for( set(j-controlBar_dockedThumbnails, 0), j-controlBar_dockedThumbnails LT scene.count, inc(j-controlBar_dockedThumbnails),
+				if(j-controlBar_dockedThumbnails-wait == j-controlBar_dockedThumbnails,
+					add(j-controlBar_dockedThumbnails-wait,30);
+					wait(0);
+				);
+				set(thumbBorderName, 'thumbBorder_');
+				txtadd(thumbBorderName, get(scene[get(j-controlBar_dockedThumbnails)].name));
+				txtadd(thumbBorderName, '-controlBar_dockedThumbnails');
+				
+				setupMouseBehavior-controlBar_dockedThumbnails(get(scene[get(j-controlBar_dockedThumbnails)].name), get(scene[get(j-controlBar_dockedThumbnails)].titleid));
+			);
+		
+	</action>
+	
+	
+	<action name="setupMouseBehavior-controlBar_dockedThumbnails">
+
+		set(thumbName, 'thumb_');
+		txtadd(thumbName, %1);
+		txtadd(thumbName, '-controlBar_dockedThumbnails');
+		
+		set(thumbBorderName, 'thumbBorder_');
+		txtadd(thumbBorderName, %1);
+		txtadd(thumbBorderName, '-controlBar_dockedThumbnails');
+		
+		if(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url,
+			set(layer[get(thumbBorderName)].crop, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].cropDefault));
+			set(layer[get(thumbBorderName)].onovercrop, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].cropHover));
+			set(layer[get(thumbBorderName)].ondowncrop, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].cropHover));
+			set(layer[get(thumbBorderName)].tooltip, %2);
+				set(layer[get(thumbBorderName)].onhover, showTooltip(get(align), themeunanimemenuTooltipStyle));
+				set(layer[get(thumbBorderName)].onout, hideTooltip());
+		,
+			set(layer[get(thumbBorderName)].bgcolor, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderColorDefault));
+			set(layer[get(thumbBorderName)].bgalpha, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderAlphaDefault));
+				set(layer[get(thumbName)].tooltip, %2);
+				set(layer[get(thumbName)].onhover, showTooltip(get(align), themeunanimemenuTooltipStyle));
+			
+			set(layer[get(thumbName)].onover, 
+				set(layer[get(parent)].bgcolor, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderColorHover));
+				set(layer[get(parent)].bgalpha, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderAlphaHover));
+			);
+			
+			set(layer[get(thumbName)].onout, 
+				set(layer[get(parent)].bgcolor, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderColorDefault));
+				set(layer[get(parent)].bgalpha, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderAlphaDefault));
+				hideTooltip();
+			);
+		);
+	
+	</action>
+	
+	
+	<action name="highlightCurrentThumb-controlBar_dockedThumbnails">
+			highlightThumb-controlBar_dockedThumbnails(get(xml.scene));
+	</action>
+	
+	
+	<action name="highlightThumb-controlBar_dockedThumbnails">
+	
+		set(thumbBorderName, 'thumbBorder_');
+		txtadd(thumbBorderName, %1);
+		txtadd(thumbBorderName, '-controlBar_dockedThumbnails');
+		
+		if(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url,
+			set(layer[get(thumbBorderName)].crop, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].cropSelected));
+			set(layer[get(thumbBorderName)].onovercrop, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].cropSelected));
+			set(layer[get(thumbBorderName)].ondowncrop, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].cropSelected));
+		,
+			set(thumbName, 'thumb_');
+			txtadd(thumbName, %1);
+			txtadd(thumbName, '-controlBar_dockedThumbnails');
+			
+			set(layer[get(thumbBorderName)].bgcolor, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderColorSelected));
+			set(layer[get(thumbBorderName)].bgalpha, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderAlphaSelected));
+			
+			set(layer[get(thumbName)].onover, "");
+			set(layer[get(thumbName)].onout, hideTooltip(););
+		);
+
+		scrollToThumb-controlBar_dockedThumbnails(%1);
+	</action>
+	
+	
+	<action name="scrollToCurrentThumb-controlBar_dockedThumbnails">
+			scrollToThumb-controlBar_dockedThumbnails(get(xml.scene));
+	</action>
+	
+	
+	<action name="scrollToThumb-controlBar_dockedThumbnails">
+		
+		set(thumbName, 'thumb_');
+		set(thumbBorderName, 'thumbBorder_');
+		
+		txtadd(thumbName, %1);
+		txtadd(thumbName, '-controlBar_dockedThumbnails');
+		txtadd(thumbBorderName, %1);
+		txtadd(thumbBorderName, '-controlBar_dockedThumbnails');
+
+			set(posX-controlBar_dockedThumbnails, 0);
+			if(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url,
+				div(halfThumbWidth-controlBar_dockedThumbnails, get(layer[get(thumbName)].width), 2);
+				ifnot(layer[scrollAreaContainer-controlBar_dockedThumbnails].adjustToContent,
+					add(posX-controlBar_dockedThumbnails, get(layer[get(thumbName)].x), get(halfThumbWidth-controlBar_dockedThumbnails));
+				);
+				if(layer[thumbsScrollArea-controlBar_dockedThumbnails].scrolltocenter,
+					layer[thumbsScrollArea-controlBar_dockedThumbnails].scrolltocenter(get(posX-controlBar_dockedThumbnails), 0);
+				);
+			,
+				div(halfThumbWidth-controlBar_dockedThumbnails, get(layer[get(thumbBorderName)].width), 2);
+				ifnot(layer[scrollAreaContainer-controlBar_dockedThumbnails].adjustToContent,
+					add(posX-controlBar_dockedThumbnails, get(layer[get(thumbBorderName)].x), get(halfThumbWidth-controlBar_dockedThumbnails));
+				);
+				if(layer[thumbsScrollArea-controlBar_dockedThumbnails].scrolltocenter,
+					layer[thumbsScrollArea-controlBar_dockedThumbnails].scrolltocenter(get(posX-controlBar_dockedThumbnails), 0);
+				);
+			);
+		
+	</action>
+
+<action name="resetThumbnailsBarSize-controlBar_dockedThumbnails">
+	
+	
+	set(sizeHeight, 40);
+	mul(totalMarginY, 5, 2);
+	if(layer[thumbnailBorderSource-controlBar_dockedThumbnails].url,
+		mul(totalOffsetY, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].offsetY), 2);
+	,
+		mul(totalOffsetY, get(layer[thumbnailBorderSource-controlBar_dockedThumbnails].borderWidth), 2);
+	);
+	add(sizeHeight, totalMarginY);
+	add(sizeHeight, totalOffsetY);
+	
+	setSize-controlBar_dockedThumbnails(%1, sizeHeight);
+</action>
+
+
+
+
+<action name="themeunanimebuildMenu">
+	
+    set(themeunanimebutton_pos, 0);
+    set(layer[themeunanimebtn_hidecontrols].x, get(themeunanimebutton_pos));
+    set(layer[themeunanimebtn_hidecontrols_bg].x, get(themeunanimebutton_pos));
+    inc(themeunanimebutton_pos, 36);
+
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_display_help].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_display_help_bg].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_close_help].x  , get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_close_help_bg].x  , get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+      if (device.fullscreensupport,
+        set(layer[themeunanimebtn_openfs].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_closefs].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_openfs_bg ].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_closefs_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+
+
+      set(layer[themeunanimebtn_autorotate_on].x , get(themeunanimebutton_pos));
+      set(layer[themeunanimebtn_autorotate_on_bg].x , get(themeunanimebutton_pos));
+      set(layer[themeunanimebtn_autorotate_off].x, get(themeunanimebutton_pos));
+      set(layer[themeunanimebtn_autorotate_off_bg].x, get(themeunanimebutton_pos));
+      inc(themeunanimebutton_pos, 36);
+
+
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_ctrlmode_drag_to].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_ctrlmode_drag_to_bg].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_ctrlmode_move_to].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_ctrlmode_move_to_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+
+      set(themeunanimeDisplayGryoscopeButton, false);
+      if (device.tablet, set(themeunanimeDisplayGryoscopeButton, true););
+      if (device.mobile, set(themeunanimeDisplayGryoscopeButton, true););
+      if(themeunanimeDisplayGryoscopeButton,
+        set(layer[themeunanimebtn_gyroscope_on].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_gyroscope_on_bg ].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_gyroscope_off].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_gyroscope_off_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_out].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_out_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+        set(layer[themeunanimebtn_in].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_in_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+
+      set(themeunanimeThumbnailsPos, get(themeunanimebutton_pos));
+      themeunanimeUpdateThumbnailsSize();
+	
+	
+	
+</action>
+
+<events name="themeunanimeStartTourEvents" onTourStart="themeunanimeCallOnStartTour();" keep="true" />
+
+<action name="themeunanimeCallOnStartTour">
+	
+	themeunanimeshowMenuControls();
+</action>
+
+	<action name="themeunanimeOnResize">
+		themeunanimeUpdateThumbnailsSize();
+	</action>
+	<action name="themeunanimeUpdateThumbnailsSize">
+		copy(newThumbnailsBarWidth, stagewidth);
+		sub(newThumbnailsBarWidth, themeunanimeThumbnailsPos);
+		
+		resetThumbnailsBarSize-controlBar_dockedThumbnails(get(newThumbnailsBarWidth));
+	</action>
+
+    <layer name="themeunanime_bg"
+           keep="true"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/footer.png"
+           zorder="4"
+           width="100%"
+           align="bottomleft"
+           x="0"
+           visible="false" />
+
+    <style name="themeunanime_btn_style_bg"
+            keep="true"
+            parent="themeunanime_bg"
+            crop="0|0|48|48"
+            url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_bg.png"
+            align="bottomright"
+            height="36"
+            width="36"
+            alpha="0.3"
+            y="12"
+            zorder="0"
+            />
+
+    <style name="themeunanime_btn_style_on_bg"
+           keep="true"
+           parent="themeunanime_bg"
+           crop="0|48|48|48"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_bg.png"
+           align="bottomright"
+           height="36"
+           width="36"
+           alpha="0.3"
+           y="12"
+           zorder="0"
+           />
+
+    <style name="themeunanime_btn_down_style"
+           keep="true"
+           parent="themeunanime_bg"
+                 crop="0| 0|48|48"
+           onovercrop="0|48|48|48"
+           ondowncrop="0|96|48|48"
+           align="bottomright"
+           height="36"
+           width="36"
+           x="0" y="12"
+           zorder="1"
+           onhover="showTooltip(bottomright, themeunanimemenuTooltipStyle);"
+           onover="themeunanimectrl_btn_onoveraction"
+           onout="themeunanimectrl_btn_onoutaction"
+           />
+
+    <style name="themeunanime_btn_style"
+           keep="true"
+           parent="themeunanime_bg"
+                 crop="0| 0|48|48"
+           onovercrop="0|48|48|48"
+           ondowncrop="0|96|48|48"
+           align="bottomright"
+           height="36"
+           width="36"
+           x="0" y="12"
+           zorder="1"
+           onhover="showTooltip(bottomright, themeunanimemenuTooltipStyle);"
+           onover="themeunanimectrl_btn_onoveraction"
+           ondown="themeunanimectrl_btn_ondownaction"
+           onout="themeunanimectrl_btn_onoutaction"
+           />
+
+  <action name="themeunanimectrl_btn_onoveraction">
+    txtadd(btn_bg_name, get(name), "_bg");
+    set(layer[get(btn_bg_name)].crop, "0|48|48|48");
+  </action>
+
+  <action name="themeunanimectrl_btn_ondownaction">
+    txtadd(btn_bg_name, get(name), "_bg");
+    set(layer[get(btn_bg_name)].crop, "0|96|48|48");
+  </action>
+
+  <action name="themeunanimectrl_btn_onoutaction">
+    txtadd(btn_bg_name, get(name), "_bg");
+    set(layer[get(btn_bg_name)].crop, "0|0|48|48");
+    hideTooltip();
+  </action>
+
+    <style name="themeunanime_btn_style_on"
+            keep="true"
+            parent="themeunanime_bg"
+                  crop="0|48|48|48"
+            onovercrop="0|48|48|48"
+            ondowncrop="0|96|48|48"
+            align="bottomright"
+            height="36"
+            width="36"
+            y="12"
+            zorder="1"
+            onhover="showTooltip(bottomright, themeunanimemenuTooltipStyle);" 
+            onout="hideTooltip();"
+            />
+
+
+  <events name="themeunanimegyroscopeavailableevent"
+          ongyroscopeavailable="themeunanimeupdateGyroscopeButtonsAvailability();"
+          ongyroscopeon="themeunanimeenableGyroscopeButtons(true);"
+          ongyroscopeoff="themeunanimeenableGyroscopeButtons(false);"
+          keep="true"/>
+  <krpano themeunanimemenugyroscopeavailable="false" themeunanimemenugyroscopeenabled="false"/>
+  <action name="themeunanimeupdateGyroscopeButtonsAvailability">
+    if (tour_gyroscopedevices,
+      set(themeunanimemenugyroscopeavailable, true);
+      themeunanimeupdateGyroscopeButtons();
+    );
+  </action>
+  <action name="themeunanimeenableGyroscopeButtons">
+    if (tour_gyroscopedevices,
+      set(themeunanimemenugyroscopeenabled, %1);
+      themeunanimeupdateGyroscopeButtons();
+    );
+  </action>
+	<action name="themeunanimeHideGyroscopeButtons">
+		set(layer[themeunanimebtn_gyroscope_off].visible, false);
+		set(layer[themeunanimebtn_gyroscope_on].visible, false);
+		set(layer[themeunanimebtn_gyroscope_off_bg].visible, false);
+		set(layer[themeunanimebtn_gyroscope_on_bg].visible, false);
+	</action>
+	<action name="themeunanimeShowGyroscopeButtons">
+		if (themeunanimemenugyroscopeavailable,
+			if (themeunanimemenugyroscopeenabled,
+				set(layer[themeunanimebtn_gyroscope_off].visible, true);
+				set(layer[themeunanimebtn_gyroscope_on].visible, false);
+				set(layer[themeunanimebtn_gyroscope_off_bg].visible, true);
+				set(layer[themeunanimebtn_gyroscope_on_bg].visible, false);
+			,
+				set(layer[themeunanimebtn_gyroscope_off].visible, false);
+				set(layer[themeunanimebtn_gyroscope_on].visible, true);
+				set(layer[themeunanimebtn_gyroscope_off_bg].visible, false);
+				set(layer[themeunanimebtn_gyroscope_on_bg].visible, true);
+			);
+		,
+			themeunanimeHideGyroscopeButtons();
+		);
+	</action>
+	<action name="themeunanimeupdateGyroscopeButtons">
+	if (tour_gyroscopedevices,
+		set(themeunanimeDisplayMenuGyroscopeButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayMenuGyroscopeButtons, true););
+		if (themeunanimeDisplayMenuGyroscopeButtons,
+			themeunanimeShowGyroscopeButtons();
+		,
+			themeunanimeHideGyroscopeButtons();
+		);
+	,
+		themeunanimeHideGyroscopeButtons();
+	);
+	</action>
+	
+    <layer name="themeunanimebtn_gyroscope_off_bg" style="themeunanime_btn_style_bg" visible="false" />
+    <layer name="themeunanimebtn_gyroscope_off"
+            url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_gyroscope.png"
+            style="themeunanime_btn_style"
+            onclick="disableGyroscope();"
+            devices="tablet|mobile"
+            tooltip="controlBar_dockedThumbnailsgyroOffTip"
+            visible="false"
+            />
+    <layer name="themeunanimebtn_gyroscope_on_bg" style="themeunanime_btn_style_on_bg" visible="false" />
+    <layer name="themeunanimebtn_gyroscope_on"
+            url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_gyroscope.png"
+            style="themeunanime_btn_style_on"
+            onclick="enableGyroscope();"
+            devices="tablet|mobile"
+            tooltip="controlBar_dockedThumbnailsgyroOnTip"
+            visible="false"
+            />
+
+
+	<events name="themeunanimecontrolmodechangedevent" oncontrolmodechanged="themeunanimeupdateControlModeButtons();" keep="true"/>
+	<action name="themeunanimeHideControlModeButtons">
+		set(layer[themeunanimebtn_ctrlmode_move_to].visible, false);
+		set(layer[themeunanimebtn_ctrlmode_drag_to].visible, false);
+		set(layer[themeunanimebtn_ctrlmode_move_to_bg].visible, false);
+		set(layer[themeunanimebtn_ctrlmode_drag_to_bg].visible, false);
+	</action>
+	<action name="themeunanimeShowControlModeButtons">
+		if (tour_controlmodemousetype == "moveto",
+			set(layer[themeunanimebtn_ctrlmode_drag_to].visible, true);
+			set(layer[themeunanimebtn_ctrlmode_move_to].visible, false);
+			set(layer[themeunanimebtn_ctrlmode_drag_to_bg].visible, true);
+			set(layer[themeunanimebtn_ctrlmode_move_to_bg].visible, false);
+		,
+			set(layer[themeunanimebtn_ctrlmode_move_to].visible, true);
+			set(layer[themeunanimebtn_ctrlmode_drag_to].visible, false);
+			set(layer[themeunanimebtn_ctrlmode_move_to_bg].visible, true);
+			set(layer[themeunanimebtn_ctrlmode_drag_to_bg].visible, false);
+		);
+	</action>
+	<action name="themeunanimeupdateControlModeButtons">
+	if (device.desktop,
+		set(themeunanimeDisplayControlModeButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayControlModeButtons, true););
+		if (themeunanimeDisplayControlModeButtons,
+			themeunanimeShowControlModeButtons();
+		,
+			themeunanimeHideControlModeButtons();
+		);
+	,
+		themeunanimeHideControlModeButtons();
+	);
+	</action>
+	
+    <layer name="themeunanimebtn_ctrlmode_move_to_bg" style="themeunanime_btn_style_bg" visible="false" devices="desktop" />
+    <layer name="themeunanimebtn_ctrlmode_move_to"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_move_to.png"
+           style="themeunanime_btn_style"
+           tooltip="controlBar_dockedThumbnailsctrlmodeMoveTip"
+           onclick="setControlModeMoveTo();"
+           visible="false"
+           devices="desktop"
+           />
+    <layer name="themeunanimebtn_ctrlmode_drag_to_bg" style="themeunanime_btn_style_bg" visible="false" devices="desktop" />
+    <layer name="themeunanimebtn_ctrlmode_drag_to"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_drag_to.png"
+           style="themeunanime_btn_style"
+           tooltip="controlBar_dockedThumbnailsctrlmodeDragTip"
+           onclick="setControlModeDragTo();"
+           visible="false"
+           devices="desktop"
+           />
+
+    <layer name="themeunanimebtn_in_bg" style="themeunanime_btn_style_bg" visible="false" devices="desktop"/>
+    <layer name="themeunanimebtn_in"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_zoom_in.png"
+           style="themeunanime_btn_down_style"
+           ondown="themeunanimectrl_btn_ondownaction();set(fov_moveforce, -1);"
+           onup="set(fov_moveforce, 0);"
+           tooltip="controlBar_dockedThumbnailszoomInTip"
+           devices="desktop"
+           visible="false"
+           />
+    <layer name="themeunanimebtn_out_bg" style="themeunanime_btn_style_bg" visible="false" devices="desktop"/>
+    <layer name="themeunanimebtn_out"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_zoom_out.png"
+           style="themeunanime_btn_down_style"
+           ondown="themeunanimectrl_btn_ondownaction();set(fov_moveforce, +1);"
+           onup="set(fov_moveforce, 0);"
+           tooltip="controlBar_dockedThumbnailszoomOutTip"
+           devices="desktop"
+           visible="false"
+           />
+
+
+
+
+
+    <layer name="themeunanimebtn_openfs_bg" style="themeunanime_btn_style_bg" visible="false" devices="fullscreensupport" />
+    <layer name="themeunanimebtn_openfs"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_enter_fs.png"
+           onclick="enterFullscreen();"
+           style="themeunanime_btn_style"
+           visible="false"
+           tooltip="controlBar_dockedThumbnailsopenFsTip"
+           devices="fullscreensupport"
+           />
+    <layer name="themeunanimebtn_closefs_bg" style="themeunanime_btn_style_on_bg" visible="false" devices="fullscreensupport" />
+    <layer name="themeunanimebtn_closefs"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_close_fs.png"
+           onclick="exitFullscreen();"
+           style="themeunanime_btn_style_on"
+           visible="false"
+           tooltip="controlBar_dockedThumbnailscloseFsTip"
+           devices="fullscreensupport"
+           />
+
+    <layer name="themeunanimebtn_autorotate_on_bg" style="themeunanime_btn_style_bg" visible="false" />
+    <layer name="themeunanimebtn_autorotate_on"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_start_autorotation.png"
+           onclick="startautorotation();"
+           style="themeunanime_btn_style"
+           visible="false"
+            tooltip="controlBar_dockedThumbnailsautorotateOnTip"
+           />
+    <layer name="themeunanimebtn_autorotate_off_bg" style="themeunanime_btn_style_on_bg" visible="false" />
+    <layer name="themeunanimebtn_autorotate_off"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_stop_autorotation.png"
+           onclick="stopautorotation();"
+           style="themeunanime_btn_style_on"
+           visible="false"
+           tooltip="controlBar_dockedThumbnailsautorotateOffTip"
+           />
+
+
+
+    <layer name="themeunanimebtn_display_help_bg" style="themeunanime_btn_style_bg" visible="false" devices="desktop" />
+    <layer name="themeunanimebtn_display_help"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_help.png"
+           onclick="themeunanimedisplayHelp();"
+           style="themeunanime_btn_style"
+           tooltip="controlBar_dockedThumbnailsdisplayHelpTip"
+           devices="desktop"
+           visible="false"
+           />
+    <layer name="themeunanimebtn_close_help_bg" style="themeunanime_btn_style_on_bg" visible="false" devices="desktop"/>
+    <layer name="themeunanimebtn_close_help"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_help.png"
+           onclick="themeunanimecloseHelp();"
+           style="themeunanime_btn_style_on"
+           visible="false"
+           tooltip="controlBar_dockedThumbnailshideHelpTip"
+           devices="desktop"
+           />
+
+
+
+    <layer name="themeunanimebtn_hidecontrols_bg" style="themeunanime_btn_style_bg" visible="false" />
+    <layer name="themeunanimebtn_hidecontrols"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_hide_controls.png"
+           style="themeunanime_btn_style"
+           onclick="themeunanimehideMenuControls();hideTourControls();"
+           visible="false"
+            tooltip="controlBar_dockedThumbnailshideControlsTip"
+           />
+
+    <layer name="themeunanimebtn_showcontrols"
+                  crop="0| 0|48|48"
+            onovercrop="0|48|48|48"
+            ondowncrop="0|96|48|48"
+            keep="true"
+            url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_show_controls_bg.png"
+            align="bottomright"
+            zorder="4"
+            height="36"
+            width="36"
+            visible="false"
+            y="12"
+            x="0" >
+    <layer name="themeunanimebtn_showcontrols_fg"
+                  crop="0| 0|48|48"
+            onovercrop="0|48|48|48"
+            ondowncrop="0|96|48|48"
+            onclick="themeunanimeshowMenuControls();showTourControls();"
+            onhover="showTooltip(bottomright, themeunanimemenuTooltipStyle);"
+            onout="hideTooltip();"
+            tooltip="controlBar_dockedThumbnailsdisplayControlsTip"
+            keep="true"
+            url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_show_controls.png"
+            align="center"
+            height="36"
+            width="36"
+            />
+    </layer>
+
+
+<action name="themeunanimehideMenuControls">
+	set(themeunanimeIsOpened, false);
+	set(layer[themeunanime_bg].visible, false);
+	set(layer[themeunanimebtn_showcontrols].visible, true);
+	set(layer[themeunanimebtn_hidecontrols_bg].visible, false);
+	set(layer[themeunanimebtn_hidecontrols].visible, false);
+	set(layer[themeunanimebtn_in_bg].visible, false);
+	set(layer[themeunanimebtn_out_bg].visible, false);
+	set(layer[themeunanimebtn_in].visible, false);
+	set(layer[themeunanimebtn_out].visible, false);
+
+
+
+		themeunanimeupdateGyroscopeButtons();
+
+		themeunanimeupdateControlModeButtons();
+
+
+
+
+		themeunanimeupdateFullscreenButtons();
+		themeunanimeupdateAutorotationButtons();
+
+
+		themeunanimeupdateHelpButtons();
+
+
+</action>
+<action name="themeunanimeshowMenuControls">
+	set(themeunanimeIsOpened, true);
+      themeunanimeupdateFullscreenButtons();
+
+
+      themeunanimeupdateAutorotationButtons();
+
+      themeunanimeupdateGyroscopeButtons();
+
+      themeunanimeupdateControlModeButtons();
+
+
+
+
+      themeunanimeupdateHelpButtons();
+      set(layer[themeunanime_bg].visible, true);
+	set(layer[themeunanimebtn_showcontrols].visible, false);
+	set(layer[themeunanimebtn_hidecontrols_bg].visible, true);
+	set(layer[themeunanimebtn_hidecontrols].visible, true);
+	set(layer[themeunanimebtn_in_bg].visible, true);
+	set(layer[themeunanimebtn_out_bg].visible, true);
+	set(layer[themeunanimebtn_in].visible, true);
+	set(layer[themeunanimebtn_out].visible, true);
+
+
+	
+	
+		themeunanimeUpdateThumbnailsSize();
+</action>
+
+
+    <layer name="themeunanimehelpScreenBg" align="center" keep="true" onclick="themeunanimecloseHelp();"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/help_screen_bg.png"
+           visible="false"
+           zorder="97"
+           >
+      <layer name="themeunanimehelpScreen" align="center" keep="true" onclick="themeunanimecloseHelp();" 
+             url="%FIRSTXML%/graphics/dockedthumbscontrolbar/help_screen_fg.png"
+             height="100%" 
+             width="prop" 
+             displayed="false"
+             />
+    </layer>
+    <action name="themeunanimedisplayHelp">
+      if (device.desktop,
+        set(layer[themeunanimehelpScreen].displayed, true);
+        set(layer[themeunanimehelpScreenBg].visible,true);
+        themeunanimeupdateHelpButtons();
+      );
+    </action>
+    <action name="themeunanimecloseHelp">
+      if (device.desktop,
+        set(layer[themeunanimehelpScreen].displayed, false);
+        set(layer[themeunanimehelpScreenBg].visible,false);
+        themeunanimeupdateHelpButtons();
+      );
+    </action>
+	<action name="themeunanimeHideHelpButtons">
+		set(layer[themeunanimebtn_display_help].visible, false);
+		set(layer[themeunanimebtn_close_help].visible, false);
+		set(layer[themeunanimebtn_display_help_bg].visible, false);
+		set(layer[themeunanimebtn_close_help_bg].visible, false);
+	</action>
+	<action name="themeunanimeShowHelpButtons">
+		if (layer[themeunanimehelpScreen].displayed,
+			set(layer[themeunanimebtn_close_help].visible, true);
+			set(layer[themeunanimebtn_display_help].visible, false);
+			set(layer[themeunanimebtn_close_help_bg].visible, true);
+			set(layer[themeunanimebtn_display_help_bg].visible, false);
+		,
+			set(layer[themeunanimebtn_display_help].visible, true);
+			set(layer[themeunanimebtn_close_help].visible, false);
+			set(layer[themeunanimebtn_display_help_bg].visible, true);
+			set(layer[themeunanimebtn_close_help_bg].visible, false);
+		);
+	</action>
+	<action name="themeunanimeupdateHelpButtons">
+	if (device.desktop,
+		set(themeunanimeDisplayHelpButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayHelpButtons, true););
+		if (themeunanimeDisplayHelpButtons,
+			themeunanimeShowHelpButtons();
+		,
+			themeunanimeHideHelpButtons();
+		);
+	,
+		themeunanimeHideHelpButtons();
+	);
+	</action>
+    
+
+
+	<events name="themeunanimemenufullscreenchangeevent"
+		onenterfullscreen="themeunanimeupdateFullscreenButtons();"
+		onexitfullscreen="themeunanimeupdateFullscreenButtons();"
+		keep="true"/>
+	<action name="themeunanimeHideFullscreenButtons">
+		set(layer[themeunanimebtn_openfs].visible , false);
+		set(layer[themeunanimebtn_closefs].visible, false);
+		set(layer[themeunanimebtn_openfs_bg].visible, false);
+		set(layer[themeunanimebtn_closefs_bg].visible, false);
+	</action>
+	<action name="themeunanimeShowFullscreenButtons">
+		if (device.fullscreensupport,
+			if(tour_fullscreen,
+				set(layer[themeunanimebtn_openfs].visible , false);
+				set(layer[themeunanimebtn_closefs].visible, true);
+				set(layer[themeunanimebtn_openfs_bg].visible, false);
+				set(layer[themeunanimebtn_closefs_bg].visible, true);
+			,
+				set(layer[themeunanimebtn_openfs].visible ,true);
+				set(layer[themeunanimebtn_closefs].visible,false);
+				set(layer[themeunanimebtn_openfs_bg].visible, true);
+				set(layer[themeunanimebtn_closefs_bg].visible, false);
+			);
+		,
+			themeunanimeHideFullscreenButtons();
+		);
+	</action>
+	<action name="themeunanimeupdateFullscreenButtons">
+		set(themeunanimeDisplayFullscreenButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayFullscreenButtons, true););
+		if (themeunanimeDisplayFullscreenButtons,
+			themeunanimeShowFullscreenButtons();
+		,
+			themeunanimeHideFullscreenButtons();
+		);
+	</action>
+
+	<events name="themeunanimeAutorotationEvents"
+		onstartautorotation="themeunanimeupdateAutorotationButtons();"
+		onresumeautorotation="themeunanimeupdateAutorotationButtons();"
+		onstopautorotation="themeunanimeupdateAutorotationButtons();"
+		onpauseautorotation="themeunanimeupdateAutorotationButtons();"
+		keep="true"/>
+	<action name="themeunanimeHideAutorotationButtons">
+		set(layer[themeunanimebtn_autorotate_off].visible, false);
+		set(layer[themeunanimebtn_autorotate_on].visible , false);
+		set(layer[themeunanimebtn_autorotate_off_bg].visible, false);
+		set(layer[themeunanimebtn_autorotate_on_bg].visible , false);
+	</action>
+	<action name="themeunanimeShowAutorotationButtons">
+		if(tour_autorotateenabled==false,
+			set(layer[themeunanimebtn_autorotate_off].visible, false);
+			set(layer[themeunanimebtn_autorotate_on].visible , true);
+			set(layer[themeunanimebtn_autorotate_off_bg].visible, false);
+			set(layer[themeunanimebtn_autorotate_on_bg].visible , true);
+		,
+			set(layer[themeunanimebtn_autorotate_off].visible, true);
+			set(layer[themeunanimebtn_autorotate_on].visible , false);
+			set(layer[themeunanimebtn_autorotate_off_bg].visible, true);
+			set(layer[themeunanimebtn_autorotate_on_bg].visible , false);
+		);
+	</action>
+	<action name="themeunanimeupdateAutorotationButtons">
+		set(themeunanimeDisplayAutorotationButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayAutorotationButtons, true););
+		if (themeunanimeDisplayAutorotationButtons,
+			themeunanimeShowAutorotationButtons();
+		,
+			themeunanimeHideAutorotationButtons();
+		);
+	</action>
+
+
+
+	<layer name="themeunanimemenuTooltipStyle"
+	keep="true"
+	enabled="false"
+	capture="false"
+	url="%FIRSTXML%/graphics/textfield.swf"
+	align="center"
+	background="true"
+	backgroundcolor="0x92d26a"
+	backgroundalpha="0.8"
+	border="false"
+	css="color:#f29320;font-family:Times New Roman;font-weight:bold;font-size:14px;text-align:left;"
+	height="20" 
+	autoheight="true"
+	autowidth="auto"
+	edge="bottom"
+	selectable="false"
+	zorder="0"
+	xoffset="0"
+	yoffset="0"
+	visible="false"
+	html=""
+	/>
+
+
+  <!-- ************************ -->
+  <!-- Title : current panorama -->
+  <!-- ************************ -->
+
+  <events name="title_currentpanorama_events" 
+    onTourStart="showtitle_currentpanorama();"
+    hidetourcontrols="hidetitle_currentpanorama();" 
+    showtourcontrols="showtitle_currentpanorama();" 
+    onnewpano="updatetitle_currentpanorama();" 
+    keep="true" />
+
+  <action name="hidetitle_currentpanorama">set(layer[title_currentpanorama].visible, false);</action>
+  <action name="showtitle_currentpanorama">set(layer[title_currentpanorama].visible, true );</action>
+
+  <action name="updatetitle_currentpanorama">
+    getmessage(layer[title_currentpanorama].html, get(scene[get(xml.scene)].titleid));
+    escape(layer[title_currentpanorama].html);
+  </action>
+  <layer name="title_currentpanorama" keep="true" zorder="5"
+         url="%FIRSTXML%/graphics/textfield.swf"
+         align="topright" x="10" y="15" width="100%" autoheight="true"
+         background="false" capture="false" handcursor="false" selectable="false" enabled="false"
+         borderwidth="0"
+         alpha="1"
+         visible="false"
+         css="text-align:right;
+              color:#000000;
+              font-family:Baskerville;
+              font-size:20px;"/>
+  <!-- *********** -->
+  <!-- Description -->
+  <!-- *********** -->
+
+
+<ptplugin name="description" canStart="false" newPano="false" openatstart="true" startMethod="showProjectDescription-description" engine="kolorArea">
+	<settings>
+		<option name="position" value="topleft" type="string" />
+		<option name="start_position" value="left" type="string" />
+		<option name="margin_x" value="0" type="int" />
+		<option name="margin_y" value="0" type="int" />
+		<option name="background_color" value="000000" type="string" />
+		<option name="background_alpha" value="0" type="float" />
+		<option name="topleft_radius" value="0" type="int" />
+		<option name="topright_radius" value="0" type="int" />
+		<option name="bottomleft_radius" value="0" type="int" />
+		<option name="bottomright_radius" value="0" type="int" />
+		<option name="area_border_width" value="0" type="int" />
+		<option name="area_border_color" value="f2f2f2" type="string" />
+		<option name="padding" value="10" type="int" />
+		<option name="display_title" value="false" type="bool" />
+		<option name="close_displayed" value="false" type="bool" />
+		<option name="overlay_displayed" value="false" type="bool" />
+		<option name="overlay_color" value="000000" type="string" />
+		<option name="overlay_alpha" value="0.500007629510948" type="float" />
+		<option name="area_width" value="50" type="int" />
+		<option name="area_height" value="50" type="int" />
+		<option name="area_width_unit" value="percent" type="string" />
+		<option name="area_height_unit" value="percent" type="string" />
+		<option name="animation" value="false" type="bool" />
+		<option name="animation_duration" value="500" type="int" />
+		<option name="refresh_content" value="true" type="bool" />
+		<option name="close_callback" value="invokeKrFunction('closeKolorAreaCallback-description')" type="string" />
+		<option name="close_on_click" value="false" type="bool" />
+		<option name="zorder" value="6" type="int" />
+		<option name="use_i18n" value="true" type="bool" />
+	</settings>
+</ptplugin>
+
+<action name="kolorAreaJsReady-description">
+	set(ptplugin[description].jsready, true);
+</action>
+
+<action name="updateTitle-description">
+	js(invokePluginFunction(description, changeTitle, get(scene[get(xml.scene)].titleid)));
+</action>
+
+<action name="openKolorArea-description">
+	set(ptplugin[description].isOpen, true);
+	js(showKolorArea(description, get(ptplugin[description].descID)));
+</action>
+
+<action name="closeKolorArea-description">
+	set(ptplugin[description].isOpen, false);
+	js(invokePluginFunction(description, closeKolorArea));
+</action>
+
+<action name="toggleKolorArea-description">
+	if(ptplugin[description].isOpen,
+		closeKolorArea-description();
+	,
+		openKolorArea-description();
+	);
+</action>
+
+<action name="closeKolorAreaCallback-description">
+	set(ptplugin[description].isOpen, false);
+	if(tour_displayinfo,hideTourInfo();
+	);
+</action>
+
+
+
+<action name="showKolorArea-description">
+	ifnot(ptplugin[description].startMethod == "",
+		delayedcall(0,get(ptplugin[description].startMethod));
+	,
+		js(invokePluginFunction(description, showKolorArea, %1));
+	);
+</action>
+	
+<action name="hideKolorArea-description">
+	js(invokePluginFunction(description, hideKolorArea, %1));
+</action>
+
+<action name="openDescription-description">
+	openKolorArea-description();
+</action>
+
+<action name="openSpotDescription-description">
+	set(ptplugin[description].descID, %1);
+	openKolorArea-description();
+</action>
+
+<action name="closeDescription-description">
+	set(ptplugin[description].currentGroup, false);
+	closeKolorArea-description();
+</action> 
+
+<action name="showProjectDescription-description">
+	if(ptplugin[description].canStart,
+		set(ptplugin[description].descID, get(projectdescriptionid));
+		if(ptplugin[description].descID != "",
+			openDescription-description();
+		,
+			hideKolorArea-description(false);
+		);
+		set(ptplugin[description].startMethod, "");
+	);
+</action>
+
+
+
+<events name="kolorAreaEvents-description" 
+	keep="true"
+	onTourStart="set(ptplugin[description].canStart, true);if(ptplugin[description].openatstart,showTourInfo();,if(tour_displayinfo,showTourInfo();););"
+	onshowtourinfo="showProjectDescription-description();"
+	onhidetourinfo="closeDescription-description();"
+/>
+  <!-- ******************************************* -->
+  <!-- Button : bottomright -->
+  <!-- ******************************************* -->
+
+  <layer name="button"
+         keep="true"
+         url="%FIRSTXML%/graphics/button/fbshare.png" 
+         align="bottomright"
+         x="10"
+         y="90"
+         zorder="7"
+         visible="false"
+         onclick="buttonOnClick"
+         tooltip="buttontooltip"
+         onhover="showTooltip(bottomright,'');"
+         onout="hideTooltip();"
+         />
+  <action name="buttonOnClick">
+openurl(https://www.facebook.com/sharer/sharer.php?u=http://www.ssgpp.com/,_blank);
+  </action>
+
+  <events name="buttonevents" 
+    onTourStart="showbutton();"
+    hidetourcontrols="hidebutton();" 
+    showtourcontrols="showbutton();" 
+    keep="true" />
+  <action name="hidebutton">set(layer[button].visible, false);</action>
+  <action name="showbutton">set(layer[button].visible, true);</action>
+
+
+  <!-- ******************************************* -->
+  <!-- Button : bottomright -->
+  <!-- ******************************************* -->
+
+  <layer name="button1"
+         keep="true"
+         url="%FIRSTXML%/graphics/button1/more.png" 
+         align="bottomright"
+         x="10"
+         y="130"
+         zorder="8"
+         visible="false"
+         onclick="button1OnClick"
+         tooltip="button1tooltip"
+         onhover="showTooltip(bottomright,'');"
+         onout="hideTooltip();"
+         />
+  <action name="button1OnClick">
+openurl(http://www.ssgpp.com,_top);
+  </action>
+
+  <events name="button1events" 
+    onTourStart="showbutton1();"
+    hidetourcontrols="hidebutton1();" 
+    showtourcontrols="showbutton1();" 
+    keep="true" />
+  <action name="hidebutton1">set(layer[button1].visible, false);</action>
+  <action name="showbutton1">set(layer[button1].visible, true);</action>
+
+<action name="setViewFisheye">
+	set(sceneisfull360, false);
+	if(scene[get(xml.scene)].full360,
+		sub(viewhfov, view.hlookatmax, view.hlookatmin);
+		if (viewhfov == 360,
+			sub(viewvfov, view.vlookatmax, view.vlookatmin);
+			if (viewvfov == 180,
+				set(sceneisfull360, true);
+			);
+		);
+	);
+	if (sceneisfull360,
+		stopSetViewTweens();
+		setViewFisheyeComplete();
+	);
+</action>
+
+<action name="setViewFisheyeComplete">
+	tween(view.architectural, 0.0, distance(1.0, 0.30), easeoutquad, 
+		tween(view.fisheye, 0.0, distance(1.0, 0.30), easeoutquad,
+			set(view.stereographic,false);
+			if(view.pannini, set(view.pannini,false); delayedcall(0,updateobject(true,true)); );
+			tween(view.fovmax, 179, 0.25);
+			set(view.fisheyefovlink, 1.5);
+			if(panoview.fov LE view.fov, tween(view.fov, get(panoview.fov), distance(50, 0.45)); );
+			tween(view.fisheye, 0.40, distance(1.0, 1.25));
+			tween(view.vlookat, get(panoview.v), 1.25);
+		);
+	);
+</action>
+  <!-- Hide / Show Controls -->
+  <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
+  <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
+  <!-- Fullscreen Management -->
+  <action name="exitFullScreen" devices="fullscreensupport">set(tour_fullscreen,false);js(setFullscreen(false));</action>
+  <action name="enterFullScreen" devices="fullscreensupport">set(tour_fullscreen,true);js(setFullscreen(true));</action>
+  <action name="switchFullScreen">if(tour_fullscreen,exitFullScreen();,enterFullScreen(););</action>
+
+  
+  <events name="krpanoExitFullscreenEvent"
+    onexitfullscreen="if(tour_fullscreen,exitFullScreenChangeEvent(););"
+    keep="true" />
+
+  <action name="exitFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,false);events.dispatch(onexitfullscreen);</action>
+  <action name="enterFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,true);events.dispatch(onenterfullscreen);</action>
+  <action name="exitFullScreenFallback">set(fullscreen,false);</action>
+  <action name="enterFullScreenFallback">set(fullscreen,true);</action>
+  
+  <action name="resizeFullScreenEvent">delayedcall(0,updatescreen(););</action>
+  <action name="enableGyroscope">
+    changeGyroscopeState(true);
+  </action>
+  <action name="disableGyroscope">
+    changeGyroscopeState(false);
+  </action>
+  <!-- Tour Information -->
+  <action name="hideTourInfo">set(tour_displayinfo, false);events.dispatch(onhidetourinfo);</action>
+  <action name="showTourInfo">set(tour_displayinfo, true); events.dispatch(onshowtourinfo);</action><action name="setViewArchitectural">
+	stopSetViewTweens();
+	setViewArchitecturalComplete();
+</action>
+
+<action name="setViewArchitecturalComplete">
+	tween(view.fovmax, get(panoview.fovmax), distance(179, 1.00), easeoutquad);
+	tween(view.architectural, 1.0, distance(1.0, 0.45), easeoutquad, 
+		tween(view.fisheye, 0.0, distance(1.0, 0.45), easeoutquad, 
+			set(view.fisheyefovlink, 0.5);
+			set(view.stereographic,false);
+			if(view.pannini, set(view.pannini,false); delayedcall(0,updateobject(true,true)); );
+			tween(view.vlookat, get(panoview.v), 1.25);
+			if(panoview.fov LE view.fov, tween(view.fov, get(panoview.fov), distance(50, 0.45)); );
+		);
+	);
+</action><action name="setViewLittlePlanet">
+	set(sceneisfull360, false);
+	if(scene[get(xml.scene)].full360,
+		sub(viewhfov, view.hlookatmax, view.hlookatmin);
+		if (viewhfov == 360,
+			sub(viewvfov, view.vlookatmax, view.vlookatmin);
+			if (viewvfov == 180,
+				set(sceneisfull360, true);
+			);
+		);
+	);
+	if (sceneisfull360,
+		stopSetViewTweens();
+		setViewLittlePlanetComplete();
+	);
+</action>
+
+<action name="setViewLittlePlanetComplete">
+	tween(view.architectural, 0.0, 0.25, easeoutquad, 
+		tween(view.vlookat, 90, distance(179, 1.50), easeoutquad);
+		set(backtonormalfirst,false);
+		if(view.pannini == true, set(backtonormalfirst,true) );
+		if(view.stereographic == false, set(backtonormalfirst,true) );
+		if(backtonormalfirst, tween(view.fisheye, 0.0 ,distance(1.0, 0.25), easeoutquad, WAIT); );
+		if(view.pannini, set(view.pannini,false); delayedcall(0, updateobject(true,true)); );
+		if(panoview.fovmax LE 150, set(view.fovmax, 150); , set(view.fovmax, get(panoview.fovmax)); );
+		set(view.stereographic, true);
+		set(view.fisheyefovlink, 1.5);
+		tween(view.fisheye, 1.0, distance(1.0, 0.75), easeoutquad);
+		tween(view.fov, 150, distance(179, 0.75), easeoutquad);
+	);
+</action><action name="setViewNormal">
+	stopSetViewTweens();
+	setViewNormalComplete();
+</action>
+
+<action name="setViewNormalComplete">
+	tween(view.architectural, 0.0, distance(1.0, 0.45), easeoutquad,
+		tween(view.fovmax, get(panoview.fovmax), distance(179, 1.00));
+		tween(view.vlookat, get(panoview.v), distance(90, 0.45));
+		tween(view.fisheye, 0.0, distance(1.0, 0.45), easeoutquad,
+			set(view.stereographic,false);
+			if(view.pannini, set(view.pannini,false); delayedcall(0,updateobject(true,true)); );
+			set(view.fisheyefovlink, 0.5);
+			if(panoview.fov LE view.fov, tween(view.fov, get(panoview.fov), distance(50, 0.45)); );
+		);
+	);
+</action>
+
+<action name="stopSetViewTweens">
+	stoptween(view.fov);
+	stoptween(view.fovmax);
+	stoptween(view.vlookat);
+	stoptween(view.fisheye);
+	stoptween(view.architectural);
+</action>
+</krpano>

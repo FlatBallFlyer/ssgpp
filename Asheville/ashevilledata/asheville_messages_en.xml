@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano>
+
+<!-- ************************ -->
+<!--         Messages         -->
+<!-- ************************ -->
+
+  <data name="en_project_title"><![CDATA[Asheville NC]]></data>
+  <data name="en_project_author_name"><![CDATA[Mike Storey]]></data>
+  <data name="en_project_author_url"><![CDATA[http://www.ssgpp.com]]></data>
+
+
+
+  <data name="en_pano59_title"><![CDATA[SkyLoft]]></data>
+  <data name="en_spotpoint64_tooltip"><![CDATA[SkyLoft]]></data>
+  <data name="en_spotpoint104_tooltip"><![CDATA[aLoft Hotel]]></data>
+
+
+  <data name="en_pano156_title"><![CDATA[Sunset at Sunset View Dr.]]></data>
+  <data name="en_spotpoint158_tooltip"><![CDATA[aLoft Hotel]]></data>
+  <data name="en_spotpoint162_tooltip"><![CDATA[SkyLoft]]></data>
+  <data name="en_spotpoint163_tooltip"><![CDATA[Sunset View Dr.]]></data>
+
+
+  <data name="en_pano135_title"><![CDATA[aLoft Hotel]]></data>
+  <data name="en_spotpoint137_tooltip"><![CDATA[Sunset View Dr.]]></data>
+  <data name="en_spotpoint138_tooltip"><![CDATA[Sunset at Sunset View Dr.]]></data>
+  <data name="en_spotpoint141_tooltip"><![CDATA[SkyLoft]]></data>
+  <data name="en_spotpoint148_tooltip"><![CDATA[Eagle St.]]></data>
+
+
+  <data name="en_pano55_title"><![CDATA[Sunset View Dr.]]></data>
+  <data name="en_spotpoint63_tooltip"><![CDATA[SkyLoft]]></data>
+  <data name="en_spotpoint65_tooltip"><![CDATA[aLoft Hotel]]></data>
+  <data name="en_spotpoint67_tooltip"><![CDATA[Sunset at Sunset View Dr.]]></data>
+
+
+  <data name="en_pano146_title"><![CDATA[Eagle St.]]></data>
+  <data name="en_spotpoint149_tooltip"><![CDATA[aLoft Hotel]]></data>
+
+
+
+
+
+
+  <data name="en_contextmenuopenFsLabel"><![CDATA[Enter Fullscreen]]></data>
+  <data name="en_contextmenucloseFsLabel"><![CDATA[Exit Fullscreen]]></data>
+  <data name="en_contextmenunormallabel"><![CDATA[Normal View]]></data>
+  <data name="en_contextmenufisheyelabel"><![CDATA[Fisheye View]]></data>
+  <data name="en_contextmenuarchitecturallabel"><![CDATA[Architectural View]]></data>
+  <data name="en_contextmenulittleplanetlabel"><![CDATA[Little Planet View]]></data>
+  <data name="en_controlBar_dockedThumbnailszoomInTip"><![CDATA[Zoom in]]></data>
+  <data name="en_controlBar_dockedThumbnailszoomOutTip"><![CDATA[Zoom out]]></data>
+  <data name="en_controlBar_dockedThumbnailsopenFsTip"><![CDATA[Enter fullscreen]]></data>
+  <data name="en_controlBar_dockedThumbnailscloseFsTip"><![CDATA[Exit fullscreen]]></data>
+  <data name="en_controlBar_dockedThumbnailsautorotateOnTip"><![CDATA[Start autorotation]]></data>
+  <data name="en_controlBar_dockedThumbnailsautorotateOffTip"><![CDATA[Stop autorotation]]></data>
+  <data name="en_controlBar_dockedThumbnailsgyroOnTip"><![CDATA[Enable gyroscope]]></data>
+  <data name="en_controlBar_dockedThumbnailsgyroOffTip"><![CDATA[Disable gyroscope]]></data>
+  <data name="en_controlBar_dockedThumbnailsdisplayHelpTip"><![CDATA[Show help screen]]></data>
+  <data name="en_controlBar_dockedThumbnailshideHelpTip"><![CDATA[Hide help screen]]></data>
+  <data name="en_controlBar_dockedThumbnailsdisplayControlsTip"><![CDATA[Show controls]]></data>
+  <data name="en_controlBar_dockedThumbnailshideControlsTip"><![CDATA[Hide controls]]></data>
+  <data name="en_controlBar_dockedThumbnailsctrlmodeDragTip"><![CDATA[Change control mode]]></data>
+  <data name="en_controlBar_dockedThumbnailsctrlmodeMoveTip"><![CDATA[Change control mode]]></data>
+  <data name="en_buttontooltip"><![CDATA[Share this page on Facebook]]></data>
+  <data name="en_buttonopenurlwebsiteurl"><![CDATA[https://www.facebook.com/sharer/sharer.php?u=http://www.ssgpp.com/]]></data>
+  <data name="en_button1tooltip"><![CDATA[See More Pano's at www.ssgpp.com]]></data>
+  <data name="en_button1openurlwebsiteurl"><![CDATA[http://www.ssgpp.com]]></data>
+
+  <data name="en_project_description"><![CDATA[<font size="4"><b>Asheville NC in Gigapixel by Mike Storey</b></font><div><font size="1">All images copyright Surround Sight Gigapixel Panoramic Photography</font><div><br></div></div>]]></data>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</krpano>
