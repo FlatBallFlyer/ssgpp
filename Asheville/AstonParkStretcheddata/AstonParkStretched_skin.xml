@@ -1,0 +1,862 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano version="1.17">
+
+<!-- ************ -->
+<!-- Double click -->
+<!-- ************ -->
+  <plugin name="doubleclick" url="%FIRSTXML%/graphics/doubleclick/fieldofview_dc.swf" alturl="%FIRSTXML%/graphics/doubleclick/fieldofview_dc.js" keep="true" ondblclick="ondoubleclick();"/>
+  <action name="ondoubleclick">switchFullscreen();
+
+  </action>
+<!-- ************ -->
+<!-- Context Menu -->
+<!-- ************ -->
+  <contextmenu fullscreen="false">
+    <item name="author" onclick="getmessage(urltoopen,project_author_url);openurl(get(urltoopen),_blank);" />
+    <item name="normal"        onclick="setViewNormal();" separator="true"/>
+    <item name="architectural" onclick="setViewArchitectural();"/>
+    <item name="littleplanet"  onclick="setViewLittlePlanet();"/>
+    <item name="fullscreenentry" onclick="enterFullscreen();" separator="true"/>
+  </contextmenu>
+
+  <events name="contextmenuevents" keep="true" onenterfullscreen="updateContextMenu" onexitfullscreen="updateContextMenu" onxmlcomplete="updateContextMenu"/>
+  <action name="updateContextMenu">
+    getmessage(contextmenu.item[author].caption, project_author_name);
+    getmessage(contextmenu.item[normal].caption, contextmenunormallabel);
+    getmessage(contextmenu.item[architectural].caption, contextmenuarchitecturallabel);
+    
+    set(sceneisfull360, false);
+    if(scene[get(xml.scene)].full360,
+      sub(viewhfov, view.hlookatmax, view.hlookatmin);
+      if (viewhfov == 360,
+        sub(viewvfov, view.vlookatmax, view.vlookatmin);
+        if (viewvfov == 180,
+          set(sceneisfull360, true);
+        );
+      );
+    );
+    if (sceneisfull360,
+      set(contextmenu.item[littleplanet].visible, true);
+      getmessage(contextmenu.item[littleplanet].caption, contextmenulittleplanetlabel);
+    ,
+      set(contextmenu.item[littleplanet].visible, false);
+    );
+    if(tour_fullscreen,
+      getmessage(contextmenu.item[fullscreenentry].caption, contextmenucloseFsLabel);
+      set(contextmenu.item[fullscreenentry].onclick, exitFullscreen(););
+     ,
+      getmessage(contextmenu.item[fullscreenentry].caption, contextmenuopenFsLabel);
+      set(contextmenu.item[fullscreenentry].onclick, enterFullscreen(););
+    );
+  </action>
+<!-- ********* -->
+<!-- Gyroscope -->
+<!-- ********* -->
+<plugin name="gyroscope"
+        url="graphics/gyro.js"
+        keep="true"
+        devices="tablet|mobile"
+        onavailable="delayedcall(1, checkGyroAvailability(););"
+        enabled="false"
+        />
+
+<action name="changeGyroscopeState">
+  ifnot (plugin[gyroscope].available === undefined,
+    if (plugin[gyroscope].available,
+      if (%1 !=  plugin[gyroscope].enabled,
+	    switch(plugin[gyroscope].enabled);
+	    if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
+      );
+    );
+  );
+</action>
+
+<action name="checkGyroAvailability">
+	ifnot (plugin[gyroscope].available === undefined, 
+		if (plugin[gyroscope].available,
+			set(tour_gyroscopedevices, true);
+			events.dispatch(ongyroscopeavailable);
+			if (plugin[gyroscope].enabled, events.dispatch(ongyroscopeon);, events.dispatch(ongyroscopeoff););
+		,
+			set(tour_gyroscopedevices, false);
+			set(plugin[gyroscope].enabled, false);
+		);
+	,
+		set(tour_gyroscopedevices, false);
+		set(plugin[gyroscope].enabled, false);
+	);
+</action>
+  <!-- ************ -->
+  <!-- iControl Bar -->
+  <!-- ************ -->
+
+
+  <krpano theme11barbuilt="false" theme11backgroundwidthwhenclosed="0" theme11backgroundwidthwhenopened="0" theme11IsOpened="false" />
+  <events name="theme11events" onxmlcomplete="theme11buildMenuBar();" keep="true"/>
+  <action name="theme11buildMenuBar">
+    ifnot (theme11barbuilt, theme11buildMenu(); set(theme11barbuilt, true););
+  </action>
+
+  <style name="theme11_btn_style"
+         keep="true"
+         edge="right"
+         align="right"
+         x="0" y="0"
+         width="40" height="40"
+         crop="0|0|60|60"
+         onovercrop="0|60|60|60"
+         ondowncrop="0|120|60|60"
+         />
+
+  <layer name="theme11_menu_bg"
+         keep="true"
+         type="container"
+         zorder="3"
+         width="40"
+         height="40"
+         align="bottomright"
+         x="10" y="10"
+         maskchildren="true"
+         rotate="0"
+         visible="false"
+         >
+
+    <layer name="theme11btn_gyroscope_off"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_gyroscope.png"
+            style="theme11_btn_style"
+            onclick="disableGyroscope();"
+            devices="tablet|mobile"
+            visible="false"
+            />
+    <layer name="theme11btn_gyroscope_on"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_gyroscope.png"
+            style="theme11_btn_style"
+            onclick="enableGyroscope();"
+            devices="tablet|mobile"
+            visible="false"
+            />
+
+
+    <layer name="theme11btn_ctrlmode_move_to"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_move_to.png"
+            style="theme11_btn_style"
+            onclick="setControlModeMoveTo();"
+            visible="false"
+            devices="desktop"
+            />
+    <layer name="theme11btn_ctrlmode_drag_to"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_drag_to.png"
+            style="theme11_btn_style"
+            onclick="setControlModeDragTo();"
+            visible="false"
+            devices="desktop"
+            />
+
+    <layer name="theme11btn_in"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_zoom_in.png"
+            ondown="set(fov_moveforce, -1);"
+            onup="set(fov_moveforce, 0);"
+            style="theme11_btn_style"
+            visible="false"
+            devices="desktop"
+            />
+    <layer name="theme11btn_out"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_zoom_out.png"
+            ondown="set(fov_moveforce, +1);"
+            onup="set(fov_moveforce, 0);"
+            style="theme11_btn_style"
+            visible="false"
+            devices="desktop"
+            />
+
+    <layer name="theme11btn_left"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_move_left.png"
+            ondown="set(hlookat_moveforce, -1);"
+            onup="set(hlookat_moveforce, 0);"
+            style="theme11_btn_style"
+            visible="false"
+            devices="desktop"
+            />
+    <layer name="theme11btn_right"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_move_right.png"
+            ondown="set(hlookat_moveforce, +1);"
+            onup="set(hlookat_moveforce, 0);"
+            style="theme11_btn_style"
+            visible="false"
+            devices="desktop"
+            />
+
+    <layer name="theme11btn_up"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_move_up.png"
+            ondown="set(vlookat_moveforce, -1);"
+            onup="set(vlookat_moveforce, 0);"
+            style="theme11_btn_style"
+            visible="false"
+            devices="desktop"
+            />
+    <layer name="theme11btn_down"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_move_down.png"
+            ondown="set(vlookat_moveforce, +1);"
+            onup="set(vlookat_moveforce, 0);"
+            style="theme11_btn_style"
+            visible="false"
+            devices="desktop"
+            />
+
+
+
+    <layer name="theme11btn_prev_pano"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_previous_scene.png"
+            onclick="loadPreviousScene();"
+            style="theme11_btn_style"
+            visible="false"
+            />
+    <layer name="theme11btn_next_pano"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_next_scene.png"
+            onclick="loadNextScene();"
+            style="theme11_btn_style"
+            visible="false"
+            />
+
+
+
+    <layer name="theme11btn_openfs"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_enter_fs.png"
+            onclick="enterFullscreen();"
+            style="theme11_btn_style"
+            visible="false"
+            devices="fullscreensupport"
+            />
+    <layer name="theme11btn_closefs"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_close_fs.png"
+            onclick="exitFullscreen();"
+            style="theme11_btn_style"
+            visible="false"
+            devices="fullscreensupport"
+            />
+
+    <layer name="theme11btn_autorotate_on"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_start_autorotation.png"
+            onclick="startautorotation();"
+            style="theme11_btn_style"
+            visible="false"
+            />
+    <layer name="theme11btn_autorotate_off"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_stop_autorotation.png"
+            onclick="stopautorotation();"
+            style="theme11_btn_style"
+            visible="false"
+            />
+
+
+
+    <layer name="theme11btn_display_help"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_help.png"
+            onclick="theme11displayHelp();"
+            style="theme11_btn_style"
+            devices="desktop"
+            visible="false"
+            />
+    <layer name="theme11btn_close_help"
+            url="%FIRSTXML%/graphics/icontrolbar/btn_help.png"
+            onclick="theme11closeHelp();"
+            style="theme11_btn_style"
+            visible="false"
+            devices="desktop"
+            />
+
+
+
+    <layer name="theme11btn_hidecontrols"
+           url="%FIRSTXML%/graphics/icontrolbar/btn_hide_controls.png"
+           style="theme11_btn_style"
+           onclick="theme11hideMenuControls();hideTourControls();"
+           visible="false"
+           />
+    <layer name="theme11btn_showcontrols"
+           url="%FIRSTXML%/graphics/icontrolbar/btn_show_controls.png"
+           style="theme11_btn_style"
+           onclick="theme11showMenuControls();showTourControls();"
+           visible="false"
+           />
+ </layer>
+
+
+
+  <events name="theme11gyroscopeavailableevent"
+          ongyroscopeavailable="theme11updateGyroscopeButtonsAvailability();"
+          ongyroscopeon="theme11enableGyroscopeButtons(true);"
+          ongyroscopeoff="theme11enableGyroscopeButtons(false);"
+          keep="true"/>
+  <krpano theme11menugyroscopeavailable="false" theme11menugyroscopeenabled="false"/>
+  <action name="theme11updateGyroscopeButtonsAvailability">
+    if (tour_gyroscopedevices,
+      set(theme11menugyroscopeavailable, true);
+      theme11updateGyroscopeButtons();
+    );
+  </action>
+  <action name="theme11enableGyroscopeButtons">
+    if (tour_gyroscopedevices,
+      set(theme11menugyroscopeenabled, %1);
+      theme11updateGyroscopeButtons();
+    );
+  </action>
+	<action name="theme11HideGyroscopeButtons">
+		set(layer[theme11btn_gyroscope_off].visible, false);
+		set(layer[theme11btn_gyroscope_on].visible, false);
+	</action>
+	<action name="theme11ShowGyroscopeButtons">
+		if (theme11menugyroscopeavailable,
+			if (theme11menugyroscopeenabled,
+				set(layer[theme11btn_gyroscope_off].visible, true);
+				set(layer[theme11btn_gyroscope_on].visible, false);
+			,
+				set(layer[theme11btn_gyroscope_off].visible, false);
+				set(layer[theme11btn_gyroscope_on].visible, true);
+			);
+		,
+			theme11HideGyroscopeButtons();
+		);
+	</action>
+	<action name="theme11updateGyroscopeButtons">
+	if (tour_gyroscopedevices,
+		set(theme11DisplayMenuGyroscopeButtons, false);
+		if (theme11IsOpened, set(theme11DisplayMenuGyroscopeButtons, true););
+		if (theme11DisplayMenuGyroscopeButtons,
+			theme11ShowGyroscopeButtons();
+		,
+			theme11HideGyroscopeButtons();
+		);
+	,
+		theme11HideGyroscopeButtons();
+	);
+	</action>
+
+
+	<events name="theme11controlmodechangedevent" 
+		oncontrolmodechanged="theme11updateControlModeButtons();" 
+		keep="true" />
+	<action name="theme11HideControlModeButtons">
+		set(layer[theme11btn_ctrlmode_move_to].visible, false);
+		set(layer[theme11btn_ctrlmode_drag_to].visible, false);
+	</action>
+	<action name="theme11ShowControlModeButtons">
+		if (tour_controlmodemousetype == "moveto",
+			set(layer[theme11btn_ctrlmode_drag_to].visible, true);
+			set(layer[theme11btn_ctrlmode_move_to].visible, false);
+		,
+			set(layer[theme11btn_ctrlmode_move_to].visible, true);
+			set(layer[theme11btn_ctrlmode_drag_to].visible, false);
+		);
+	</action>
+	<action name="theme11updateControlModeButtons">
+	if (device.desktop,
+		set(theme11DisplayControlModeButtons, false);
+		if (theme11IsOpened, set(theme11DisplayControlModeButtons, true););
+		if (theme11DisplayControlModeButtons,
+			theme11ShowControlModeButtons();
+		,
+			theme11HideControlModeButtons();
+		);
+	,
+		theme11HideControlModeButtons();
+	);
+	</action>
+
+
+  <action name="theme11hideMenuControls">
+    set(theme11IsOpened, false);
+    set(layer[theme11btn_hidecontrols].visible, false);
+    set(layer[theme11btn_showcontrols].visible, true);
+if (scene.count GT 1,
+	set(layer[theme11btn_next_pano].visible, false);
+	set(layer[theme11btn_prev_pano].visible, false);
+);
+
+
+if (device.desktop,
+	set(layer[theme11btn_in].visible, false);
+	set(layer[theme11btn_out].visible, false);
+);
+if (device.desktop,
+	set(layer[theme11btn_up].visible, false);
+	set(layer[theme11btn_down].visible, false);
+);
+if (device.desktop,
+	set(layer[theme11btn_left].visible, false);
+	set(layer[theme11btn_right].visible, false);
+);
+	theme11updateFullscreenButtons();
+	theme11updateHelpButtons();
+
+
+	theme11updateAutorotationButtons();
+
+	theme11updateGyroscopeButtons();
+
+	theme11updateControlModeButtons();
+
+
+
+    set(layer[theme11_menu_bg].width , get(theme11backgroundwidthwhenclosed));
+	set(layer[theme11_menu_bg].visible, true);
+  </action>
+  <action name="theme11showMenuControls">
+    set(theme11IsOpened, true);
+    set(layer[theme11btn_hidecontrols].visible, true);
+    set(layer[theme11btn_showcontrols].visible, false);
+	set(layer[theme11_menu_bg].visible, true);
+if (scene.count GT 1,
+	set(layer[theme11btn_next_pano].visible, true);
+	set(layer[theme11btn_prev_pano].visible, true);
+);
+
+
+if (device.desktop,
+	set(layer[theme11btn_in].visible, true);
+	set(layer[theme11btn_out].visible, true);
+);
+if (device.desktop,
+	set(layer[theme11btn_up].visible, true);
+	set(layer[theme11btn_down].visible, true);
+);
+if (device.desktop,
+	set(layer[theme11btn_left].visible, true);
+	set(layer[theme11btn_right].visible, true);
+);
+	theme11updateFullscreenButtons();
+	theme11updateHelpButtons();
+
+
+	theme11updateAutorotationButtons();
+
+	theme11updateGyroscopeButtons();
+
+	theme11updateControlModeButtons();
+
+
+
+    set(layer[theme11_menu_bg].width, get(theme11backgroundwidthwhenopened));
+  </action>
+
+  <layer name="theme11helpScreenBg"
+         align="center"
+         keep="true"
+         onclick="theme11closeHelp();"
+         url="%FIRSTXML%/graphics/icontrolbar/help_screen_bg.png"
+         visible="false"
+         rotate="-90"
+         height="50%"
+         width="prop"
+         zorder="97"
+         x="100%" />
+  <layer name="theme11helpScreenFg"
+         align="center"
+         keep="true"
+         onclick="theme11closeHelp();"
+         url="%FIRSTXML%/graphics/icontrolbar/help_screen_fg.png"
+         height="50%"
+         width="prop"
+         visible="false"
+         rotate="90"
+         zorder="98"
+         x="-100%"
+         displayed="false" />
+  <action name="theme11displayHelp">
+  if (device.desktop,
+    set(layer[theme11helpScreenFg].displayed,true);
+    set(layer[theme11helpScreenBg].visible,true);
+    set(layer[theme11helpScreenFg].visible,true);
+    tween(layer[theme11helpScreenFg].rotate,0, 1);
+    tween(layer[theme11helpScreenFg].x,0, 1);
+    tween(layer[theme11helpScreenBg].rotate,0, 1);
+    tween(layer[theme11helpScreenBg].x,0, 1);
+    theme11updateHelpButtons();
+  );
+  </action>
+  <action name="theme11closeHelp">
+  if (device.desktop,
+    set(layer[theme11helpScreenFg].displayed,false);
+    tween(layer[theme11helpScreenFg].rotate,  90, 1, easeOutQuad, set(layer[theme11helpScreenFg].visible,false););
+    tween(layer[theme11helpScreenFg].x, -100%, 1);
+    tween(layer[theme11helpScreenBg].rotate, -90, 1, easeOutQuad, set(layer[theme11helpScreenBg].visible,false););
+    tween(layer[theme11helpScreenBg].x, 100%, 1);
+    theme11updateHelpButtons();
+  );
+  </action>
+	<action name="theme11HideHelpButtons">
+		set(layer[theme11btn_display_help].visible, false);
+		set(layer[theme11btn_close_help].visible, false);
+	</action>
+	<action name="theme11ShowHelpButtons">
+		if (layer[theme11helpScreenFg].displayed,
+			set(layer[theme11btn_close_help].visible, true);
+			set(layer[theme11btn_display_help].visible, false);
+		,
+			set(layer[theme11btn_display_help].visible, true);
+			set(layer[theme11btn_close_help].visible, false);
+		);
+	</action>
+	<action name="theme11updateHelpButtons">
+	if (device.desktop,
+		set(theme11DisplayHelpButtons, false);
+		if (theme11IsOpened, set(theme11DisplayHelpButtons, true););
+		if (theme11DisplayHelpButtons,
+			theme11ShowHelpButtons();
+		,
+			theme11HideHelpButtons();
+		);
+	,
+		theme11HideHelpButtons();
+	);
+	</action>
+
+
+
+
+  <events name="theme11menufullscreenchangeevent"
+          onenterfullscreen="theme11updateFullscreenButtons();"
+          onexitfullscreen="theme11updateFullscreenButtons();"
+          keep="true"/>
+	<action name="theme11HideFullscreenButtons">
+		set(layer[theme11btn_openfs].visible , false);
+		set(layer[theme11btn_closefs].visible, false);
+	</action>
+	<action name="theme11ShowFullscreenButtons">
+		if (device.fullscreensupport,
+			if(tour_fullscreen,
+				set(layer[theme11btn_openfs].visible , false);
+				set(layer[theme11btn_closefs].visible, true);
+			,
+				set(layer[theme11btn_openfs].visible ,true);
+				set(layer[theme11btn_closefs].visible,false);
+			);
+		,
+			theme11HideFullscreenButtons();
+		);
+	</action>
+	<action name="theme11updateFullscreenButtons">
+		set(theme11DisplayFullscreenButtons, false);
+		if (theme11IsOpened, set(theme11DisplayFullscreenButtons, true););
+		if (theme11DisplayFullscreenButtons,
+			theme11ShowFullscreenButtons();
+		,
+			theme11HideFullscreenButtons();
+		);
+	</action>
+
+	<events name="theme11AutorotationEvents"
+		onstartautorotation="theme11updateAutorotationButtons();"
+		onresumeautorotation="theme11updateAutorotationButtons();"
+		onstopautorotation="theme11updateAutorotationButtons();"
+		onpauseautorotation="theme11updateAutorotationButtons();"
+		keep="true"/>
+	<action name="theme11HideAutorotationButtons">
+		set(layer[theme11btn_autorotate_off].visible, false);
+		set(layer[theme11btn_autorotate_on].visible , false);
+	</action>
+	<action name="theme11ShowAutorotationButtons">
+		if(tour_autorotateenabled==false,
+			set(layer[theme11btn_autorotate_off].visible, false);
+			set(layer[theme11btn_autorotate_on].visible , true);
+		,
+			set(layer[theme11btn_autorotate_off].visible, true);
+			set(layer[theme11btn_autorotate_on].visible , false);
+		);
+	</action>
+	<action name="theme11updateAutorotationButtons">
+		set(theme11DisplayAutorotationButtons, false);
+		if (theme11IsOpened, set(theme11DisplayAutorotationButtons, true););
+		if (theme11DisplayAutorotationButtons,
+			theme11ShowAutorotationButtons();
+		,
+			theme11HideAutorotationButtons();
+		);
+	</action>
+
+
+
+  <action name="theme11buildMenu">
+    
+    set(theme11button_pos, 0);
+
+	set(theme11backgroundwidthwhenclosed, 40);
+    set(layer[theme11btn_hidecontrols].x, get(theme11button_pos));
+    set(layer[theme11btn_showcontrols].x, get(theme11button_pos));
+    inc(theme11button_pos, 45);
+
+
+
+      if (device.desktop,
+        set(layer[theme11btn_display_help].x, get(theme11button_pos));
+        set(layer[theme11btn_close_help].x  , get(theme11button_pos));
+        inc(theme11button_pos, 45);
+      );
+
+      if (device.fullscreensupport,
+        set(layer[theme11btn_openfs].x , get(theme11button_pos));
+        set(layer[theme11btn_closefs].x, get(theme11button_pos));
+        inc(theme11button_pos, 45);
+      );
+
+
+
+      set(layer[theme11btn_autorotate_on].x , get(theme11button_pos));
+      set(layer[theme11btn_autorotate_off].x, get(theme11button_pos));
+      inc(theme11button_pos, 45);
+
+
+
+    if (device.desktop,
+      set(layer[theme11btn_ctrlmode_drag_to].x, get(theme11button_pos));
+      set(layer[theme11btn_ctrlmode_move_to].x, get(theme11button_pos));
+      inc(theme11button_pos, 45);
+    );
+
+
+      set(theme11DisplayGryoscopeButton, false);
+      if (device.tablet, set(theme11DisplayGryoscopeButton, true););
+      if (device.mobile, set(theme11DisplayGryoscopeButton, true););
+      if(theme11DisplayGryoscopeButton,
+        set(layer[theme11btn_gyroscope_on].x , get(theme11button_pos));
+        set(layer[theme11btn_gyroscope_off].x, get(theme11button_pos));
+        inc(theme11button_pos, 45);
+      );
+
+
+      if (device.desktop,
+        set(layer[theme11btn_right].x, get(theme11button_pos));
+        inc(theme11button_pos, 45);
+        set(layer[theme11btn_left].x, get(theme11button_pos));
+        inc(theme11button_pos, 45);
+      );
+
+      if (device.desktop,
+        set(layer[theme11btn_down].x, get(theme11button_pos));
+        inc(theme11button_pos, 45);
+        set(layer[theme11btn_up].x, get(theme11button_pos));
+        inc(theme11button_pos, 45);
+      );
+
+      if (device.desktop,
+        set(layer[theme11btn_out].x, get(theme11button_pos));
+        inc(theme11button_pos, 45);
+        set(layer[theme11btn_in].x, get(theme11button_pos));
+        inc(theme11button_pos, 45);
+      );
+
+    if (scene.count GT 1,
+        set(layer[theme11btn_next_pano].x, get(theme11button_pos));
+        inc(theme11button_pos, 45);
+        set(layer[theme11btn_prev_pano].x, get(theme11button_pos));
+        inc(theme11button_pos, 45);
+      );
+
+      dec(theme11button_pos, 5);
+
+      set(theme11backgroundwidthwhenopened, get(theme11button_pos));
+      set(layer[theme11_menu_bg].width, get(theme11backgroundwidthwhenopened));
+	
+	
+	
+    </action>
+
+	<events name="theme11StartTourEvents" onTourStart="theme11CallOnStartTour();" keep="true" />
+	
+	<action name="theme11CallOnStartTour">
+		
+		theme11showMenuControls();
+	</action>
+
+  <!-- ************* -->
+  <!-- Panorama Menu -->
+  <!-- ************* -->
+
+<ptplugin name="panoramaMenu" engine="kolorMenu">
+	<settings>
+		<option name="position" value="topleft" type="string" />
+		<option name="orientation" value="horizontal" type="string" />
+		<option name="sub_orientation" value="vertical" type="string" />
+		<option name="margin_x" value="10" type="int" />
+		<option name="margin_y" value="10" type="int" />
+		<option name="background_color" value="b7ae9e" type="string" />
+		<option name="background_alpha" value="1" type="float" />
+		<option name="item_spacer" value="5" type="int" />
+		<option name="border_radius" value="7" type="int" />
+		<option name="full_size" value="false" type="bool" />
+		<option name="use_out_effect" value="true" type="bool" />
+		<option name="item_out_border_radius" value="7" type="int" />
+		<option name="item_hover_border_radius" value="7" type="int" />
+		<option name="item_out_border_width" value="0" type="int" />
+		<option name="item_hover_border_width" value="0" type="int" />
+		<option name="item_out_bg_color" value="b7ae9e" type="string" />
+		<option name="item_out_bg_alpha" value="1" type="float" />
+		<option name="item_out_font_color" value="ffffff" type="string" />
+		<option name="item_out_font_family" value="Arial" type="string" />
+		<option name="item_out_font_size" value="14" type="int" />
+		<option name="item_out_font_weight" value="normal" type="string" />
+		<option name="item_out_font_style" value="normal" type="string" />
+		<option name="item_out_font_decoration" value="normal" type="string" />
+		<option name="use_hover_effect" value="true" type="bool" />
+		<option name="item_hover_bg_color" value="dcd1be" type="string" />
+		<option name="item_hover_bg_alpha" value="1" type="float" />
+		<option name="item_hover_font_color" value="ffffff" type="string" />
+		<option name="item_hover_font_family" value="Arial" type="string" />
+		<option name="item_hover_font_size" value="14" type="int" />
+		<option name="item_hover_font_weight" value="normal" type="string" />
+		<option name="item_hover_font_style" value="normal" type="string" />
+		<option name="item_hover_font_decoration" value="normal" type="string" />
+		<option name="text_align" value="right" type="string" />
+		<option name="item_thumb_max_width" value="160" type="int" />
+		<option name="item_thumb_max_height" value="80" type="int" />
+		<option name="zorder" value="4" type="int" />
+	</settings>
+	<internaldata>
+				<group name="group_1"
+						titleID="panogroup21_title"
+						thumbnail=""
+						subMenu="false"
+						cssClass="panogroup21"> 
+
+				
+				
+						<item name="group_1_item_1"
+							action="invokeKrFunction('mainloadscene', 'pano20')"
+								titleID="pano20_title"
+								thumbnail=""
+							cssClass="pano20">
+						
+						
+						</item>
+					
+				
+				</group>
+	</internaldata>
+</ptplugin>
+
+<action name="kolorMenuJsReady-panoramaMenu">
+	set(ptplugin[panoramaMenu].jsready, true);
+</action>
+
+<action name="showKolorMenu-panoramaMenu">
+	
+	ifnot(ptplugin[panoramaMenu].isOpen,
+		set(ptplugin[panoramaMenu].isOpen, true);
+		js(openKolorMenu(panoramaMenu));
+	,
+		if(ptplugin[panoramaMenu].jsready,
+			js(invokePluginFunction(panoramaMenu, showKolorMenu));
+		);
+	);
+</action>
+
+<action name="hideKolorMenu-panoramaMenu">
+	if(ptplugin[panoramaMenu].jsready,
+		js(invokePluginFunction(panoramaMenu, hideKolorMenu));
+	);
+</action>
+
+
+<events name="kolorMenuEvents-panoramaMenu" 
+	keep="true"
+	
+	
+	onTourStart="showKolorMenu-panoramaMenu();"
+/>
+  <!-- Hide / Show Controls -->
+  <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
+  <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
+  <!-- Fullscreen Management -->
+  <action name="exitFullScreen" devices="fullscreensupport">set(tour_fullscreen,false);js(setFullscreen(false));</action>
+  <action name="enterFullScreen" devices="fullscreensupport">set(tour_fullscreen,true);js(setFullscreen(true));</action>
+  <action name="switchFullScreen">if(tour_fullscreen,exitFullScreen();,enterFullScreen(););</action>
+
+  
+  <events name="krpanoExitFullscreenEvent"
+    onexitfullscreen="if(tour_fullscreen,exitFullScreenChangeEvent(););"
+    keep="true" />
+
+  <action name="exitFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,false);events.dispatch(onexitfullscreen);</action>
+  <action name="enterFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,true);events.dispatch(onenterfullscreen);</action>
+  <action name="exitFullScreenFallback">set(fullscreen,false);</action>
+  <action name="enterFullScreenFallback">set(fullscreen,true);</action>
+  
+  <action name="resizeFullScreenEvent">delayedcall(0,updatescreen(););</action>
+  <action name="enableGyroscope">
+    changeGyroscopeState(true);
+  </action>
+  <action name="disableGyroscope">
+    changeGyroscopeState(false);
+  </action><action name="setViewArchitectural">
+	stopSetViewTweens();
+	setViewArchitecturalComplete();
+</action>
+
+<action name="setViewArchitecturalComplete">
+	tween(view.fovmax, get(panoview.fovmax), distance(179, 1.00), easeoutquad);
+	tween(view.architectural, 1.0, distance(1.0, 0.45), easeoutquad, 
+		tween(view.fisheye, 0.0, distance(1.0, 0.45), easeoutquad, 
+			set(view.fisheyefovlink, 0.5);
+			set(view.stereographic,false);
+			if(view.pannini, set(view.pannini,false); delayedcall(0,updateobject(true,true)); );
+			tween(view.vlookat, get(panoview.v), 1.25);
+			if(panoview.fov LE view.fov, tween(view.fov, get(panoview.fov), distance(50, 0.45)); );
+		);
+	);
+</action><action name="setViewLittlePlanet">
+	set(sceneisfull360, false);
+	if(scene[get(xml.scene)].full360,
+		sub(viewhfov, view.hlookatmax, view.hlookatmin);
+		if (viewhfov == 360,
+			sub(viewvfov, view.vlookatmax, view.vlookatmin);
+			if (viewvfov == 180,
+				set(sceneisfull360, true);
+			);
+		);
+	);
+	if (sceneisfull360,
+		stopSetViewTweens();
+		setViewLittlePlanetComplete();
+	);
+</action>
+
+<action name="setViewLittlePlanetComplete">
+	tween(view.architectural, 0.0, 0.25, easeoutquad, 
+		tween(view.vlookat, 90, distance(179, 1.50), easeoutquad);
+		set(backtonormalfirst,false);
+		if(view.pannini == true, set(backtonormalfirst,true) );
+		if(view.stereographic == false, set(backtonormalfirst,true) );
+		if(backtonormalfirst, tween(view.fisheye, 0.0 ,distance(1.0, 0.25), easeoutquad, WAIT); );
+		if(view.pannini, set(view.pannini,false); delayedcall(0, updateobject(true,true)); );
+		if(panoview.fovmax LE 150, set(view.fovmax, 150); , set(view.fovmax, get(panoview.fovmax)); );
+		set(view.stereographic, true);
+		set(view.fisheyefovlink, 1.5);
+		tween(view.fisheye, 1.0, distance(1.0, 0.75), easeoutquad);
+		tween(view.fov, 150, distance(179, 0.75), easeoutquad);
+	);
+</action><action name="setViewNormal">
+	stopSetViewTweens();
+	setViewNormalComplete();
+</action>
+
+<action name="setViewNormalComplete">
+	tween(view.architectural, 0.0, distance(1.0, 0.45), easeoutquad,
+		tween(view.fovmax, get(panoview.fovmax), distance(179, 1.00));
+		tween(view.vlookat, get(panoview.v), distance(90, 0.45));
+		tween(view.fisheye, 0.0, distance(1.0, 0.45), easeoutquad,
+			set(view.stereographic,false);
+			if(view.pannini, set(view.pannini,false); delayedcall(0,updateobject(true,true)); );
+			set(view.fisheyefovlink, 0.5);
+			if(panoview.fov LE view.fov, tween(view.fov, get(panoview.fov), distance(50, 0.45)); );
+		);
+	);
+</action>
+
+<action name="stopSetViewTweens">
+	stoptween(view.fov);
+	stoptween(view.fovmax);
+	stoptween(view.vlookat);
+	stoptween(view.fisheye);
+	stoptween(view.architectural);
+</action>
+</krpano>

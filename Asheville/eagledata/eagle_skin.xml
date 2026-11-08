@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<krpano version="1.17">
+
+	<!-- ***************************** -->
+	<!-- Docked Thumbnails Control Bar -->
+	<!-- ***************************** -->
+
+
+
+<krpano themeunanimebarbuilt="false" themeunanimeIsOpened="false" />
+
+<events name="themeunanimebarevents" 
+	onxmlcomplete="themeunanimebuildMenuBar();"
+	
+	keep="true"/>
+
+<action name="themeunanimebuildMenuBar">
+	ifnot (themeunanimebarbuilt, themeunanimebuildMenu(); set(themeunanimebarbuilt, true););
+</action>
+
+
+
+<action name="themeunanimebuildMenu">
+	
+    set(themeunanimebutton_pos, 0);
+    set(layer[themeunanimebtn_hidecontrols].x, get(themeunanimebutton_pos));
+    set(layer[themeunanimebtn_hidecontrols_bg].x, get(themeunanimebutton_pos));
+    inc(themeunanimebutton_pos, 36);
+
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_display_help].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_display_help_bg].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_close_help].x  , get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_close_help_bg].x  , get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+      if (device.fullscreensupport,
+        set(layer[themeunanimebtn_openfs].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_closefs].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_openfs_bg ].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_closefs_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+
+
+      set(layer[themeunanimebtn_autorotate_on].x , get(themeunanimebutton_pos));
+      set(layer[themeunanimebtn_autorotate_on_bg].x , get(themeunanimebutton_pos));
+      set(layer[themeunanimebtn_autorotate_off].x, get(themeunanimebutton_pos));
+      set(layer[themeunanimebtn_autorotate_off_bg].x, get(themeunanimebutton_pos));
+      inc(themeunanimebutton_pos, 36);
+
+
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_ctrlmode_drag_to].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_ctrlmode_drag_to_bg].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_ctrlmode_move_to].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_ctrlmode_move_to_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_right].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_right_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+
+        set(layer[themeunanimebtn_left].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_left_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_down].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_down_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+
+        set(layer[themeunanimebtn_up].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_up_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+      if (device.desktop,
+        set(layer[themeunanimebtn_out].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_out_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+        set(layer[themeunanimebtn_in].x, get(themeunanimebutton_pos));
+        set(layer[themeunanimebtn_in_bg].x, get(themeunanimebutton_pos));
+        inc(themeunanimebutton_pos, 36);
+      );
+
+
+	
+	
+	
+</action>
+
+<events name="themeunanimeStartTourEvents" onTourStart="themeunanimeCallOnStartTour();" keep="true" />
+
+<action name="themeunanimeCallOnStartTour">
+	
+	themeunanimehideMenuControls();
+</action>
+
+
+    <layer name="themeunanime_bg"
+           keep="true"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/footer.png"
+           zorder="0"
+           width="100%"
+           align="bottomleft"
+           x="0"
+           visible="false" />
+
+    <style name="themeunanime_btn_style_bg"
+            keep="true"
+            parent="themeunanime_bg"
+            crop="0|0|48|48"
+            url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_bg.png"
+            align="bottomright"
+            height="36"
+            width="36"
+            alpha="0.3"
+            y="12"
+            zorder="0"
+            />
+
+    <style name="themeunanime_btn_style_on_bg"
+           keep="true"
+           parent="themeunanime_bg"
+           crop="0|48|48|48"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_bg.png"
+           align="bottomright"
+           height="36"
+           width="36"
+           alpha="0.3"
+           y="12"
+           zorder="0"
+           />
+
+    <style name="themeunanime_btn_down_style"
+           keep="true"
+           parent="themeunanime_bg"
+                 crop="0| 0|48|48"
+           onovercrop="0|48|48|48"
+           ondowncrop="0|96|48|48"
+           align="bottomright"
+           height="36"
+           width="36"
+           x="0" y="12"
+           zorder="1"
+           onhover="showTooltip(bottomright, themeunanimemenuTooltipStyle);"
+           onover="themeunanimectrl_btn_onoveraction"
+           onout="themeunanimectrl_btn_onoutaction"
+           />
+
+    <style name="themeunanime_btn_style"
+           keep="true"
+           parent="themeunanime_bg"
+                 crop="0| 0|48|48"
+           onovercrop="0|48|48|48"
+           ondowncrop="0|96|48|48"
+           align="bottomright"
+           height="36"
+           width="36"
+           x="0" y="12"
+           zorder="1"
+           onhover="showTooltip(bottomright, themeunanimemenuTooltipStyle);"
+           onover="themeunanimectrl_btn_onoveraction"
+           ondown="themeunanimectrl_btn_ondownaction"
+           onout="themeunanimectrl_btn_onoutaction"
+           />
+
+  <action name="themeunanimectrl_btn_onoveraction">
+    txtadd(btn_bg_name, get(name), "_bg");
+    set(layer[get(btn_bg_name)].crop, "0|48|48|48");
+  </action>
+
+  <action name="themeunanimectrl_btn_ondownaction">
+    txtadd(btn_bg_name, get(name), "_bg");
+    set(layer[get(btn_bg_name)].crop, "0|96|48|48");
+  </action>
+
+  <action name="themeunanimectrl_btn_onoutaction">
+    txtadd(btn_bg_name, get(name), "_bg");
+    set(layer[get(btn_bg_name)].crop, "0|0|48|48");
+    hideTooltip();
+  </action>
+
+    <style name="themeunanime_btn_style_on"
+            keep="true"
+            parent="themeunanime_bg"
+                  crop="0|48|48|48"
+            onovercrop="0|48|48|48"
+            ondowncrop="0|96|48|48"
+            align="bottomright"
+            height="36"
+            width="36"
+            y="12"
+            zorder="1"
+            onhover="showTooltip(bottomright, themeunanimemenuTooltipStyle);" 
+            onout="hideTooltip();"
+            />
+
+
+
+	<events name="themeunanimecontrolmodechangedevent" oncontrolmodechanged="themeunanimeupdateControlModeButtons();" keep="true"/>
+	<action name="themeunanimeHideControlModeButtons">
+		set(layer[themeunanimebtn_ctrlmode_move_to].visible, false);
+		set(layer[themeunanimebtn_ctrlmode_drag_to].visible, false);
+		set(layer[themeunanimebtn_ctrlmode_move_to_bg].visible, false);
+		set(layer[themeunanimebtn_ctrlmode_drag_to_bg].visible, false);
+	</action>
+	<action name="themeunanimeShowControlModeButtons">
+		if (tour_controlmodemousetype == "moveto",
+			set(layer[themeunanimebtn_ctrlmode_drag_to].visible, true);
+			set(layer[themeunanimebtn_ctrlmode_move_to].visible, false);
+			set(layer[themeunanimebtn_ctrlmode_drag_to_bg].visible, true);
+			set(layer[themeunanimebtn_ctrlmode_move_to_bg].visible, false);
+		,
+			set(layer[themeunanimebtn_ctrlmode_move_to].visible, true);
+			set(layer[themeunanimebtn_ctrlmode_drag_to].visible, false);
+			set(layer[themeunanimebtn_ctrlmode_move_to_bg].visible, true);
+			set(layer[themeunanimebtn_ctrlmode_drag_to_bg].visible, false);
+		);
+	</action>
+	<action name="themeunanimeupdateControlModeButtons">
+	if (device.desktop,
+		set(themeunanimeDisplayControlModeButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayControlModeButtons, true););
+		if (themeunanimeDisplayControlModeButtons,
+			themeunanimeShowControlModeButtons();
+		,
+			themeunanimeHideControlModeButtons();
+		);
+	,
+		themeunanimeHideControlModeButtons();
+	);
+	</action>
+	
+    <layer name="themeunanimebtn_ctrlmode_move_to_bg" style="themeunanime_btn_style_bg" visible="false" devices="desktop" />
+    <layer name="themeunanimebtn_ctrlmode_move_to"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_move_to.png"
+           style="themeunanime_btn_style"
+           tooltip="controlBar_dockedThumbnailsctrlmodeMoveTip"
+           onclick="setControlModeMoveTo();"
+           visible="false"
+           devices="desktop"
+           />
+    <layer name="themeunanimebtn_ctrlmode_drag_to_bg" style="themeunanime_btn_style_bg" visible="false" devices="desktop" />
+    <layer name="themeunanimebtn_ctrlmode_drag_to"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_drag_to.png"
+           style="themeunanime_btn_style"
+           tooltip="controlBar_dockedThumbnailsctrlmodeDragTip"
+           onclick="setControlModeDragTo();"
+           visible="false"
+           devices="desktop"
+           />
+
+    <layer name="themeunanimebtn_in_bg" style="themeunanime_btn_style_bg" visible="false" devices="desktop"/>
+    <layer name="themeunanimebtn_in"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_zoom_in.png"
+           style="themeunanime_btn_down_style"
+           ondown="themeunanimectrl_btn_ondownaction();set(fov_moveforce, -1);"
+           onup="set(fov_moveforce, 0);"
+           tooltip="controlBar_dockedThumbnailszoomInTip"
+           devices="desktop"
+           visible="false"
+           />
+    <layer name="themeunanimebtn_out_bg" style="themeunanime_btn_style_bg" visible="false" devices="desktop"/>
+    <layer name="themeunanimebtn_out"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_zoom_out.png"
+           style="themeunanime_btn_down_style"
+           ondown="themeunanimectrl_btn_ondownaction();set(fov_moveforce, +1);"
+           onup="set(fov_moveforce, 0);"
+           tooltip="controlBar_dockedThumbnailszoomOutTip"
+           devices="desktop"
+           visible="false"
+           />
+
+    <layer name="themeunanimebtn_left_bg" style="themeunanime_btn_style_bg" devices="desktop" visible="false" />
+    <layer name="themeunanimebtn_left"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_move_left.png"
+           style="themeunanime_btn_down_style"
+           ondown="themeunanimectrl_btn_ondownaction();set(hlookat_moveforce, -1);"
+           onup="set(hlookat_moveforce, 0);"
+            tooltip="controlBar_dockedThumbnailsmoveLeftTip"
+           devices="desktop"
+           visible="false"
+           />
+    <layer name="themeunanimebtn_right_bg" style="themeunanime_btn_style_bg" devices="desktop" visible="false" />
+    <layer name="themeunanimebtn_right"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_move_right.png"
+           style="themeunanime_btn_down_style"
+           ondown="themeunanimectrl_btn_ondownaction();set(hlookat_moveforce, +1);"
+           onup="set(hlookat_moveforce, 0);"
+            tooltip="controlBar_dockedThumbnailsmoveRightTip"
+           devices="desktop"
+           visible="false"
+           />
+
+    <layer name="themeunanimebtn_up_bg" style="themeunanime_btn_style_bg" devices="desktop" visible="false" />
+    <layer name="themeunanimebtn_up"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_move_up.png"
+           style="themeunanime_btn_down_style"
+           ondown="themeunanimectrl_btn_ondownaction();set(vlookat_moveforce, -1);"
+           onup="set(vlookat_moveforce, 0);"
+            tooltip="controlBar_dockedThumbnailsmoveUpTip"
+           devices="desktop"
+           visible="false"
+           />
+    <layer name="themeunanimebtn_down_bg" style="themeunanime_btn_style_bg" devices="desktop" visible="false" />
+    <layer name="themeunanimebtn_down"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_move_down.png"
+           style="themeunanime_btn_down_style"
+           ondown="themeunanimectrl_btn_ondownaction();set(vlookat_moveforce, +1);"
+           onup="set(vlookat_moveforce, 0);"
+            tooltip="controlBar_dockedThumbnailsmoveDownTip"
+           devices="desktop"
+           visible="false"
+           />
+
+
+
+
+
+    <layer name="themeunanimebtn_openfs_bg" style="themeunanime_btn_style_bg" visible="false" devices="fullscreensupport" />
+    <layer name="themeunanimebtn_openfs"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_enter_fs.png"
+           onclick="enterFullscreen();"
+           style="themeunanime_btn_style"
+           visible="false"
+           tooltip="controlBar_dockedThumbnailsopenFsTip"
+           devices="fullscreensupport"
+           />
+    <layer name="themeunanimebtn_closefs_bg" style="themeunanime_btn_style_on_bg" visible="false" devices="fullscreensupport" />
+    <layer name="themeunanimebtn_closefs"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_close_fs.png"
+           onclick="exitFullscreen();"
+           style="themeunanime_btn_style_on"
+           visible="false"
+           tooltip="controlBar_dockedThumbnailscloseFsTip"
+           devices="fullscreensupport"
+           />
+
+    <layer name="themeunanimebtn_autorotate_on_bg" style="themeunanime_btn_style_bg" visible="false" />
+    <layer name="themeunanimebtn_autorotate_on"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_start_autorotation.png"
+           onclick="startautorotation();"
+           style="themeunanime_btn_style"
+           visible="false"
+            tooltip="controlBar_dockedThumbnailsautorotateOnTip"
+           />
+    <layer name="themeunanimebtn_autorotate_off_bg" style="themeunanime_btn_style_on_bg" visible="false" />
+    <layer name="themeunanimebtn_autorotate_off"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_stop_autorotation.png"
+           onclick="stopautorotation();"
+           style="themeunanime_btn_style_on"
+           visible="false"
+           tooltip="controlBar_dockedThumbnailsautorotateOffTip"
+           />
+
+
+
+    <layer name="themeunanimebtn_display_help_bg" style="themeunanime_btn_style_bg" visible="false" devices="desktop" />
+    <layer name="themeunanimebtn_display_help"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_help.png"
+           onclick="themeunanimedisplayHelp();"
+           style="themeunanime_btn_style"
+           tooltip="controlBar_dockedThumbnailsdisplayHelpTip"
+           devices="desktop"
+           visible="false"
+           />
+    <layer name="themeunanimebtn_close_help_bg" style="themeunanime_btn_style_on_bg" visible="false" devices="desktop"/>
+    <layer name="themeunanimebtn_close_help"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_help.png"
+           onclick="themeunanimecloseHelp();"
+           style="themeunanime_btn_style_on"
+           visible="false"
+           tooltip="controlBar_dockedThumbnailshideHelpTip"
+           devices="desktop"
+           />
+
+
+
+    <layer name="themeunanimebtn_hidecontrols_bg" style="themeunanime_btn_style_bg" visible="false" />
+    <layer name="themeunanimebtn_hidecontrols"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_hide_controls.png"
+           style="themeunanime_btn_style"
+           onclick="themeunanimehideMenuControls();hideTourControls();"
+           visible="false"
+            tooltip="controlBar_dockedThumbnailshideControlsTip"
+           />
+
+    <layer name="themeunanimebtn_showcontrols"
+                  crop="0| 0|48|48"
+            onovercrop="0|48|48|48"
+            ondowncrop="0|96|48|48"
+            keep="true"
+            url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_show_controls_bg.png"
+            align="bottomright"
+            zorder="0"
+            height="36"
+            width="36"
+            visible="false"
+            y="12"
+            x="0" >
+    <layer name="themeunanimebtn_showcontrols_fg"
+                  crop="0| 0|48|48"
+            onovercrop="0|48|48|48"
+            ondowncrop="0|96|48|48"
+            onclick="themeunanimeshowMenuControls();showTourControls();"
+            onhover="showTooltip(bottomright, themeunanimemenuTooltipStyle);"
+            onout="hideTooltip();"
+            tooltip="controlBar_dockedThumbnailsdisplayControlsTip"
+            keep="true"
+            url="%FIRSTXML%/graphics/dockedthumbscontrolbar/btn_show_controls.png"
+            align="center"
+            height="36"
+            width="36"
+            />
+    </layer>
+
+
+<action name="themeunanimehideMenuControls">
+	set(themeunanimeIsOpened, false);
+	set(layer[themeunanime_bg].visible, false);
+	set(layer[themeunanimebtn_showcontrols].visible, true);
+	set(layer[themeunanimebtn_hidecontrols_bg].visible, false);
+	set(layer[themeunanimebtn_hidecontrols].visible, false);
+	set(layer[themeunanimebtn_in_bg].visible, false);
+	set(layer[themeunanimebtn_out_bg].visible, false);
+	set(layer[themeunanimebtn_in].visible, false);
+	set(layer[themeunanimebtn_out].visible, false);
+	set(layer[themeunanimebtn_right_bg].visible, false);
+	set(layer[themeunanimebtn_left_bg].visible, false);
+	set(layer[themeunanimebtn_right].visible, false);
+	set(layer[themeunanimebtn_left].visible, false);
+	set(layer[themeunanimebtn_down_bg].visible, false);
+	set(layer[themeunanimebtn_up_bg].visible, false);
+	set(layer[themeunanimebtn_down].visible, false);
+	set(layer[themeunanimebtn_up].visible, false);
+
+
+
+
+		themeunanimeupdateControlModeButtons();
+
+
+
+
+		themeunanimeupdateFullscreenButtons();
+		themeunanimeupdateAutorotationButtons();
+
+
+		themeunanimeupdateHelpButtons();
+
+
+</action>
+<action name="themeunanimeshowMenuControls">
+	set(themeunanimeIsOpened, true);
+      themeunanimeupdateFullscreenButtons();
+
+
+      themeunanimeupdateAutorotationButtons();
+
+
+      themeunanimeupdateControlModeButtons();
+
+
+
+
+      themeunanimeupdateHelpButtons();
+      set(layer[themeunanime_bg].visible, true);
+	set(layer[themeunanimebtn_showcontrols].visible, false);
+	set(layer[themeunanimebtn_hidecontrols_bg].visible, true);
+	set(layer[themeunanimebtn_hidecontrols].visible, true);
+	set(layer[themeunanimebtn_in_bg].visible, true);
+	set(layer[themeunanimebtn_out_bg].visible, true);
+	set(layer[themeunanimebtn_in].visible, true);
+	set(layer[themeunanimebtn_out].visible, true);
+	set(layer[themeunanimebtn_right_bg].visible, true);
+	set(layer[themeunanimebtn_left_bg].visible, true);
+	set(layer[themeunanimebtn_right].visible, true);
+	set(layer[themeunanimebtn_left].visible, true);
+	set(layer[themeunanimebtn_down_bg].visible, true);
+	set(layer[themeunanimebtn_up_bg].visible, true);
+	set(layer[themeunanimebtn_down].visible, true);
+	set(layer[themeunanimebtn_up].visible, true);
+
+
+	
+	
+</action>
+
+
+    <layer name="themeunanimehelpScreenBg" align="center" keep="true" onclick="themeunanimecloseHelp();"
+           url="%FIRSTXML%/graphics/dockedthumbscontrolbar/help_screen_bg.png"
+           visible="false"
+           zorder="97"
+           >
+      <layer name="themeunanimehelpScreen" align="center" keep="true" onclick="themeunanimecloseHelp();" 
+             url="%FIRSTXML%/graphics/dockedthumbscontrolbar/help_screen_fg.png"
+             height="100%" 
+             width="prop" 
+             displayed="false"
+             />
+    </layer>
+    <action name="themeunanimedisplayHelp">
+      if (device.desktop,
+        set(layer[themeunanimehelpScreen].displayed, true);
+        set(layer[themeunanimehelpScreenBg].visible,true);
+        themeunanimeupdateHelpButtons();
+      );
+    </action>
+    <action name="themeunanimecloseHelp">
+      if (device.desktop,
+        set(layer[themeunanimehelpScreen].displayed, false);
+        set(layer[themeunanimehelpScreenBg].visible,false);
+        themeunanimeupdateHelpButtons();
+      );
+    </action>
+	<action name="themeunanimeHideHelpButtons">
+		set(layer[themeunanimebtn_display_help].visible, false);
+		set(layer[themeunanimebtn_close_help].visible, false);
+		set(layer[themeunanimebtn_display_help_bg].visible, false);
+		set(layer[themeunanimebtn_close_help_bg].visible, false);
+	</action>
+	<action name="themeunanimeShowHelpButtons">
+		if (layer[themeunanimehelpScreen].displayed,
+			set(layer[themeunanimebtn_close_help].visible, true);
+			set(layer[themeunanimebtn_display_help].visible, false);
+			set(layer[themeunanimebtn_close_help_bg].visible, true);
+			set(layer[themeunanimebtn_display_help_bg].visible, false);
+		,
+			set(layer[themeunanimebtn_display_help].visible, true);
+			set(layer[themeunanimebtn_close_help].visible, false);
+			set(layer[themeunanimebtn_display_help_bg].visible, true);
+			set(layer[themeunanimebtn_close_help_bg].visible, false);
+		);
+	</action>
+	<action name="themeunanimeupdateHelpButtons">
+	if (device.desktop,
+		set(themeunanimeDisplayHelpButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayHelpButtons, true););
+		if (themeunanimeDisplayHelpButtons,
+			themeunanimeShowHelpButtons();
+		,
+			themeunanimeHideHelpButtons();
+		);
+	,
+		themeunanimeHideHelpButtons();
+	);
+	</action>
+    
+
+
+	<events name="themeunanimemenufullscreenchangeevent"
+		onenterfullscreen="themeunanimeupdateFullscreenButtons();"
+		onexitfullscreen="themeunanimeupdateFullscreenButtons();"
+		keep="true"/>
+	<action name="themeunanimeHideFullscreenButtons">
+		set(layer[themeunanimebtn_openfs].visible , false);
+		set(layer[themeunanimebtn_closefs].visible, false);
+		set(layer[themeunanimebtn_openfs_bg].visible, false);
+		set(layer[themeunanimebtn_closefs_bg].visible, false);
+	</action>
+	<action name="themeunanimeShowFullscreenButtons">
+		if (device.fullscreensupport,
+			if(tour_fullscreen,
+				set(layer[themeunanimebtn_openfs].visible , false);
+				set(layer[themeunanimebtn_closefs].visible, true);
+				set(layer[themeunanimebtn_openfs_bg].visible, false);
+				set(layer[themeunanimebtn_closefs_bg].visible, true);
+			,
+				set(layer[themeunanimebtn_openfs].visible ,true);
+				set(layer[themeunanimebtn_closefs].visible,false);
+				set(layer[themeunanimebtn_openfs_bg].visible, true);
+				set(layer[themeunanimebtn_closefs_bg].visible, false);
+			);
+		,
+			themeunanimeHideFullscreenButtons();
+		);
+	</action>
+	<action name="themeunanimeupdateFullscreenButtons">
+		set(themeunanimeDisplayFullscreenButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayFullscreenButtons, true););
+		if (themeunanimeDisplayFullscreenButtons,
+			themeunanimeShowFullscreenButtons();
+		,
+			themeunanimeHideFullscreenButtons();
+		);
+	</action>
+
+	<events name="themeunanimeAutorotationEvents"
+		onstartautorotation="themeunanimeupdateAutorotationButtons();"
+		onresumeautorotation="themeunanimeupdateAutorotationButtons();"
+		onstopautorotation="themeunanimeupdateAutorotationButtons();"
+		onpauseautorotation="themeunanimeupdateAutorotationButtons();"
+		keep="true"/>
+	<action name="themeunanimeHideAutorotationButtons">
+		set(layer[themeunanimebtn_autorotate_off].visible, false);
+		set(layer[themeunanimebtn_autorotate_on].visible , false);
+		set(layer[themeunanimebtn_autorotate_off_bg].visible, false);
+		set(layer[themeunanimebtn_autorotate_on_bg].visible , false);
+	</action>
+	<action name="themeunanimeShowAutorotationButtons">
+		if(tour_autorotateenabled==false,
+			set(layer[themeunanimebtn_autorotate_off].visible, false);
+			set(layer[themeunanimebtn_autorotate_on].visible , true);
+			set(layer[themeunanimebtn_autorotate_off_bg].visible, false);
+			set(layer[themeunanimebtn_autorotate_on_bg].visible , true);
+		,
+			set(layer[themeunanimebtn_autorotate_off].visible, true);
+			set(layer[themeunanimebtn_autorotate_on].visible , false);
+			set(layer[themeunanimebtn_autorotate_off_bg].visible, true);
+			set(layer[themeunanimebtn_autorotate_on_bg].visible , false);
+		);
+	</action>
+	<action name="themeunanimeupdateAutorotationButtons">
+		set(themeunanimeDisplayAutorotationButtons, false);
+		if (themeunanimeIsOpened, set(themeunanimeDisplayAutorotationButtons, true););
+		if (themeunanimeDisplayAutorotationButtons,
+			themeunanimeShowAutorotationButtons();
+		,
+			themeunanimeHideAutorotationButtons();
+		);
+	</action>
+
+
+
+	<layer name="themeunanimemenuTooltipStyle"
+	keep="true"
+	enabled="false"
+	capture="false"
+	url="%FIRSTXML%/graphics/textfield.swf"
+	align="center"
+	background="true"
+	backgroundcolor="0x92d26a"
+	backgroundalpha="0.8"
+	border="false"
+	css="color:#f29320;font-family:Times New Roman;font-weight:bold;font-size:14px;text-align:left;"
+	height="20" 
+	autoheight="true"
+	autowidth="auto"
+	edge="bottom"
+	selectable="false"
+	zorder="0"
+	xoffset="0"
+	yoffset="0"
+	visible="false"
+	html=""
+	/>
+
+
+  <!-- Hide / Show Controls -->
+  <action name="hideTourControls">set(tour_displaycontrols, false);events.dispatch(hidetourcontrols);</action>
+  <action name="showTourControls">set(tour_displaycontrols, true); events.dispatch(showtourcontrols);</action>
+  <!-- Fullscreen Management -->
+  <action name="exitFullScreen" devices="fullscreensupport">set(tour_fullscreen,false);set(fullscreen,false);</action>
+  <action name="enterFullScreen" devices="fullscreensupport">set(tour_fullscreen,true);set(fullscreen,true);</action>
+  <action name="switchFullScreen">if(tour_fullscreen,exitFullScreen();,enterFullScreen(););</action>
+
+  
+  <events name="krpanoExitFullscreenEvent"
+    onexitfullscreen="if(tour_fullscreen,exitFullScreenChangeEvent(););"
+    keep="true" />
+
+  <action name="exitFullScreenChangeEvent" devices="fullscreensupport">set(tour_fullscreen,false);events.dispatch(onexitfullscreen);</action>
+</krpano>
