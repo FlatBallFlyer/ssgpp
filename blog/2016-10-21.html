@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blue Farm House Shooting Journal · Surround Sight Blog</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-elev: #131720;
+      --bg-card: #161b26;
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f3f5f8;
+      --text-muted: #94a0b8;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.07), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.07), transparent 40%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+    }
+    header.site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 13, 18, 0.85);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #0b0d12;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.42rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--bg-card);
+    }
+    main {
+      max-width: 860px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+    article.blog-post {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .post-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .post-header h1 {
+      font-size: 1.85rem;
+      line-height: 1.25;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+    .related-panos {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .related-panos span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .pano-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pano-pill:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+    .post-text p {
+      margin-bottom: 1.15rem;
+      color: #e2e8f0;
+      font-size: 1.02rem;
+    }
+    .post-text h2, .post-text h3 {
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .post-text a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .post-text ul, .post-text ol {
+      margin: 0.75rem 0 1.25rem 1.5rem;
+      color: #e2e8f0;
+    }
+    figure.post-figure {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    figure.post-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    figure.post-figure figcaption {
+      padding: 0.75rem 1rem;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .post-embed, .post-video {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .post-embed iframe, .post-video iframe {
+      width: 100%;
+      height: 480px;
+      border: 0;
+      display: block;
+    }
+    .embed-caption {
+      padding: 0.6rem 1rem;
+      background: var(--bg-elev);
+      border-top: 1px solid var(--border);
+      text-align: right;
+      font-size: 0.82rem;
+    }
+    .embed-caption a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .post-nav {
+      margin-top: 2.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .post-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .post-nav a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      article.blog-post { padding: 1.35rem; }
+      .post-header h1 { font-size: 1.4rem; }
+    }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">
+        <div class="brand-icon">360°</div>
+        <span>Surround Sight</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-btn" href="../index.html">← All Panoramas</a>
+        <a class="nav-btn" href="./index.html">All Blog Posts (44)</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <article class="blog-post">
+      <div class="post-header">
+        <div class="post-meta">
+          <time datetime="2016-10-21">October 21, 2016 (2016-10-21)</time>
+          <span>·</span>
+          <span>Mike Storey</span>
+        </div>
+        <h1>Blue Farm House Shooting Journal</h1>
+        <div class="related-panos"><span>Interactive Panorama:</span><a class="pano-pill" href="../2016/bluefarm1/tour.html">🔭 Blue Farm #1</a><a class="pano-pill" href="../2016/bluefarm2/tour.html">🔭 Blue Farm #2</a><a class="pano-pill" href="../2016/bluefarm3/tour.html">🔭 Blue Farm #3</a></div>
+      </div>
+      <div class="post-content">
+        <div class="post-text"><p>Early October scouting</p><p>The month of October is my busiest month for taking pictures in the Appalachians. This year I decided to shoot the very south west portion of the state, and I made several trips back-and-forth to the Cherohala Skyway. On the Smoky Mountain Expressway just passed Waynesville in the Nantahala forest I caught a glimpse of a pasture on a ridge line as I was going around a curve in the highway. You could only see the vista for about 30 seconds on the expressway. The next time I came by and spotted the same pasture, I spent about two hours driving around in the countryside looking for that view. That day I abandon my search and continued on to Cherohala.&nbsp;Later in the week I again spotted it on my way down and spent another few hours looking for this elusive pasture to no avail. After a two day outing and some camping in Joyce Kilmer forest, I determined that I would find it and recruited a fellow photographer (Micah Mackenzie) to help me in my quest.</p><p>The next day Micah and I drove down, determined to find this location.&nbsp;When we first spotted the view from the highway we immediately pulled off and brought up our phones and map apps and looked at the satellite view to determine exactly where the pasture was. Then we switched over to map view to try and find a way to drive up. The problem was none of the map applications had roads that went anywhere near the pasture. We drove around for several hours without any luck, driving through the same rural neighborhoods over and over.</p><p>Driving through these neighborhoods taught me something about white privilege.</p><p>I normally would not feel the need to mention that Micah is black, however during the course of this project I learned a new level of respect for exactly what white privilege means, and I can't relate that without mentioning Micah's race. You should also be aware of where this shoot is located, in a very rural part of Jackson county, where as recently as the 1970's black people were not welcome. Visiting high school football teams would field a smaller team because the black players could not travel to Sylva. This was at the same time I was attending high-school, so when I heard this story the timing resonated with me. We had no sooner pulled off the highway before I noticed a truck in a driveway with a confederate flag waiving from the antenna. A few more miles down the road and I saw a confederate flag flying with the US flag in someone's front yard. This was the first time I had driven around in the country and seen those symbols as potentially threatening to my passenger. I was uncomfortable with it, and still absorbing the new insights when Micah asked me how to spell "trepidation"....&nbsp;from this point forward in the story, ask yourself "could a black man have pulled this shoot off without a white chaperon?"&nbsp;Finding this location, and gaining access to shoot was an exercise in white privilege.&nbsp;Now back to finding the view:</p><p>After driving around for several hours, exasperated and ready to give up again,&nbsp;I pulled into a driveway and knocked on the door. A very nice gentleman and his dog came out, with a rather puzzled look on his face.&nbsp;I asked if he knew were a blue roof farm house was and he looked at me oddly, glancing out to Micah in the car and back at me with my long hair and sandals. I could tell he was uncomfortable, a hippie shows up at his door with a black man in the car asking about finding a house.&nbsp;I told him we were photographers and looking to take some pictures from the pasture. I explained that I could see the blue tin roof from Apple maps and showed him on my phone. A big grin came over his face and he told me "yeah I know where that is, you just go down the road here, and when it turns into a dirt road turn left at the third mailbox and just keep going back that driveway. You'll pass about four other houses before you get there but it's up that way" and after a short drive we found the blue tin roof farmhouse. I found out later that this man was related to the folks who owned the house, and they were aware of our escapades before they got a call from me.&nbsp;This contact was the key to the shoot, and it was based in white privilege not because the people I spoke with would not have helped Micah, but because he would not have felt comfortable enough in this neighborhood to even try. After all, if I had made a mistake and gone to a house where Micah was not welcome, they would have turned me away without harm, and Micah has no such guarantee in today's America.&nbsp;</p><p>No one was home at the blue tin roof farm house and there was no name on the mailbox but there was a street address. The farm was a beautiful piece of land, and they had quite a few of the most beautiful mule's I've ever seen as well as horses, goats and several large dogs.&nbsp;We couldn't get to the top of the pasture without going through fences, but we could see it from the house and we're very excited. I left several business cards (in the mailbox, under a windshield wiper, and at the door).&nbsp;As we drove back to Asheville I started thinking how I could get access to shoot from the property. Once home I did a quick google search on the address from the mailbox and sure enough an article about a cemetery on the property came up, and as luck would have it the care takers were listed as Mr. and Mrs. Hoyle and there was actually a phone number.&nbsp;I called and left a polite message explaining that I wanted to shoot there and she called back the very same day,&nbsp;and said they love to share their view with folks. I was so excited I could hardly stand it, and it would be another full week before the colors we're at peak.</p><p>Blue Farm 1</p><p>I wanted to share this location with another friend of mine (Mike Rice from <a target="_blank" href="http://www.mikericephotography.com">Mike Rice photography</a>) so I arranged a time, and he and I drove up on a Friday afternoon. The skies were partly cloudy and I was thinking we might have a nice sunset, and I was anxious to meet the Hoyle's. Upon arriving we found this wonderful couple that were more than happy to share their view with us. She took one look at his car and said "I don't think that'll make it around the backside, let me drive y'all up there." We piled all of our equipment into her SUV and she drove us around the backside of the pasture through the woods. We stopped at the first opening and she said "we call this view halfway to heaven". The view was amazing, but we didn't linger long and she drove the rest of the way through another stretch of beautiful woods, up the hill to the view you'll see in the Blue Farm 1 print. It was probably 40° and it was misting and at the top of the hill. The wind was blowing at about 30 miles an hour. In other words, it was freezing. While I was setting up my shot, a beautiful double rainbow appeared but before I could get through capturing the entire image it disappeared as quickly as it had come. Mike Rice managed to capture a beautiful complete picture of the double rainbow and you can see it <a target="_blank" href="https://www.facebook.com/photomikerice/photos/a.713295748835876.1073741871.168442503321206/711337985698319/?type=3&amp;theater">here</a>.&nbsp;</p><p>After we came back down the hill, we spent some time chatting with the Hoyle's and I must say they were some of the nicest and most entertaining folks I've meet in a long time. Mr. Hoyle was a miller by profession, which meant that not only did he know how to turn trees into lumber but was a mechanical engineer.&nbsp; He was more than happy to share his collection of antique gadgets with us. I remember in particular a millers tachometer that was used to test the spin rate of a blade in the mill. With each new piece he would explain what it was and how it was used. We spent some time looking at tack - he has a huge tack barn with full show gear for an 8-mule team. He showed us a few bar-room tricks (how to balance 16 nails on 1 nail).&nbsp;We shared laughs and stories for over an hour, and at the end of our visit we arranged to come back early in the morning and catch sunrise from the pasture.</p><p>Blue Farm 2</p><p>Having made arrangements to shoot early in the morning Mike Rice and I got up and out before dawn. We drove all the way out to the farm house and were greeted by the smell of bacon and eggs and an invitation to have breakfast. We explained that we were in a hurry to catch the sunrise, and that we had brought hot chocolate and a camp stove so we would be fine. Once again we packed all of our equipment into Mrs. Hoyle's car and she drove us to the top of the hill. This time it was much too cold for her to stay, and Mike and I had difficulty even getting a camp stove started because the wind was so strong. I stayed in the wind long enough to catch seven panoramics.&nbsp; I ended up printing the one shown in Blue Farm 2.</p><p>After finishing the shoot, and walking back down the hill, we again sat and enjoyed the company of our hosts who were as polite and entertaining as the evening before. At one point Mr. Hoyle needed to make some room to show us another trick, and I watched in awe as this man picked up a 50lb Anvil with one hand and moved it out of his way. Now Mr. Hoyle is not a small man, but he's not a young man either, and I could barely pick up the anvil with two hands, much less grab it by the horn and carry it around like he did.</p><p>Blue Farm 3</p><p>The next day, Micah Mackenzie and I spent most of the morning shooting at the Oconaluftee river near Cherokee, and we wanted to catch a sunset from the Blue Farm house one last time. We made it out in the afternoon and Mr. and Mrs. Hoyle were just as polite and welcoming as ever. This time we had a car that would go up the road, so we went up the hill ourselves and spent the majority of the evening shooting. I shot 12 panoramics and we got several lovely shots with our model. When we headed back down the hill to say goodbye the extended Hoyle family was there and we spoke for a moment, but the conversation was a little awkward so we said our goodbyes. As we were leaving we drove by the tack room and Micah said "wow look at that" so I stopped immediately and backed up because I knew Mr. Hoyle would be super happy to show Micah the tack and some of his toys. We got out and all went into the tack room and started looking around. Micah was very impressed and then he spotted a bull whip and asked if he could see it. Mr. Hoyle smiled and said, "Yeah, let me get my boy out here to show you how it's really done." After a few minutes one of his sons came over and demonstrated that the bullwhip can sound louder than a rifle and a man can make a bullwhip crack like that six or seven times in a row. Mr. Hoyle told us a story of a mule team owner that had requested a 21 bullwhip salute at his funeral. After an hour of chatting and sharing stories, we said our good byes and drove home with smiles all around. It was one of my favorite shooting days ever, and Micah commented on how nice they were and what a fun day it had been.</p><p>Over the course of these three days, I shot over 10,000 frames at this location. Of the 35 panoramics that were taken, the three described above and a quick "in-the-woods" experiment were printed.</p></div>
+<div class="post-video"><iframe src="https://www.youtube.com/embed/yP9HDxghcb4?wmode=opaque&amp;enablejsapi=1" height="480" width="854" scrolling="no" frameborder="0" allowfullscreen="">
+</iframe></div>
+      </div>
+      <nav class="post-nav">
+        <a href="./2016-10-06.html">&larr; Can Collaborative Art Projects set Asheville apart from the crowd? (2016-10-06)</a>
+        <a href="./2016-12-07.html">Disaster narrowly averted (2016-12-07) &rarr;</a>
+      </nav>
+    </article>
+  </main>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facebook Marketing Study · Surround Sight Blog</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-elev: #131720;
+      --bg-card: #161b26;
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f3f5f8;
+      --text-muted: #94a0b8;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.07), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.07), transparent 40%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+    }
+    header.site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 13, 18, 0.85);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #0b0d12;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.42rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--bg-card);
+    }
+    main {
+      max-width: 860px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+    article.blog-post {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .post-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .post-header h1 {
+      font-size: 1.85rem;
+      line-height: 1.25;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+    .related-panos {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .related-panos span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .pano-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pano-pill:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+    .post-text p {
+      margin-bottom: 1.15rem;
+      color: #e2e8f0;
+      font-size: 1.02rem;
+    }
+    .post-text h2, .post-text h3 {
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .post-text a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .post-text ul, .post-text ol {
+      margin: 0.75rem 0 1.25rem 1.5rem;
+      color: #e2e8f0;
+    }
+    figure.post-figure {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    figure.post-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    figure.post-figure figcaption {
+      padding: 0.75rem 1rem;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .post-embed, .post-video {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .post-embed iframe, .post-video iframe {
+      width: 100%;
+      height: 480px;
+      border: 0;
+      display: block;
+    }
+    .embed-caption {
+      padding: 0.6rem 1rem;
+      background: var(--bg-elev);
+      border-top: 1px solid var(--border);
+      text-align: right;
+      font-size: 0.82rem;
+    }
+    .embed-caption a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .post-nav {
+      margin-top: 2.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .post-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .post-nav a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      article.blog-post { padding: 1.35rem; }
+      .post-header h1 { font-size: 1.4rem; }
+    }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">
+        <div class="brand-icon">360°</div>
+        <span>Surround Sight</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-btn" href="../index.html">← All Panoramas</a>
+        <a class="nav-btn" href="./index.html">All Blog Posts (44)</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <article class="blog-post">
+      <div class="post-header">
+        <div class="post-meta">
+          <time datetime="2014-12-13">December 13, 2014 (2014-12-13)</time>
+          <span>·</span>
+          <span>Mike Storey</span>
+        </div>
+        <h1>Facebook Marketing Study</h1>
+        
+      </div>
+      <div class="post-content">
+        <div class="post-text"><p>I haven't been very productive for the last few weeks, a combination of taking some time to be lazy, and projects that fell apart without making it to press. As a result I haven't posted any new pano content in several weeks. This, after a fall blitz in which I published more pictures in four weeks than I had in the previous year. This drop off in publication of new material really drives home just how important it is to&nbsp;<span>consistently</span> bring fresh material to market. The months of October and November saw Facebook reach of roughly 7,000 "organic" and 3,000 "paid" engagements.&nbsp;On the web site, this translated into just over 700 users during the same period.</p><p>With virtually no new content to my site in several weeks, I have some insight into a "quiet" state, and a few observations. Here is a daily traffic overview going back to mid November.</p></div>
+
+                <figure class="post-figure">
+                  <a href="./images/2014-12-13-01.jpeg" target="_blank" title="Click to view full resolution image">
+                    <img src="./images/2014-12-13-01.jpeg" alt="Facebook Marketing Study" loading="lazy" />
+                  </a>
+                  
+                </figure>
+                
+<div class="post-text"><p>Cover Photo Changes are more likely to be seen than posts. I made several posts to promote the Aston Park panoramic, and they only garnered one or two shares and a few likes. My ego told me this was because it wasn't seen.... so I changed my Cover Photo. When that was liked, I made a comment with a link to the panoramic.&nbsp;This drove a nice spike in traffic, the next day with 53 visitors, and it seemed to have several days of residual effects. For now, a cover photo change is still a good way to get some organic reach.</p><p>Every share helps!&nbsp;My friend Scott who worked with me, found and shared my page, and it showed up clearly in the web traffic, driving 10-12 new users to my page. Many people don't realize that when they share a friends business site, it has a real impact on the visibility their business has.</p><p>Not all shares are equal. A good photographer friend has a very large following on Facebook, and he himself publishes amazing work on an almost daily basis. I will tell you from experience, that the public is fickle and it takes a lot of work to keep your audience engaged. Micah does this exceptionally well, and from time to time he shares a link to my work (and many other artists around Asheville). I'm not sure he understands the impact that has, his share drove over 50 people to the page the following day, and the residual effect is headed for a full weekend. This was with NO NEW CONTENT, he just extend the reach of the photo I had published in mid November.&nbsp;&nbsp;</p><p>With all the up's and downs of daily traffic, and the hit or miss nature of Facebook promotion it's easy to loose sight of the baseline 5-10 visitors a day that my site receives. I have found one very effective way to drive traffic to the site for extended periods of time. When I'm trying to do something, and I&nbsp;find a problem that's not answered in the support forums, and google searches don't work, I figure it out on my own. Nothing new there, but now I document what I did in a blog post, and go back to those forums that didn't have the answers and post a link to my solution. My forum posts on how to host complex flash content on Square Space drive 50 or more visitors a month to my site, with a steady trickle of traffic every day,&nbsp;week after week.&nbsp;</p><p>I will be taking&nbsp;this into account when I consider advertising with Facebook in the future. They have recently tuned their algorithms to boost&nbsp;monetization&nbsp;of your news feed. This is a calculated risk, in that they are tearing down the organic value of their platform to squeeze money out of your friends. While I will still use Facebook as a platform for publication and strive to attain good organic reach of new works, I will likely focus my real time and energy in marketing on finding problems to fix and communities to serve.&nbsp;</p></div>
+      </div>
+      <nav class="post-nav">
+        <a href="./2014-12-07.html">&larr; Project Journal: Dali Museum Stitch (Surrender) (2014-12-07)</a>
+        <a href="./2015-04-27.html">Bob the computer gets a new home. (2015-04-27) &rarr;</a>
+      </nav>
+    </article>
+  </main>
+</body>
+</html>

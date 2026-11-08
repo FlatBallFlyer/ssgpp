@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experiments in Small Business - The Facebook Page · Surround Sight Blog</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-elev: #131720;
+      --bg-card: #161b26;
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f3f5f8;
+      --text-muted: #94a0b8;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.07), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.07), transparent 40%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+    }
+    header.site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 13, 18, 0.85);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #0b0d12;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.42rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--bg-card);
+    }
+    main {
+      max-width: 860px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+    article.blog-post {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .post-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .post-header h1 {
+      font-size: 1.85rem;
+      line-height: 1.25;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+    .related-panos {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .related-panos span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .pano-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pano-pill:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+    .post-text p {
+      margin-bottom: 1.15rem;
+      color: #e2e8f0;
+      font-size: 1.02rem;
+    }
+    .post-text h2, .post-text h3 {
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .post-text a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .post-text ul, .post-text ol {
+      margin: 0.75rem 0 1.25rem 1.5rem;
+      color: #e2e8f0;
+    }
+    figure.post-figure {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    figure.post-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    figure.post-figure figcaption {
+      padding: 0.75rem 1rem;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .post-embed, .post-video {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .post-embed iframe, .post-video iframe {
+      width: 100%;
+      height: 480px;
+      border: 0;
+      display: block;
+    }
+    .embed-caption {
+      padding: 0.6rem 1rem;
+      background: var(--bg-elev);
+      border-top: 1px solid var(--border);
+      text-align: right;
+      font-size: 0.82rem;
+    }
+    .embed-caption a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .post-nav {
+      margin-top: 2.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .post-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .post-nav a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      article.blog-post { padding: 1.35rem; }
+      .post-header h1 { font-size: 1.4rem; }
+    }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">
+        <div class="brand-icon">360°</div>
+        <span>Surround Sight</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-btn" href="../index.html">← All Panoramas</a>
+        <a class="nav-btn" href="./index.html">All Blog Posts (44)</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <article class="blog-post">
+      <div class="post-header">
+        <div class="post-meta">
+          <time datetime="2014-09-20">September 20, 2014 (2014-09-20)</time>
+          <span>·</span>
+          <span>Mike Storey</span>
+        </div>
+        <h1>Experiments in Small Business - The Facebook Page</h1>
+        
+      </div>
+      <div class="post-content">
+        <div class="post-text"><p>I've been attempting to get a new career in photography off the ground for a couple of years now, and while I have had some success in building an inventory of somewhat marketable products, I've floundered in my attempt to market these products. I will be posting a series of articles about what I've done (right and wrong) and hopefully give some other folks who are trying to get a simple small business up and running some insight. As I've set things up, I've kept an eye on the reach of my efforts and the numbers seem disappointing. I haven't let limited reach and a financially muted response discourage me, I'm working on this part time, and my business (fine-art prints of gigapixel panoramic photography) is a very specialized undertaking, with an proportionately narrow marketplace. This means I will never have large transactional volume, so investments in sales and marketing are critical, and must be highly cost effective. If you have idea's of how I could do anything better (ANYTHING from my work to marketing and sales efforts) please leave a comment below! It can be daunting when first setting up a new business with an On-Line presence, there are lot's of decisions and sometimes it can be hard to figure out where to start. I started with Facebook, because it was easy and free.</p><h2>Setting up my Business Facebook page</h2><p>A lot of you will just skip right over this post, because you already have a Facebook page setup, but for those who are just getting started, setting up my Facebook page is very easy, and has been one of the most effective ways to build an audience (however meager) for my work. <a target="_blank" href="https://www.facebook.com/SurroundSight">Here's a link to my page.</a> &nbsp;There are a couple of things I wish I had done before starting, so let's start you off right.&nbsp;</p><p>Your first cover page. The Facebook image size guidelines as of Sept. 2014 show a cover page that is 851 x 315 pixels. When finding and cropping an image, keep in mind that the lower left will be obscured by your profile picture, and the lower center and right are over-laid with your page name and like buttons, so if you have text make sure it is across the top, or top-right of the image.&nbsp;</p><p>As of this writing, profile pictures should be 160 x 160 pixels. You should test that your image is recognizable as a "thumbnail" of 40 x 40 pixels. This is the picture your fan's will see next to your posts, so it's probably the most viewed piece of art you will have.&nbsp;</p><p>A name - it's easy to do a quick search in Facebook for a name you are thinking of using, spend a few minutes and make sure you can get a name you want, and try not to end up with an extremely long page name (like Surround Sight Gigapixel Panoramic Photography) - it makes it harder for someone to remember the name from a conversation and find your page later. &nbsp;</p><p>Now, go get started by logging in to FB and clicking on the "Create Page" option in the&nbsp;pull down menu from the right side of the top menu bar.</p></div>
+
+                <figure class="post-figure">
+                  <a href="./images/2014-09-20-01.png" target="_blank" title="Click to view full resolution image">
+                    <img src="./images/2014-09-20-01.png" alt="Experiments in Small Business - The Facebook Page" loading="lazy" />
+                  </a>
+                  
+                </figure>
+                
+<div class="post-text"><p>You will then be guided through setting up your page. You will select what type of business you have, and provide additional information specific to that type of business. Be as complete as possible, make it easy for people to find you.</p><p>If you don't have a Web Page or Business eMail, that's ok for now. Next time I'll talk about how I set up my Web Page and business eMail.</p><p>Ok, your page is up, now Invite a few of your close friends to like your page and get some feedback from them. Give it a few days, and don't expect a lot of initial like's. I'll talk about some things I've done to build audience later.</p><p>I uploaded a dozen or more pictures to my page as soon as it was up. I was in a rush to get everything up there, and missed a key opportunity to build audience. You should upload a few pictures (just one or two), and make an introductory post (but don't get carried away). You will want add new content to your page regularly to keep your audience engaged. In my case truly new work is fairly rare (if I get twelve marketable pictures in a year I'm doing pretty good) so I have to pace myself in order to be able to post fresh work every week or so.</p><p>Next time.... how I selected a Web Hosting company and setup my own web site.</p><p>&nbsp;</p></div>
+      </div>
+      <nav class="post-nav">
+        <a href="./2014-08-30.html">&larr; Project Journal: Dali Museum Shoot (2014-08-30)</a>
+        <a href="./2014-09-21.html">Experiments in Small Business - The Web Site (2014-10-03) &rarr;</a>
+      </nav>
+    </article>
+  </main>
+</body>
+</html>

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog Archive · Surround Sight</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-elev: #131720;
+      --bg-card: #161b26;
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f3f5f8;
+      --text-muted: #94a0b8;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.07), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.07), transparent 40%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+    }
+    header.site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 13, 18, 0.85);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #0b0d12;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.42rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--bg-card);
+    }
+    main {
+      max-width: 860px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+    article.blog-post {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .post-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .post-header h1 {
+      font-size: 1.85rem;
+      line-height: 1.25;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+    .related-panos {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .related-panos span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .pano-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pano-pill:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+    .post-text p {
+      margin-bottom: 1.15rem;
+      color: #e2e8f0;
+      font-size: 1.02rem;
+    }
+    .post-text h2, .post-text h3 {
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .post-text a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .post-text ul, .post-text ol {
+      margin: 0.75rem 0 1.25rem 1.5rem;
+      color: #e2e8f0;
+    }
+    figure.post-figure {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    figure.post-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    figure.post-figure figcaption {
+      padding: 0.75rem 1rem;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .post-embed, .post-video {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .post-embed iframe, .post-video iframe {
+      width: 100%;
+      height: 480px;
+      border: 0;
+      display: block;
+    }
+    .embed-caption {
+      padding: 0.6rem 1rem;
+      background: var(--bg-elev);
+      border-top: 1px solid var(--border);
+      text-align: right;
+      font-size: 0.82rem;
+    }
+    .embed-caption a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .post-nav {
+      margin-top: 2.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .post-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .post-nav a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      article.blog-post { padding: 1.35rem; }
+      .post-header h1 { font-size: 1.4rem; }
+    }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">
+        <div class="brand-icon">360°</div>
+        <span>Surround Sight Blog Archive</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-btn" href="../index.html">← Back to Panorama Gallery</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <h1 style="margin-bottom:0.35rem;font-size:1.75rem;">Shooting &amp; Stitching Journals</h1>
+    <p style="color:var(--text-muted);margin-bottom:1.75rem;font-size:0.95rem;">All 44 blog posts and project journals archived from ssgpp.com/blog</p>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2017-08-25.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Blue Farm House #4 Stitching Journal</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2017-08-25.html · August 25, 2017</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 3 images</span>
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2017-08-12.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Blue Farm House #3 Stitching Journal</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2017-08-12.html · August 12, 2017</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 5 images</span>
+          <a class="pano-pill" href="../2016/bluefarm3/tour.html">🔭 Blue Farm #3</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2017-08-07.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Blue Farm House #2 Stitching Journal</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2017-08-07.html · August  7, 2017</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 5 images</span>
+          <a class="pano-pill" href="../2016/bluefarm2/tour.html">🔭 Blue Farm #2</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2017-07-01.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Blue Farm House #1 Stitching Journal</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2017-07-01.html · July  1, 2017</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 5 images</span>
+          <a class="pano-pill" href="../2016/bluefarm1/tour.html">🔭 Blue Farm #1</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2017-06-21.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Valparaiso Stitching Journal</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2017-06-21.html · June 21, 2017</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 7 images</span>
+          <a class="pano-pill" href="../2012/Valparaiso2/tour.html">🔭 Valparaíso at Sunset (2012)</a><a class="pano-pill" href="../Valparaiso/valparaiso.html">🔭 Valparaíso, Chile</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2017-03-15.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Oconaluftee Journal</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2017-03-15.html · March 15, 2017</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 9 images</span>
+          <a class="pano-pill" href="../2016/Oconaluftee/tour.html">🔭 Oconaluftee with Kenya</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2017-02-16.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">and now for some good news.....</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2017-02-16.html · February 16, 2017</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../2016.fall.spoting/2016.html">🔭 2016 Spotting (7 Scenes)</a><a class="pano-pill" href="../2016.fall.spoting/2016.10.html">🔭 2016.10 Spotting (8 Scenes)</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2016-12-07.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Disaster narrowly averted</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2016-12-07.html · December  7, 2016</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 1 images</span>
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2016-10-21.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Blue Farm House Shooting Journal</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2016-10-21.html · October 21, 2016</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../2016/bluefarm1/tour.html">🔭 Blue Farm #1</a><a class="pano-pill" href="../2016/bluefarm2/tour.html">🔭 Blue Farm #2</a><a class="pano-pill" href="../2016/bluefarm3/tour.html">🔭 Blue Farm #3</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2016-10-06.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Can Collaborative Art Projects set Asheville apart from the crowd?</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2016-10-06.html · October  6, 2016</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 1 images</span>
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2015-04-27.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Bob the computer gets a new home.</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2015-04-27.html · April 27, 2015</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 9 images</span>
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-12-13.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Facebook Marketing Study</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-12-13.html · December 13, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 1 images</span>
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-12-07.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Project Journal: Dali Museum Stitch (Surrender)</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-12-07.html · December  7, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../TampaBay/Dali.html">🔭 Salvador Dalí Museum</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-12-06.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Project Journal: Dali Museum Stitch (cont.)</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-12-06.html · December  6, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../TampaBay/Dali.html">🔭 Salvador Dalí Museum</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-12-05.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Project Journal: Dali Museum Stitch</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-12-05.html · December  5, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 1 images</span>
+          <a class="pano-pill" href="../TampaBay/Dali.html">🔭 Salvador Dalí Museum</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-11-23.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Stitch Journal - Aston Park</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-11-23.html · November 23, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../Asheville/AstonPark.html">🔭 Aston Park</a><a class="pano-pill" href="../Asheville/AstonParkStretched.html">🔭 Aston Park (Stretched)</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-11-11.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Project Journal: Dali Museum Review</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-11-11.html · November 11, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../TampaBay/Dali.html">🔭 Salvador Dalí Museum</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-11-06.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Gigapixel Challenges: Vignetting part 3</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-11-06.html · November  6, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../Family/2014101801f.html">🔭 Orange Beach, AL</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-11-05.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Gigapixel Challenges: Vignetting part 2</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-11-05.html · November  5, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../Family/2014101801f.html">🔭 Orange Beach, AL</a><a class="pano-pill" href="../Family/2014101801s2flat.html">🔭 Orange Beach (Flat)</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-11-04.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Gigapixel Challenges: Vignetting</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-11-04.html · November  4, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../Family/2014101801f.html">🔭 Orange Beach, AL</a><a class="pano-pill" href="../Family/2014101801s2n0.html">🔭 Orange Beach N0</a><a class="pano-pill" href="../Family/2014101801s2n3.html">🔭 Orange Beach N3</a><a class="pano-pill" href="../Family/2014101801s2n4.html">🔭 Orange Beach N4</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-10-24.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Spring 2014 - Four Corners, Mesa Verde Overlook</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-10-24.html · October 24, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../2014.Spring/fourcorners.html">🔭 Cliff Palace Overlook (Four Corners)</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-10-13.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Fall 2014 - Big East Overlook</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-10-13.html · October 13, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 1 images</span>
+          <a class="pano-pill" href="../2014.Fall/wncFall.html">🔭 Big East Overlook</a><a class="pano-pill" href="../Appalachia/AppalacianFall.html">🔭 Appalachian Fall Tour</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-10-11.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Fall 2014 - Sam Branch Falls</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-10-11.html · October 11, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 1 images</span>
+          <a class="pano-pill" href="../2014.Fall/2014100903.html">🔭 Sam Branch Falls</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-10-08.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Fall 2014 - Graveyard Falls</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-10-08.html · October  8, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 1 images</span>
+          <a class="pano-pill" href="../2014.Fall/2014.10.08.html">🔭 Graveyard Falls #3</a><a class="pano-pill" href="../2014.Fall/GraveyardUpper.html">🔭 Graveyard Fields Upper Falls</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-10-04.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Fall 2014 - Leaf Lookers</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-10-04.html · October  4, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 16 images</span>
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-10-03.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">2014 Fall Vacation - Day 1</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-10-03.html · October  3, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 1 images</span>
+          <a class="pano-pill" href="../Asheville/2014.10.03.01.html">🔭 Sunset from Aloft Pool</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-10-03-day1.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Fall 2014 - Day1</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-10-03-day1.html · October  3, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../Asheville/2014.10.03.01.html">🔭 Sunset from Aloft Pool</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-09-29.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Experiments in Small Business - Hosting Gigapixel Content</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-09-29.html · September 29, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-09-21.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Experiments in Small Business - The Web Site</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-09-21.html · October  3, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-09-20.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Experiments in Small Business - The Facebook Page</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-09-20.html · September 20, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 1 images</span>
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-08-30.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Project Journal: Dali Museum Shoot</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-08-30.html · August 30, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../TampaBay/Dali.html">🔭 Salvador Dalí Museum</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-08-19.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Using Complex Flash/HTML5 Content on SquareSpace</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-08-19.html · August 19, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-08-07.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">aLoft Web mock-up</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-08-07.html · August  7, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../Asheville/aLoft.html">🔭 Asheville from Aloft Hotel</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-03-02.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Hosting with SquareSpace (not)</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-03-02.html · March  2, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-02-15.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Grey February</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-02-15.html · February 15, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-02-09.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Sunday Scouting</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-02-09.html · February  9, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 6 images</span>
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-01-19.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Disappearing Views</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-01-19.html · January 19, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 5 images</span>
+          <a class="pano-pill" href="../Asheville/eagle.html">🔭 Eagle St. Shops</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-01-13.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Good Morning Asheville</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-01-13.html · January 13, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 2 images</span>
+          <a class="pano-pill" href="../Asheville/svdss.html">🔭 Sunset from Sunset View Dr.</a><a class="pano-pill" href="../Asheville/svdbs.html">🔭 Sunset View Dr. (Daylight)</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2014-01-10.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Skyloft Phase2b</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2014-01-10.html · January 10, 2014</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../Asheville/skyloft.html">🔭 Asheville from SkyLoft</a><a class="pano-pill" href="../Asheville/asheville.html">🔭 Asheville 5-Scene Tour</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2013-12-28.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Skyloft Phase2a</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2013-12-28.html · December 28, 2013</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../Asheville/skyloft.html">🔭 Asheville from SkyLoft</a><a class="pano-pill" href="../Asheville/asheville.html">🔭 Asheville 5-Scene Tour</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2013-12-24.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Skyloft Phase1</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2013-12-24.html · December 24, 2013</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <span style="color:#a855f7;font-size:0.78rem;">📷 4 images</span>
+          <a class="pano-pill" href="../Asheville/skyloft.html">🔭 Asheville from SkyLoft</a><a class="pano-pill" href="../Asheville/asheville.html">🔭 Asheville 5-Scene Tour</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2013-12-22.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Skyloft Project</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2013-12-22.html · December 22, 2013</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../Asheville/skyloft.html">🔭 Asheville from SkyLoft</a><a class="pano-pill" href="../Asheville/asheville.html">🔭 Asheville 5-Scene Tour</a>
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2013-12-20.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Getting off the ground</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2013-12-20.html · December 20, 2013</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          
+        </div>
+      </div>
+    
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.15rem 1.35rem;margin-bottom:0.85rem;display:flex;flex-direction:column;gap:0.45rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:0.5rem;">
+          <a href="./2012-07-21.html" style="color:var(--text);font-size:1.1rem;font-weight:650;text-decoration:none;">Valparaiso Shooting Journal</a>
+          <span style="font-family:ui-monospace,monospace;font-size:0.8rem;color:var(--text-muted);">2012-07-21.html · July 21, 2012</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          
+          <a class="pano-pill" href="../2012/Valparaiso2/tour.html">🔭 Valparaíso at Sunset (2012)</a><a class="pano-pill" href="../Valparaiso/valparaiso.html">🔭 Valparaíso, Chile</a>
+        </div>
+      </div>
+    
+  </main>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experiments in Small Business - Hosting Gigapixel Content · Surround Sight Blog</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-elev: #131720;
+      --bg-card: #161b26;
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f3f5f8;
+      --text-muted: #94a0b8;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.07), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.07), transparent 40%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+    }
+    header.site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 13, 18, 0.85);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #0b0d12;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.42rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--bg-card);
+    }
+    main {
+      max-width: 860px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+    article.blog-post {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .post-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .post-header h1 {
+      font-size: 1.85rem;
+      line-height: 1.25;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+    .related-panos {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .related-panos span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .pano-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pano-pill:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+    .post-text p {
+      margin-bottom: 1.15rem;
+      color: #e2e8f0;
+      font-size: 1.02rem;
+    }
+    .post-text h2, .post-text h3 {
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .post-text a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .post-text ul, .post-text ol {
+      margin: 0.75rem 0 1.25rem 1.5rem;
+      color: #e2e8f0;
+    }
+    figure.post-figure {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    figure.post-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    figure.post-figure figcaption {
+      padding: 0.75rem 1rem;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .post-embed, .post-video {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .post-embed iframe, .post-video iframe {
+      width: 100%;
+      height: 480px;
+      border: 0;
+      display: block;
+    }
+    .embed-caption {
+      padding: 0.6rem 1rem;
+      background: var(--bg-elev);
+      border-top: 1px solid var(--border);
+      text-align: right;
+      font-size: 0.82rem;
+    }
+    .embed-caption a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .post-nav {
+      margin-top: 2.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .post-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .post-nav a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      article.blog-post { padding: 1.35rem; }
+      .post-header h1 { font-size: 1.4rem; }
+    }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">
+        <div class="brand-icon">360°</div>
+        <span>Surround Sight</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-btn" href="../index.html">← All Panoramas</a>
+        <a class="nav-btn" href="./index.html">All Blog Posts (44)</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <article class="blog-post">
+      <div class="post-header">
+        <div class="post-meta">
+          <time datetime="2014-09-29">September 29, 2014 (2014-09-29)</time>
+          <span>·</span>
+          <span>Mike Storey</span>
+        </div>
+        <h1>Experiments in Small Business - Hosting Gigapixel Content</h1>
+        
+      </div>
+      <div class="post-content">
+        <div class="post-text"><p>You may have seen previous posts about <a target="_blank" href="./2014-08-19.html">hosting complex flash with Squarespace</a>. I have had a couple of requests for more specifics about how to setup Amazon web services to host gigapixel panoramic content, so here's a guide:</p><h2>Signing Up for AWS</h2><p>When I signed up for SquareSpace hosting, I was hopeful, but pessimistic that their "unlimited" option was truly unlimited. After further investigation I found the limits I was expecting, both in file size, and in bulk uploading restrictions. I'm guilty of not looking extensively at static content options, but AWS had more free space than Google at the time, and the price when I reach limits is very reasonable. Amazon S3 services provide cost effective hosting of static content. You can find out more about their free tier at <a href="http://aws.amazon.com/free/">http://aws.amazon.com/free</a>&nbsp;. There are also links to sign up for the service on that page. You will have to provide credit card information, but the offering includes 5GB of storage with monthly limits on "Puts" and "Gets" that you will likely not hit unless you have content go viral. I'm currently looking into how to set up AdSense from Google so that I can be prepared to offset the hosting costs of a viral event, but the only charge I've incurred so far was when uploading initial content. I uploaded over 100,000 files against an allowance of 20,000 "puts" and my charge that month was $1.08.&nbsp;</p><h2>Configure a S3 Container</h2><p>After you sign up for AWS, you will need to log into the AWS Administrative Console using the link in the email confirming your account. Bookmark this url, you'll want to check in regularly. The first thing you will want to do is create a "Bucket" for your content, keep the name short. After creating the bucket, click on the properties button and expand the "Static Website Hosting" section of the properties window. Click on "Enable Website Hosting" and make note of your endpoint url, you'll need it later. It will look something like yourdomain.s3-website-LOCATION.amazonws.com</p><h2>Uploading Content</h2><p>You can upload content using the AWS portal by clicking on the "Transfer" button. Their web dialog is easy to use, and I uploaded my first panoramic with it. But it's limited in how well it can leverage your internet connection, and does not offer a "synchronize" option that is critical to keeping a 20,000 file pano-tour up-to-date without having to re-upload all files. To handle these requirements you will need the amazon command line tools. If you're familiar with command line tools like FTP or CP, this one is pretty easy. You'll have to go through a configuration step to provide you account and endpoint information. Once configured, uploading all the files that have changed on my local system is as easy as typing a simple command and my upload speeds were 5 to 10 times faster than the web interface.</p><ul><li>AWS CLI tools download and documentation links:&nbsp;<a target="_blank" href="http://aws.amazon.com/cli/">http://aws.amazon.com/cli/&nbsp;</a></li><li>Configure with the "aws configure" command - <a target="_blank" href="http://docs.aws.amazon.com/cli/latest/reference/configure/index.html">details here</a>&nbsp;</li><li>Syncronize your files with "aws s3 sync <em>local</em> <em>remote</em>" command - <a target="_blank" href="http://docs.aws.amazon.com/cli/latest/reference/s3/index.html">details here</a></li></ul><h2>Embedding Content</h2><p>I've discussed this before, but now that your content is hosted you can embed it using iFrames in almost any web site. Here is the iFrame I use to embed a pano-tour on my <a href="/home">home page.</a>&nbsp;</p><pre>&lt;iframe seamless allowFullScreen src="https://s3.amazonaws.com/immersive.ssgpp.com/Asheville/asheville.html" style="position:fixed; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0;"&gt;
+&nbsp; Your browser doesn't support IFrames
+&lt;/iframe&gt;</pre><p>For more information on iFrames and the attributes to control size, borders, etc. you can look here <a target="_blank" href="http://www.w3schools.com/tags/tag_iframe.asp">http://www.w3schools.com/tags/tag_iframe.asp</a></p><p>If you found this post helpful and want to say thank you - I'd appreciate a like/follow on my Facebook page</p><p><a target="_blank" href="https://www.facebook.com/SurroundSight/">https://www.facebook.com/SurroundSight/</a></p></div>
+      </div>
+      <nav class="post-nav">
+        <a href="./2014-09-21.html">&larr; Experiments in Small Business - The Web Site (2014-10-03)</a>
+        <a href="./2014-10-03-day1.html">Fall 2014 - Day1 (2014-10-03) &rarr;</a>
+      </nav>
+    </article>
+  </main>
+</body>
+</html>

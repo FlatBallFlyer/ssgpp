@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hosting with SquareSpace (not) · Surround Sight Blog</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-elev: #131720;
+      --bg-card: #161b26;
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f3f5f8;
+      --text-muted: #94a0b8;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.07), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.07), transparent 40%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+    }
+    header.site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 13, 18, 0.85);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #0b0d12;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.42rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--bg-card);
+    }
+    main {
+      max-width: 860px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+    article.blog-post {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .post-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .post-header h1 {
+      font-size: 1.85rem;
+      line-height: 1.25;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+    .related-panos {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .related-panos span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .pano-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pano-pill:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+    .post-text p {
+      margin-bottom: 1.15rem;
+      color: #e2e8f0;
+      font-size: 1.02rem;
+    }
+    .post-text h2, .post-text h3 {
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .post-text a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .post-text ul, .post-text ol {
+      margin: 0.75rem 0 1.25rem 1.5rem;
+      color: #e2e8f0;
+    }
+    figure.post-figure {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    figure.post-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    figure.post-figure figcaption {
+      padding: 0.75rem 1rem;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .post-embed, .post-video {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .post-embed iframe, .post-video iframe {
+      width: 100%;
+      height: 480px;
+      border: 0;
+      display: block;
+    }
+    .embed-caption {
+      padding: 0.6rem 1rem;
+      background: var(--bg-elev);
+      border-top: 1px solid var(--border);
+      text-align: right;
+      font-size: 0.82rem;
+    }
+    .embed-caption a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .post-nav {
+      margin-top: 2.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .post-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .post-nav a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      article.blog-post { padding: 1.35rem; }
+      .post-header h1 { font-size: 1.4rem; }
+    }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">
+        <div class="brand-icon">360°</div>
+        <span>Surround Sight</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-btn" href="../index.html">← All Panoramas</a>
+        <a class="nav-btn" href="./index.html">All Blog Posts (44)</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <article class="blog-post">
+      <div class="post-header">
+        <div class="post-meta">
+          <time datetime="2014-03-02">March  2, 2014 (2014-03-02)</time>
+          <span>·</span>
+          <span>Mike Storey</span>
+        </div>
+        <h1>Hosting with SquareSpace (not)</h1>
+        
+      </div>
+      <div class="post-content">
+        <div class="post-text"><p>I have to say that setting up my web-site with Square Space was very easy, their templates are beautiful, and the commerce is well integrated. However, I must publicly let you know that I would not recommend Square Space for any person interested in hosting panoramic's or any other complex (i.e. flash) content. Here is the tail of my attempt to host an immersive pano for my site.</p><p>For those of you who are not familiar with immersive panoramic's they are created by stitching together a bunch of pictures, and then processing them. I am working with&nbsp;<a target="_blank" href="http://www.kolor.com/ptp2">Kolor's Pano-Tour software.</a>&nbsp; This software will generate a flash file, along with a collection of java script and xml configuration files, and thousands of smaller images that are in a specific directory structure. With a typical hosting company you would simply sftp all of these files to your server, and you would be done.</p><p><strong>Getting Started</strong><br />The first step proved to be fairly simple, by enabling the "developer tools" I could use sftp to upload all of the files for the panoramic. My initial panoramic, which is fairly low resolution, uploaded easily, although I would recommend a sftp tool like filezilla that will automatically re-connect and re-start transfers. The sftp server appears to be configured to disconnect any session after 100 commands have been executed.</p><p><strong>The first problem:</strong><br />After the initial upload the pano would not work properly. After several posts to support forums, and a lot of testing I determined that the xml files were not being served by the http server as they existed on the server. Advice from the folks on the Kolor support forums, "look for another hosting company" - but I pushed on. Using sftp to upload and then download the files indicated that they were properly uploaded, however using the curl utility showed that they were being served up wrong. After exchanging many messages with support (who were always courteous and professional) my ticket was escalated to "developers" - and after 10 days I was simply informed that the "problem was fixed". After re-uploading the files, the pano was working - and is shown in my blog below. There are still a few issues to work out, full screen, mobile support aren't working, etc. But when uploading a second pano that I had tested with mobile I found my second problem.&nbsp;</p><p><strong>The second problem:</strong><br />When uploading the second pano, I had several files that were between 3-5Mb and they would not upload with the sftp client. After another round of messages with the support team, my problem was again escalated to development. This time however the answer that came back was that there was a 1Mb limit to sftp file uploads that would not be changed. They indicated that they may revisit this decision&nbsp;"at some point in the future", and I was informed that I could use the single instance upload facility for files up to 20Mb. This would require the files to be uploaded individually, and would not allow me to place them into the correct folders to support the flash and java script that <strong>is</strong> the pano. This is not a workable solution if you need to upload a large number of files, or if the directory structure of your files is important to you.</p><p>If you need a web hosting service that is easy to setup, and has beautiful templates Square Space is a good choice, but<strong> if you need to host anything outside of their standard supported content I would recommend looking at other options</strong>. In the mean time, I'm struggling with where to host my art. I like my Square Space site, and I've committed for a year so I'll likely end up finding a real cheap hosting provider with just plain html services, and then I can link and embed those pieces on my Square Space page... :( not a happy customer.</p><p>Worked out the details, and it's not soooo bad, check this post:&nbsp;<a target="_blank" href="./2014-09-29.html">http://www.ssgpp.com/blog/2014/9/29/hosting-gigapixel-content</a></p></div>
+      </div>
+      <nav class="post-nav">
+        <a href="./2014-02-15.html">&larr; Grey February (2014-02-15)</a>
+        <a href="./2014-08-07.html">aLoft Web mock-up (2014-08-07) &rarr;</a>
+      </nav>
+    </article>
+  </main>
+</body>
+</html>

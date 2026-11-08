@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valparaiso Stitching Journal · Surround Sight Blog</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-elev: #131720;
+      --bg-card: #161b26;
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f3f5f8;
+      --text-muted: #94a0b8;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.07), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.07), transparent 40%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+    }
+    header.site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 13, 18, 0.85);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #0b0d12;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.42rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--bg-card);
+    }
+    main {
+      max-width: 860px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+    article.blog-post {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .post-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .post-header h1 {
+      font-size: 1.85rem;
+      line-height: 1.25;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+    .related-panos {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .related-panos span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .pano-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pano-pill:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+    .post-text p {
+      margin-bottom: 1.15rem;
+      color: #e2e8f0;
+      font-size: 1.02rem;
+    }
+    .post-text h2, .post-text h3 {
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .post-text a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .post-text ul, .post-text ol {
+      margin: 0.75rem 0 1.25rem 1.5rem;
+      color: #e2e8f0;
+    }
+    figure.post-figure {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    figure.post-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    figure.post-figure figcaption {
+      padding: 0.75rem 1rem;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .post-embed, .post-video {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .post-embed iframe, .post-video iframe {
+      width: 100%;
+      height: 480px;
+      border: 0;
+      display: block;
+    }
+    .embed-caption {
+      padding: 0.6rem 1rem;
+      background: var(--bg-elev);
+      border-top: 1px solid var(--border);
+      text-align: right;
+      font-size: 0.82rem;
+    }
+    .embed-caption a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .post-nav {
+      margin-top: 2.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .post-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .post-nav a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      article.blog-post { padding: 1.35rem; }
+      .post-header h1 { font-size: 1.4rem; }
+    }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">
+        <div class="brand-icon">360°</div>
+        <span>Surround Sight</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-btn" href="../index.html">← All Panoramas</a>
+        <a class="nav-btn" href="./index.html">All Blog Posts (44)</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <article class="blog-post">
+      <div class="post-header">
+        <div class="post-meta">
+          <time datetime="2017-06-21">June 21, 2017 (2017-06-21)</time>
+          <span>·</span>
+          <span>Mike Storey</span>
+        </div>
+        <h1>Valparaiso Stitching Journal</h1>
+        <div class="related-panos"><span>Interactive Panorama:</span><a class="pano-pill" href="../2012/Valparaiso2/tour.html">🔭 Valparaíso at Sunset (2012)</a><a class="pano-pill" href="../Valparaiso/valparaiso.html">🔭 Valparaíso, Chile</a></div>
+      </div>
+      <div class="post-content">
+        <div class="post-text"><h2>August - October 2012 Post Processing phase 1</h2><p>This was one of my first attempts at using exposure bracketing, and on the bus back to Santiago, looking through the images on the camera, I knew I had something special. It would be two weeks before I was back in front of my computer and could begin the stitching process, which turned out to be the first of many delays in working on this print. Igor who had been so wonderful in helping me find the location, was very persistent in asking about when the picture would be ready. I believe he was probably as excited about what was to come as I was apprehensive.</p><h3>Stitching</h3><p>My computer at that time took over four hours to do initial control point identification, and a full stitch was running about ten hours. The majority of the picture was stitching just fine, but the stretch of horizon that did not have anything but those beautiful hues lacked any real edges for the stitching software to use as alignment points. The process became very protracted, and getting all the layers to line up properly proved a bit challenging. I eventually gave up on getting a perfect stitch and addressed the distorted horizon manually in photoshop.&nbsp;</p><h3>Photoshop Post Processing</h3><p>After spending a good bit of time manually matching individual pictures back into the panoramic to fix the "dip" in the horizon I started to work on the HDR process. While the stitching software offered some strong HDR processing, I never liked the way the final product looked. I started to experiment with using photoshop layer masks to bring out the layer I wanted to use in each part of the picture. This was a real learning process and took months before I felt like I had something that looked good.&nbsp;</p><h3>Initial Publication</h3><p>The first run of prints for this image were very popular, and sold in canvas prints ranging up to 10' wide. This first run was based on the raw images with no filter processing and the colors, while nice, were not quite as bold as I had remembered.&nbsp;</p><h3>April 8, 2017</h3><p>After 5 years of doing gigapixel panoramics I felt that I had significantly improved my skills in the stitching and post process, and fallen in love with a haze neutralizing filter that seemed to make the colors pop even in those long focal length shots. I went back into the archives and found all of the original images, and processed them through &nbsp;the new filter and embarked on completely recreating this image. The filtered images are shown below organized into the three exposure layers.&nbsp;</p></div>
+
+                <figure class="post-figure">
+                  <a href="./images/2017-06-21-01.jpeg" target="_blank" title="Click to view full resolution image">
+                    <img src="./images/2017-06-21-01.jpeg" alt="Valparaiso Stitching Journal" loading="lazy" />
+                  </a>
+                  
+                </figure>
+                
+
+                <figure class="post-figure">
+                  <a href="./images/2017-06-21-02.jpeg" target="_blank" title="Click to view full resolution image">
+                    <img src="./images/2017-06-21-02.jpeg" alt="Valparaiso Stitching Journal" loading="lazy" />
+                  </a>
+                  
+                </figure>
+                
+
+                <figure class="post-figure">
+                  <a href="./images/2017-06-21-03.jpeg" target="_blank" title="Click to view full resolution image">
+                    <img src="./images/2017-06-21-03.jpeg" alt="Valparaiso Stitching Journal" loading="lazy" />
+                  </a>
+                  
+                </figure>
+                
+<div class="post-text"><h3>June 18, 2017</h3><p>Now on my new computer, the initial control point detection took less than two hours, and a full stitch was complete in just over four hours. This allowed me to spend &nbsp;only a couple of weeks in the stitch portion of post, and after some frustration and about 15 full stitches I finally got a perfect stitch, with the horizon properly aligned and all the colors where I wanted.&nbsp;The photoshop post processing this time went much faster as my skills in the techniques had improved, and I was ready to print in just a couple of weeks. The final layers of exposure are shown below.</p></div>
+
+                <figure class="post-figure">
+                  <a href="./images/2017-06-21-04.jpeg" target="_blank" title="Click to view full resolution image">
+                    <img src="./images/2017-06-21-04.jpeg" alt="Valparaiso Stitching Journal" loading="lazy" />
+                  </a>
+                  
+                </figure>
+                
+
+                <figure class="post-figure">
+                  <a href="./images/2017-06-21-05.jpeg" target="_blank" title="Click to view full resolution image">
+                    <img src="./images/2017-06-21-05.jpeg" alt="Valparaiso Stitching Journal" loading="lazy" />
+                  </a>
+                  
+                </figure>
+                
+
+                <figure class="post-figure">
+                  <a href="./images/2017-06-21-06.jpeg" target="_blank" title="Click to view full resolution image">
+                    <img src="./images/2017-06-21-06.jpeg" alt="Valparaiso Stitching Journal" loading="lazy" />
+                  </a>
+                  
+                </figure>
+                
+<div class="post-text"><h3>June 21, 2017</h3><p>For this new print I wanted to really step up my printing game, so I started looking for a new Fine Art print service. What I found was French Broad Imaging and Josh Niven. The work he did printing, sealing and framing this image is AMAZING and we now have limited edition 5-year anniversary prints available. The color in this new image is mesmerizing and the printing brings the resolution to bear in a dramatic way.</p></div>
+
+                <figure class="post-figure">
+                  <a href="./images/2017-06-21-07-vlpsmall.jpg" target="_blank" title="Click to view full resolution image">
+                    <img src="./images/2017-06-21-07-vlpsmall.jpg" alt="Valparaiso Stitching Journal" loading="lazy" />
+                  </a>
+                  
+                </figure>
+                
+<div class="post-text"><p>July 21, 2017 - 5 years after the original shooting. <a href="http://www.ssgpp.com/shop/valparaiso-chili">Limited Edition 5-yr Anniversary Prints now available!</a></p></div>
+      </div>
+      <nav class="post-nav">
+        <a href="./2017-03-15.html">&larr; Oconaluftee Journal (2017-03-15)</a>
+        <a href="./2017-07-01.html">Blue Farm House #1 Stitching Journal (2017-07-01) &rarr;</a>
+      </nav>
+    </article>
+  </main>
+</body>
+</html>

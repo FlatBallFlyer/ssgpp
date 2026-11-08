@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stitch Journal - Aston Park · Surround Sight Blog</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-elev: #131720;
+      --bg-card: #161b26;
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f3f5f8;
+      --text-muted: #94a0b8;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.07), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.07), transparent 40%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+    }
+    header.site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 13, 18, 0.85);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #0b0d12;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.42rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--bg-card);
+    }
+    main {
+      max-width: 860px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+    article.blog-post {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .post-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .post-header h1 {
+      font-size: 1.85rem;
+      line-height: 1.25;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+    .related-panos {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .related-panos span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .pano-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pano-pill:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+    .post-text p {
+      margin-bottom: 1.15rem;
+      color: #e2e8f0;
+      font-size: 1.02rem;
+    }
+    .post-text h2, .post-text h3 {
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .post-text a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .post-text ul, .post-text ol {
+      margin: 0.75rem 0 1.25rem 1.5rem;
+      color: #e2e8f0;
+    }
+    figure.post-figure {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    figure.post-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    figure.post-figure figcaption {
+      padding: 0.75rem 1rem;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .post-embed, .post-video {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .post-embed iframe, .post-video iframe {
+      width: 100%;
+      height: 480px;
+      border: 0;
+      display: block;
+    }
+    .embed-caption {
+      padding: 0.6rem 1rem;
+      background: var(--bg-elev);
+      border-top: 1px solid var(--border);
+      text-align: right;
+      font-size: 0.82rem;
+    }
+    .embed-caption a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .post-nav {
+      margin-top: 2.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .post-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .post-nav a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      article.blog-post { padding: 1.35rem; }
+      .post-header h1 { font-size: 1.4rem; }
+    }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">
+        <div class="brand-icon">360°</div>
+        <span>Surround Sight</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-btn" href="../index.html">← All Panoramas</a>
+        <a class="nav-btn" href="./index.html">All Blog Posts (44)</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <article class="blog-post">
+      <div class="post-header">
+        <div class="post-meta">
+          <time datetime="2014-11-23">November 23, 2014 (2014-11-23)</time>
+          <span>·</span>
+          <span>Mike Storey</span>
+        </div>
+        <h1>Stitch Journal - Aston Park</h1>
+        <div class="related-panos"><span>Interactive Panorama:</span><a class="pano-pill" href="../Asheville/AstonPark.html">🔭 Aston Park</a><a class="pano-pill" href="../Asheville/AstonParkStretched.html">🔭 Aston Park (Stretched)</a></div>
+      </div>
+      <div class="post-content">
+        <div class="post-text"><p>I didn't do a great job of keeping track, but here is a rough journal of the Aston Park panoramic. I've been wanting to shoot from the Aston Park apartment building for several years now, and was determined to make it happen this fall. All in all I think I've got around 80 person hours and over 500 CPU hours of time in this project and as of this writing I have not taken anything to print yet.</p><h2>October 3, 2014</h2><p>After several attempts to get in touch with the correct people I received a call back from the secretary for the CEO of the&nbsp;Asheville Housing authority, who put me in touch with the building manager. She was very nice and put me in contact with &nbsp;the building maintenance staff and after a few phone calls we agreed that I would watch the weather and get in touch with them sometime during the next couple of weeks.</p><h2>October 13, 2014</h2><p>After a week of shooting at higher elevations the colors were finally starting to get into the valley, so&nbsp;when the weather came up perfect I made the call. It was a beautiful&nbsp;blue sky broken up by frequent clouds with shadow's passing across the mountains, giving glimpses of Mission Hospital and Downtown highlighted by beautiful fall color, and the sun was&nbsp;dropping a cascade of shadows across the layers of blue ridge mountains to the west. I was pleasantly surprised by a call from my friend Susan, and asked her on a fluke if she wanted to go on an adventure. She was up for whatever, and after some quick staging we headed over to South French Broad.&nbsp;After a brief wait to meet the building manager we took the elevator up to the top floor of the building where the maintenance man was even kind enough to provide me with a ladder to get to the top of the roof over the staircase. With a nearly un-obstructed 360° view. I shot seven panoramic's there, two fully immersive at minimum resolution, followed by five at max resolution. I was shooting 5 exposure brackets, and the max-res shots were 5 rows by 30 columns. It get's kind of boring watching me shoot pictures, so Susan ran back to her place and brought a bottle of wine and some snacks back, and we enjoyed a roof top picnic and watched the sun drop down behind the mountains hoping for a sunset that never came.&nbsp;</p><h2>October 14, 2014</h2><p>I follow a fairly standard practice when downloading pictures. Once they are downloaded to my primary hard drive, they are copied to the backup drive before being removed from the original SD/CF cards. Once they are downloaded I use the Mac Finder app to preview the pictures and catalog where each pano begins and ends and do a primary review for missing or duplicate frames. The initial&nbsp;review looks very promising, but does reveal that one of the full resolution shots is missing a frame. I must have missed a frame when I had to make a battery change half way through a shot. Once I've identified all the pictures in a panoramic I will tag them for off-line&nbsp;archival&nbsp;and&nbsp;post processing. Cataloging, tagging and reviewing 4,600 pictures takes about three hours, and then I record it all in a workbook&nbsp;(I am after all a geek).</p><h2>November 2, 2014</h2><p>After a break to work on a few more pressing pictures I was glad to get back to the Aston park project.&nbsp;Now that the pictures were all tagged, it's fairly easy to use AutoPano&nbsp;to import the pictures for a single pano and launch control point detection. During the import you identify the order the pictures were shot in, and the number of rows/columns/brackets, and give it some&nbsp;instructions on how control point detection should deal with the layers. Then just click "Finish"&nbsp;and thirty minutes to an hour later you have your first glimpse of what the final product will look like. These pictures were detecting very well, with only a few "orphan" pictures or sub-panorama's to resolve. After an hour or so of reviewing, correcting and adding control points it's almost ready to be rendered. A quick check to see which will be the best projection (I typically use either a spherical or cylindrical projection), and a final adjustment to make sure the horizon is level and I'm ready for the HDR color settings. I usually don't like the results of the HDR output, but the HDR settings allow me to deal with vignette issues in the sky portion of the image so I usually sped about thirty minutes configuring and saving HDR settings. The process was going very smoothly for this set, and I had the first three pano's ready for stitching in just over five hours. Kick of the big job and headed to bed with high hopes of seeing amazing outcomes in the morning.&nbsp;</p><h2>November 3, 2014</h2><p>All three pictures come out looking great, with a few minor flaws here and there. I'm not going to spend a lot of time doing exposure fusion of these images, so I do some very&nbsp;quick-and-dirty gradient based masks&nbsp;and flatten the images for use in PanoTour. Once the flattened image's are loaded into pano tour I generate the first interactive web page and start reviews. The first two pano's shot at relatively lower resolution come out very nice, and I decide to use Pano #2 for an immersive. Pano #3 was my first look at the high-res version and I was very excited to stitch and review the remaining four.&nbsp;&nbsp;</p><h2>November 8, 2014</h2><p>Another week gone, and I get back to the picture in ernest. After a late start,&nbsp;control point detection for Pano #4 and #5 go&nbsp;well and I kick off the stitch to run over night, feeling good about this one.</p><h2>November 9, 2014</h2><p>I awake to find that the stitch job has blown up because I didn't have enough free space on the target disk. After some housekeeping to make room, I decide to go ahead and stack up Pano #6 and #7 for a real big job.&nbsp;Control point detection goes very smoothly and I'm able to kick off the job before 10:00 AM. Eleven hours later the last job finishes sticking, and I now have almost 600 Gigabytes of photoshops to review.</p><h2>November 10, 2014</h2><p>These files are huge, but simply opening them and saving them in Photoshop reduces their size boy 30-40%. Unfortunately, it takes about 30 minutes to open each of these files, another 20 minutes to save the layers version, then pick a single layer and flatten it for use with PanoTour. By the end of the day I have a pano tour with all 5 gigapixel images. I open the tour in five tabs of my browser and spend several hours comparing each, evaluating composition lighting and double checking for stitching flaws. I spent some time reviewing them, and was satisfied that I should let them sit till next weekend.</p><h2>November 15, 2014</h2><p>After a lot of looking back and forth, panning and zooming, looking at lighting and color I decide that I'll use bracket 2 from Pano #4, brackets 0 and 2 from Pano #5 and brackets 1 and 3 from Pano #6. Shuffling the deck of pictures to get these images, with file names that make the easier to work with is made easier with a little cheat in Excel. I simply select the files in finder, copy and paste the filenames into the worksheet and it gives me a series of rename commands that gives me pictures with Pano#, Column#, Row# and Bracket# in the form P##C##R##B##.oldname.jpg. Open a terminal window and paste the commands and now I can use Finder search strings to find the pictures I want. A search for&nbsp;"(P04 AND B02) OR (P05 AND (B02 OR B04)) OR (P06 AND (B01 OR B03))" give me the files I want. Copy and paste the file names back into my workbook and I end up with P0XC##R##B## files for stitching.&nbsp;&nbsp;</p><h2>November 16, 2014</h2><p>After the doing the rename hokey pokey I import the files into PanoTour and&nbsp;Control point detection freaks out. It appears that using two bracket #2's has confused the algorythms. Off to the web to find a tool that I can use to edit the exposure exif data to avoid this confusion.&nbsp;</p><h2>November 17, 2014</h2><p>After some searching I find exif editor in the Mac app store and after reading a few paragraphs of documentation I've managed to change the exposure of Pano #4 bracket 2. It still takes a several hours to get control points all laid out and HDR adjustments lined up. At this time I'm expecting my new computer to be delivered any day, so I put the stitch aside to prepare for the move.</p><h2>Novenber 20, 2014</h2><p>Now that I'm on the new computer, I'm able to make one last pass at control point and color tuning and stitch Pano #X in just five hours.&nbsp;The picture I get is amazing, and there do not appear to be any stitching flaws. Work on fusing the exposure layers proves difficult however. Significant haze exists in the pictures facing west, making transitions between exposure layers painfully obvious. I haven't used it much before, but I decide to use the Neturalhazer filter. This is a pre-process plugin that has to be run on the images prior to control point detection. In addition to having to go back 2 steps, the haze filter is a single threaded process, so it can take a while.</p><h2>November 21, 2014</h2><p>I decided that the Pano #4 layer is too dark to use (after all the exif stuff) so I only&nbsp;run the dehaze filter (on Pano #5 at&nbsp;80, and Pano #6 at 70). After almost three hours of pre-processing I launch control point detection and it fails miserably yielding an awful spaghetti mess. Three more attempts and nothing is improving. Now desperate to get this picture to completion I decide to discard the dehazed images and&nbsp;go back and re-apply the filter to all 5 layers at 60. Now control point detection is almost perfect, with 0 orphan images and only 1 sub-panorama to resolve. Color editing goes much faster, and I'm able to render the picture and take a quick look before bed.&nbsp;</p><h2>November 22, 2014</h2><p>This is going to be the final stitch, and after about three hours of setting up layer masks to expose the correct pictures I flatten the image, load it into PanoTour and render a page for review. Everything looks great, however there are a lot of blemishes from dust on the camera lens. These will likely not be obvious to anyone unless they zoom in considerably, but they bug me. I spend the next two hours with the brush healing tool fixing these minor blemishes and flatten the image one last time. Now I take some time and cut a dozen crop's for use as Facebook cover pages, and post thumbnails. Now import the picture into PanoTour and tweak all the settings for the final generation. Once I've got a good page, I make one final set of changes to the generated HTML to insert tags that Facebook uses when sharing a page. Now off to my web site to create the page to host the pano, upload 15,000 files to Amazon Web Services, test that the uploaded files look right, finalize the ssgpp.com page and activate it. Now I&nbsp;test that the page shares correctly using the&nbsp;Facebook Link debugger. Once everything's ready, it's time for the promote fest to begin. First&nbsp;I post the link to the SSGPP Facebook page, then to Visit Asheville, Downtown Asheville, Blue Ridge and&nbsp;several other popular Facebook communities.&nbsp;Then I share and like my own post, hoping to generate some buzz, cross my fingers and hope to get enough shares to send the image viral..... Next week I'll get a proof ready for print, and build the inventory of printable photoshop images.&nbsp;</p><p> </p><p> </p></div>
+      </div>
+      <nav class="post-nav">
+        <a href="./2014-11-11.html">&larr; Project Journal: Dali Museum Review (2014-11-11)</a>
+        <a href="./2014-12-05.html">Project Journal: Dali Museum Stitch (2014-12-05) &rarr;</a>
+      </nav>
+    </article>
+  </main>
+</body>
+</html>

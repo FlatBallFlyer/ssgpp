@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experiments in Small Business - The Web Site · Surround Sight Blog</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-elev: #131720;
+      --bg-card: #161b26;
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f3f5f8;
+      --text-muted: #94a0b8;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.07), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.07), transparent 40%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+    }
+    header.site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 13, 18, 0.85);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #0b0d12;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.42rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--bg-card);
+    }
+    main {
+      max-width: 860px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+    article.blog-post {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .post-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .post-header h1 {
+      font-size: 1.85rem;
+      line-height: 1.25;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+    .related-panos {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .related-panos span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .pano-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pano-pill:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+    .post-text p {
+      margin-bottom: 1.15rem;
+      color: #e2e8f0;
+      font-size: 1.02rem;
+    }
+    .post-text h2, .post-text h3 {
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .post-text a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .post-text ul, .post-text ol {
+      margin: 0.75rem 0 1.25rem 1.5rem;
+      color: #e2e8f0;
+    }
+    figure.post-figure {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    figure.post-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    figure.post-figure figcaption {
+      padding: 0.75rem 1rem;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .post-embed, .post-video {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .post-embed iframe, .post-video iframe {
+      width: 100%;
+      height: 480px;
+      border: 0;
+      display: block;
+    }
+    .embed-caption {
+      padding: 0.6rem 1rem;
+      background: var(--bg-elev);
+      border-top: 1px solid var(--border);
+      text-align: right;
+      font-size: 0.82rem;
+    }
+    .embed-caption a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .post-nav {
+      margin-top: 2.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .post-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .post-nav a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      article.blog-post { padding: 1.35rem; }
+      .post-header h1 { font-size: 1.4rem; }
+    }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">
+        <div class="brand-icon">360°</div>
+        <span>Surround Sight</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-btn" href="../index.html">← All Panoramas</a>
+        <a class="nav-btn" href="./index.html">All Blog Posts (44)</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <article class="blog-post">
+      <div class="post-header">
+        <div class="post-meta">
+          <time datetime="2014-10-03">October  3, 2014 (2014-10-03)</time>
+          <span>·</span>
+          <span>Mike Storey</span>
+        </div>
+        <h1>Experiments in Small Business - The Web Site</h1>
+        
+      </div>
+      <div class="post-content">
+        <div class="post-text"><p>Creating a professional web presence requires your own Web Site, and your own Web Domain Name. The domain name is the address of your web site that starts http://www and ends in one of the Top Level Domains (TLD). The original four TLD's (.com .net .org and .gov) have been expanded to include two-letter country codes (.us .ca .tv etc). More recently several industry specific TLD's have been introduced. You want a .com address if at all possible, your customers will remember this by default. The other original TLD's are well know and fairly easy to remember, but most of the newer domains will be less well known to your audience and therefore less memorable.&nbsp;I registered my first domain (storey.net) in the late 90's, and I've had several since then (iDiscGolf.net, and the sub-domain mike.is-a-geek.com) all of which I eventually let go.&nbsp;</p><h2>Finding a Domain Name</h2><p>I did a simple search for "Domain Name Search Tool", and found <a target="_blank" href="http://www.whois.com">whois.com</a>. which is a web site that makes it easy to find a non-regersted domain. This site also allows you to offer someone cash for a domain if it's already registered, but I'm cheap so that's not an option. At 46 characters SurroundSightGigapixelPanoramicPhotography.com is a bad idea for so many reasons. No one can remember it, it wouldn't fit on a business card, and eMail addresses are going to cause problems for many systems. SurroundSight.com/net/org/us were all taken (darn). I really wanted a short name, and decided to go with the acronym ssgpp. I was able to get a .com TLD, and hopefully it was short enough to remember. I did not use the domain search service to purchase my domain as most hosting companies incorporate the cost of domain registration into the cost of the service. &nbsp;</p><h2>Selecting a Hosting Company</h2><p>Let's start off with me admitting I'm a geek. I know how to program, and how to create HTML and design commercial web sites. For this reason, I have very high expectations of my hosting provider. I don't want to have to use "developer tools" or build custom code, I'm paying them to handle that part. I know what is possible and I expect my provider to give me with a high degree of functionality, and make it very easy to use, without requiring any technical work. I have hosted with several companies over the years, and am happy to report that it is truly easier than ever to create and run a professional web site. Hosting companies, like consumer electronics seem to span a continuum of "Highly Customizable" to "Specialized Focus" - think of the continuum from Linux to Windows to Mac. If you know me, I'm a Mac guy, I find my apple products make it easy to do 99% of what I need to do without diving into code and provide a consistent user experience across all of my products. I was looking for this same "it just works" level of functionality in my web hosting company. I want to focus on content, and not have to worry about Javascript, PHP, webJS, wordPress or Jumla. I expect my web site to:</p><ul><li>Work on all popular browsers without any content restrictions</li><li>Adapt to mobile devices without any special work.</li><li>Provide easy to use eCommerce features:<ul><li>A solid "Shopping Cart and Checkout" experience</li><li>Manage an inventory, pricing and presentation</li><li>Support for product variants (paper/canvas, small/med/large, etc.)</li><li>Easy integration with a variety of card processing services</li></ul></li><li>Easy analytics for user and content</li></ul><p>These requirements narrowed my focus to several "Template Based" hosting companies, so the decision came down to the appeal of the templates I would have to conform to. Most of the template based hosting companies let you setup a free page (under their Domain) to see how things work. After a brief look at several services, I found SquareSpace and was blown away by their templates, analytics, eCommerce and ease of use.</p><h2>Creating Content</h2><p>When creating content on Square Space the template you choose provides you with the framework you need. After selecting your first template, you will have a basic web site with place holders for common content. It should only take a few minutes to familiarize yourself with the Square Space editing tools. It took me about 4 hours to complete my initial web site, by simply filling in content in the sample pages, and uploading pictures. I've spent a lot of time since then customizing the look and feel of my page, and I will share my experience with those efforts in a later post.</p><h2>Setting up eCommerce</h2><p>eCommerce was also pretty easy to setup. After selecting a card processing service, and going through their setup process it was very easy to connect that account to my web-site. Once that was done, I setup up the "Shipping" calculators and added a "Shop" page with inventory and product variants. That was all there was to setting up the store. You can find complete guides <a target="_blank" href="http://help.squarespace.com/guides/?category=Commerce">here.</a></p><p> </p></div>
+      </div>
+      <nav class="post-nav">
+        <a href="./2014-09-20.html">&larr; Experiments in Small Business - The Facebook Page (2014-09-20)</a>
+        <a href="./2014-09-29.html">Experiments in Small Business - Hosting Gigapixel Content (2014-09-29) &rarr;</a>
+      </nav>
+    </article>
+  </main>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valparaiso Shooting Journal · Surround Sight Blog</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-elev: #131720;
+      --bg-card: #161b26;
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f3f5f8;
+      --text-muted: #94a0b8;
+      --accent: #38bdf8;
+      --accent-2: #a855f7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, rgba(56, 189, 248, 0.07), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.07), transparent 40%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+    }
+    header.site-header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 13, 18, 0.85);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #0b0d12;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.42rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--bg-card);
+    }
+    main {
+      max-width: 860px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.5rem;
+    }
+    article.blog-post {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .post-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .post-header h1 {
+      font-size: 1.85rem;
+      line-height: 1.25;
+      font-weight: 750;
+      letter-spacing: -0.02em;
+    }
+    .related-panos {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .related-panos span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .pano-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #7dd3fc;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pano-pill:hover {
+      background: rgba(56, 189, 248, 0.24);
+    }
+    .post-text p {
+      margin-bottom: 1.15rem;
+      color: #e2e8f0;
+      font-size: 1.02rem;
+    }
+    .post-text h2, .post-text h3 {
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .post-text a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .post-text ul, .post-text ol {
+      margin: 0.75rem 0 1.25rem 1.5rem;
+      color: #e2e8f0;
+    }
+    figure.post-figure {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    figure.post-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    figure.post-figure figcaption {
+      padding: 0.75rem 1rem;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    .post-embed, .post-video {
+      margin: 1.85rem 0;
+      background: #080a0f;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .post-embed iframe, .post-video iframe {
+      width: 100%;
+      height: 480px;
+      border: 0;
+      display: block;
+    }
+    .embed-caption {
+      padding: 0.6rem 1rem;
+      background: var(--bg-elev);
+      border-top: 1px solid var(--border);
+      text-align: right;
+      font-size: 0.82rem;
+    }
+    .embed-caption a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .post-nav {
+      margin-top: 2.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .post-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .post-nav a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      article.blog-post { padding: 1.35rem; }
+      .post-header h1 { font-size: 1.4rem; }
+    }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html">
+        <div class="brand-icon">360°</div>
+        <span>Surround Sight</span>
+      </a>
+      <div class="nav-links">
+        <a class="nav-btn" href="../index.html">← All Panoramas</a>
+        <a class="nav-btn" href="./index.html">All Blog Posts (44)</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <article class="blog-post">
+      <div class="post-header">
+        <div class="post-meta">
+          <time datetime="2012-07-21">July 21, 2012 (2012-07-21)</time>
+          <span>·</span>
+          <span>Mike Storey</span>
+        </div>
+        <h1>Valparaiso Shooting Journal</h1>
+        <div class="related-panos"><span>Interactive Panorama:</span><a class="pano-pill" href="../2012/Valparaiso2/tour.html">🔭 Valparaíso at Sunset (2012)</a><a class="pano-pill" href="../Valparaiso/valparaiso.html">🔭 Valparaíso, Chile</a></div>
+      </div>
+      <div class="post-content">
+        <div class="post-text"><h2>July 21, 2012 - Santiago Chili</h2><p>Five years ago, I was in Santiago, Chile on business for two weeks. &nbsp;Not wanting to miss the opportunity to photograph someplace new, I asked some people I was working with for good places to take pictures over the weekend. &nbsp;One coworker suggested Valparaiso, saying it was a beautiful place. &nbsp;I did a couple of web searches and confirmed that it would be a good place for a picture. &nbsp;</p><p>I had my iPhone with me in Chile, however, I had not made arrangements for service overseas so my phone did not work and had no access to data. &nbsp;I had downloaded an app that did Spanish/English translation and managed to get along with that as a tourist in Santiago.</p><p>On Saturday morning, I went to the hotel concierge to ask about the best way to get to Valparaiso. &nbsp;He instructed me that I could catch the subway right outside the hotel. &nbsp;I would take that subway to the end of the line where I would find buses. &nbsp;I would then take the bus to Vina del Mar. &nbsp;I took the subway ride, boarded the bus for a round trip fee, and arrived in Vina del Mar. &nbsp;Once there, I hired a driver, Igor Gustav Aros, and a translator, Carolina Varas, for the day. &nbsp;</p><p>We went to the first location and I set up my equipment, giving Igor and Carolina an understanding of the type of pictures I was interested in taking. Now that they had a better understanding of what I was looking for, they spent the morning showing me their favorite overlooks around Vina del Mar. &nbsp;We took a long,&nbsp;casual lunch of wonderful seafood on the beach. &nbsp;After lunch, they took me to a museum with an amazing view. &nbsp;We asked the proprietors of the museum if I could hang out the windows to shoot pictures, set up a tripod or give me access to the roof. &nbsp;They denied all of our requests. &nbsp;</p><p>While the museum proprietors were denying me access to their roof, I noticed a flat roof adjacent to the top level of the museum. &nbsp;I pointed it out to Igor and asked if we could get access to that roof. &nbsp;He nodded and ran out. &nbsp;After more failed discussion at the museum, Carolina and I headed out front. &nbsp;Igor ran up to me and proclaimed that we had access to the roof next to the museum but we had to go now! &nbsp;He had located the owner of the building, which was an old theater, and secured permission for us to shoot from the roof.</p><p>The building was being rented out for a child’s birthday party, so we wove our way past the running children and bouncey castles to the back of the stage. &nbsp;We turned on the flashlights on our phones and walked up three rickety flights of steel stairs and pushed a piece of plywood out of a window. &nbsp;Then we stepped out onto the roof, seeing the spectacular view now captured in my pictures. &nbsp;We were on the roof for almost two hours. &nbsp;The image was taken from right to left and the duration of shooting was just under one hour.</p><p>It was an amazing trip. &nbsp;I still remember looking through the pictures on the camera while listening to my headphones on my way back to Santiago, getting more and more excited about how beautiful this picture would be. &nbsp;Little did I know that it would also be the most difficult stitching job I had done yet. &nbsp;This image required over three months of post processing before it was ready to print. &nbsp;The whole time Igor was pushing me to get it done so he could see it, and he encouraged me through a few points where I was about to give up.</p><p><a href="/valparaiso">Final Image</a></p><p><a href="http://www.ssgpp.com/shop/valparaiso-chili">Limited Edition 5th Anniversary prints now available</a></p></div>
+      </div>
+      <nav class="post-nav">
+        <span></span>
+        <a href="./2013-12-20.html">Getting off the ground (2013-12-20) &rarr;</a>
+      </nav>
+    </article>
+  </main>
+</body>
+</html>
